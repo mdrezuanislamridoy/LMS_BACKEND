@@ -52,8 +52,7 @@ export const updateEnrollmentStatus = async (
   try {
     const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(
       req as Request,
-      req.body.status,
-      next as NextFunction
+      req.body.status
     );
     if (!updatedOrder) {
       return next(createHttpError(400, "Order Updation failed"));
@@ -61,6 +60,19 @@ export const updateEnrollmentStatus = async (
     res
       .status(200)
       .json({ message: "Order Updated Successfully", updatedOrder });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateVideoProgress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await SEnrollment.SUpdateVideoProgress(req as Request);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

@@ -1,8 +1,6 @@
 import type { Request } from "express";
 import { Coupon } from "./coupon.model.js";
 import createHttpError from "http-errors";
-import { success } from "../payment/payment.controller.js";
-import { CourseModel } from "../course/models/course.model.js";
 
 const SCreateCoupon = async (req: Request) => {
   const coupon = await Coupon.create(req.body);
@@ -16,6 +14,7 @@ const SCreateCoupon = async (req: Request) => {
     coupon,
   };
 };
+
 const SUpdateCoupon = async (req: Request) => {
   const couponId = req.params.id;
   const coupon = await Coupon.findById(couponId);

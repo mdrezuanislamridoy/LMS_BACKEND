@@ -1,7 +1,5 @@
 import { Coupon } from "./coupon.model.js";
 import createHttpError from "http-errors";
-import { success } from "../payment/payment.controller.js";
-import { CourseModel } from "../course/models/course.model.js";
 const SCreateCoupon = async (req) => {
     const coupon = await Coupon.create(req.body);
     if (!coupon) {

@@ -1,7 +1,7 @@
 import { Category } from "./category.model.js";
 import createHttpError from "http-errors";
 import cloud from "../../utils/cloudinary.js";
-const Add = async (req, payload, next) => {
+const AddCategory = async (req, payload, next) => {
     const icon = req.file;
     if (!icon) {
         return next(createHttpError(404, "Icon not found"));
@@ -18,18 +18,18 @@ const Add = async (req, payload, next) => {
         });
     };
     const result = await iconUploadStream(icon.buffer);
-    const iconUrl = result.secure_url;
-    const iconPublicId = result.public_id;
+    const iconUrl = result?.secure_url;
+    const iconPublicId = result?.public_id;
     return await Category.create({ ...payload, icon: { iconUrl, iconPublicId } });
 };
-const Get = async () => {
+const GetCategories = async () => {
     return await Category.find();
 };
-const Delete = async (id) => {
+const DeleteCategory = async (id) => {
     const category = await Category.findById(id);
     const iconPublicId = category?.icon.iconPublicId;
     await cloud.uploader.destroy(`bac_commerce/categoryIcon/${iconPublicId}`);
     return await Category.findByIdAndDelete(id);
 };
-export const CService = { Add, Get, Delete };
+export const CService = { AddCategory, GetCategories, DeleteCategory };
 //# sourceMappingURL=category.service.js.map

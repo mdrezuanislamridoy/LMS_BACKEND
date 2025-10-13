@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-import { UserModel } from "../auth/user.model.js";
 import { CourseModel } from "../course/models/course.model.js";
 import { Enrollment } from "./enrollment.model.js";
 import { Coupon } from "../coupon/coupon.model.js";
 import type { ICoupon } from "../coupon/coupon.interface.js";
+import { UserModel } from "../auth/user/user.model.js";
 const SEnroll = async (req: Request) => {
-  const userId = req.userId;
+  const userId = req.user.id;
   const courseId = req.params.id;
 
   const user = await UserModel.findById(userId);
@@ -43,7 +43,7 @@ const SEnroll = async (req: Request) => {
 
     discountType = coupon.discountType;
 
-    if (coupon.courses.some((id) => id.toString() === courseId)) {
+    if (!coupon.courses.some((id) => id.toString() === courseId)) {
       throw createHttpError(400, "Coupon not valid for this course");
     }
 
@@ -77,14 +77,17 @@ const SEnroll = async (req: Request) => {
 };
 
 const SGetMyEnrollments = async (req: Request) => {
-  return await Enrollment.find({ user: req.userId });
+  return await Enrollment.find({ user: req.userId })
+    .populate("courseId")
+    .populate("progress.finishedVideos")
+    .populate("progress.finishedModules");
 };
 
-const SUpdateEnrollmentStatus = async (
-  req: Request,
-  status: string,
-  next: NextFunction
-) => {
+const SUpdateEnrollmentStatus = async (req: Request, status: string) => {
+  if (!["paid", "pending", "cancelled"].includes(status)) {
+    throw createHttpError(400, "Invalid status value");
+  }
+
   return await Enrollment.findByIdAndUpdate(
     req.params.id,
     { status },
@@ -92,8 +95,40 @@ const SUpdateEnrollmentStatus = async (
   );
 };
 
+const SUpdateVideoProgress = async (req: Request) => {
+  const { videoId } = req.body;
+  const courseId = req.params.id;
+  const userId = req.user._id;
+
+  const enrollment = await Enrollment.findOne({ user: userId, courseId });
+
+  if (!enrollment) throw createHttpError(404, "Enrollment not found");
+
+  if (!enrollment?.progress.finishedVideos.includes(videoId)) {
+    enrollment?.progress.finishedVideos.push(videoId);
+  }
+
+  enrollment.progress.lastAccessedVideo = videoId;
+
+  enrollment.progress.percentage =
+    enrollment?.progress.totalVideos === 0
+      ? 0
+      : (enrollment.progress.finishedVideos.length /
+          enrollment.progress.totalVideos) *
+        100;
+
+  enrollment.save();
+  
+  return {
+    success: true,
+    message: "Progress updated successfully",
+    progress: enrollment.progress,
+  };
+};
+
 export const SEnrollment = {
   SEnroll,
   SGetMyEnrollments,
   SUpdateEnrollmentStatus,
+  SUpdateVideoProgress,
 };

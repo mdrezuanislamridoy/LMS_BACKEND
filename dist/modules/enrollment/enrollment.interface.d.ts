@@ -4,7 +4,7 @@ export interface IEnrollment extends Document {
     courseId: Types.ObjectId;
     totalAmount: number;
     discounted: number;
-    discountType: "parcentage" | "amount";
+    discountType: "percentage" | "amount";
     status: "paid" | "pending" | "cancelled";
     transactionId: string;
     phone: string;

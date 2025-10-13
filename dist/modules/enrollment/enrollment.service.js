@@ -1,10 +1,10 @@
 import createHttpError from "http-errors";
-import { UserModel } from "../auth/user.model.js";
 import { CourseModel } from "../course/models/course.model.js";
 import { Enrollment } from "./enrollment.model.js";
 import { Coupon } from "../coupon/coupon.model.js";
+import { UserModel } from "../auth/user/user.model.js";
 const SEnroll = async (req) => {
-    const userId = req.userId;
+    const userId = req.user.id;
     const courseId = req.params.id;
     const user = await UserModel.findById(userId);
     if (user?.role !== "student") {
@@ -29,7 +29,7 @@ const SEnroll = async (req) => {
             throw createHttpError(400, `Minimum spend for this coupon is ${coupon.minSpend}`);
         }
         discountType = coupon.discountType;
-        if (coupon.courses.some((id) => id.toString() === courseId)) {
+        if (!coupon.courses.some((id) => id.toString() === courseId)) {
             throw createHttpError(400, "Coupon not valid for this course");
         }
         if (discountType === "percentage") {
@@ -59,14 +59,45 @@ const SEnroll = async (req) => {
     };
 };
 const SGetMyEnrollments = async (req) => {
-    return await Enrollment.find({ user: req.userId });
+    return await Enrollment.find({ user: req.userId })
+        .populate("courseId")
+        .populate("progress.finishedVideos")
+        .populate("progress.finishedModules");
 };
-const SUpdateEnrollmentStatus = async (req, status, next) => {
+const SUpdateEnrollmentStatus = async (req, status) => {
+    if (!["paid", "pending", "cancelled"].includes(status)) {
+        throw createHttpError(400, "Invalid status value");
+    }
     return await Enrollment.findByIdAndUpdate(req.params.id, { status }, { new: true });
+};
+const SUpdateVideoProgress = async (req) => {
+    const { videoId } = req.body;
+    const courseId = req.params.id;
+    const userId = req.user._id;
+    const enrollment = await Enrollment.findOne({ user: userId, courseId });
+    if (!enrollment)
+        throw createHttpError(404, "Enrollment not found");
+    if (!enrollment?.progress.finishedVideos.includes(videoId)) {
+        enrollment?.progress.finishedVideos.push(videoId);
+    }
+    enrollment.progress.lastAccessedVideo = videoId;
+    enrollment.progress.percentage =
+        enrollment?.progress.totalVideos === 0
+            ? 0
+            : (enrollment.progress.finishedVideos.length /
+                enrollment.progress.totalVideos) *
+                100;
+    enrollment.save();
+    return {
+        success: true,
+        message: "Progress updated successfully",
+        progress: enrollment.progress,
+    };
 };
 export const SEnrollment = {
     SEnroll,
     SGetMyEnrollments,
     SUpdateEnrollmentStatus,
+    SUpdateVideoProgress,
 };
 //# sourceMappingURL=enrollment.service.js.map

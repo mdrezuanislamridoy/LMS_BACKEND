@@ -21,8 +21,8 @@ const enrollmentSchema = new Schema<IEnrollment>(
     discounted: { type: Number, default: 0 },
     discountType: {
       type: String,
-      enum: ["parcentage", "amount"],
-      default: "parcentage",
+      enum: ["percentage", "amount"],
+      default: "percentage",
     },
     status: {
       type: String,

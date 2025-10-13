@@ -8,7 +8,7 @@ export const addCategory = async (
   next: NextFunction
 ) => {
   try {
-    const category = await CService.Add(
+    const category = await CService.AddCategory(
       req as Request,
       req.body as ICategory,
       next as NextFunction
@@ -28,7 +28,7 @@ export const getCategories = async (
   next: NextFunction
 ) => {
   try {
-    const categories = await CService.Get();
+    const categories = await CService.GetCategories();
     if (!categories) {
       return res.status(404).json({ message: "category Not Found" });
     }
@@ -46,7 +46,7 @@ export const deleteCategory = async (
   next: NextFunction
 ) => {
   try {
-    const category = await CService.Delete(req.params.id as string);
+    const category = await CService.DeleteCategory(req.params.id as string);
     if (!category) {
       return res.status(404).json({ message: "category deletion failed" });
     }

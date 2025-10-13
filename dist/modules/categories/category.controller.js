@@ -1,7 +1,7 @@
 import { CService } from "./category.service.js";
 export const addCategory = async (req, res, next) => {
     try {
-        const category = await CService.Add(req, req.body, next);
+        const category = await CService.AddCategory(req, req.body, next);
         if (!category) {
             return res.status(400).json({ message: "category creation failed" });
         }
@@ -13,7 +13,7 @@ export const addCategory = async (req, res, next) => {
 };
 export const getCategories = async (req, res, next) => {
     try {
-        const categories = await CService.Get();
+        const categories = await CService.GetCategories();
         if (!categories) {
             return res.status(404).json({ message: "category Not Found" });
         }
@@ -27,7 +27,7 @@ export const getCategories = async (req, res, next) => {
 };
 export const deleteCategory = async (req, res, next) => {
     try {
-        const category = await CService.Delete(req.params.id);
+        const category = await CService.DeleteCategory(req.params.id);
         if (!category) {
             return res.status(404).json({ message: "category deletion failed" });
         }

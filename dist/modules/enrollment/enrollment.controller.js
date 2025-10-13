@@ -33,13 +33,22 @@ export const getMyEnrollments = async (req, res, next) => {
 };
 export const updateEnrollmentStatus = async (req, res, next) => {
     try {
-        const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(req, req.body.status, next);
+        const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(req, req.body.status);
         if (!updatedOrder) {
             return next(createHttpError(400, "Order Updation failed"));
         }
         res
             .status(200)
             .json({ message: "Order Updated Successfully", updatedOrder });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const updateVideoProgress = async (req, res, next) => {
+    try {
+        const result = await SEnrollment.SUpdateVideoProgress(req);
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);

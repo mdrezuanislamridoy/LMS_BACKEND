@@ -1,4 +1,4 @@
-import type { NextFunction, Request } from "express";
+import type { Request } from "express";
 export declare const SEnrollment: {
     SEnroll: (req: Request) => Promise<{
         success: boolean;
@@ -14,10 +14,22 @@ export declare const SEnrollment: {
     }> & {
         __v: number;
     })[]>;
-    SUpdateEnrollmentStatus: (req: Request, status: string, next: NextFunction) => Promise<(import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
+    SUpdateEnrollmentStatus: (req: Request, status: string) => Promise<(import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
         _id: unknown;
     }> & {
         __v: number;
     }) | null>;
+    SUpdateVideoProgress: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        progress: {
+            finishedModules: import("mongoose").Types.ObjectId[];
+            finishedVideos: import("mongoose").Types.ObjectId[];
+            totalModules: number;
+            totalVideos: number;
+            percentage: number;
+            lastAccessedVideo: import("mongoose").Types.ObjectId;
+        };
+    }>;
 };
 //# sourceMappingURL=enrollment.service.d.ts.map
