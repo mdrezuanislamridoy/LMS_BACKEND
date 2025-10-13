@@ -4,7 +4,7 @@ import {
   deleteCategory,
   getCategories,
 } from "./category.controller.js";
-import { Admin } from "../../middlewares/Admin.js";
+import { Admin } from "../../../removed/Admin.js";
 import { upload } from "../../utils/multer.js";
 
 const router = Router();

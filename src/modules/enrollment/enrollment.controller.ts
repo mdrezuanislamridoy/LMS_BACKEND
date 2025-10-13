@@ -26,23 +26,25 @@ export const Enroll = async (
   }
 };
 
-export const getMyOrders = async (
+export const getMyEnrollments = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const myOrders = await SEnrollment.SGetMyEnrollments(req as Request);
-    if (!myOrders) {
-      return next(createHttpError(404, "No order found"));
+    const myEnrollments = await SEnrollment.SGetMyEnrollments(req as Request);
+    if (!myEnrollments) {
+      return next(createHttpError(404, "No enrollment found"));
     }
-    res.status(200).json({ message: "Order fetched successfully", myOrders });
+    res
+      .status(200)
+      .json({ message: "Enrollment fetched successfully", myEnrollments });
   } catch (error) {
     next(error);
   }
 };
 
-export const updateOrderStatus = async (
+export const updateEnrollmentStatus = async (
   req: Request,
   res: Response,
   next: NextFunction

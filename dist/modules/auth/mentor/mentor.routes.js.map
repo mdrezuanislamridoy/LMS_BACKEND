@@ -1,0 +1,1 @@
+{"version":3,"file":"mentor.routes.js","sourceRoot":"","sources":["../../../../src/modules/auth/mentor/mentor.routes.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,SAAS,CAAC;AACjC,OAAO,EAAE,YAAY,EAAE,MAAM,wBAAwB,CAAC;AAEtD,MAAM,MAAM,GAAG,MAAM,EAAE,CAAC;AAExB,MAAM,CAAC,IAAI,CAAC,WAAW,EAAE,YAAY,CAAC,CAAC;AAEvC,MAAM,CAAC,MAAM,YAAY,GAAG,MAAM,CAAC"}

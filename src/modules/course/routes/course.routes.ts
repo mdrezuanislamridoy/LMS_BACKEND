@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { courseController } from "../controllers/course.controller.js";
 
-import { Admin } from "../../../middlewares/Admin.js";
+import { Admin } from "../../../../removed/Admin.js";
 import { validation } from "../../../middlewares/Validator.js";
 import { VCourseSchema } from "../validator/course.validator.js";
 import { upload } from "../../../utils/multer.js";

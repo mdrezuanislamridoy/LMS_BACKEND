@@ -35,6 +35,7 @@ export interface ICourse extends Document {
   discount?: number;
   category: Types.ObjectId;
   whatYouWillLearn: string[];
+  couponCodes: Types.ObjectId[];
   quiz?: Types.ObjectId[];
   assignment?: Types.ObjectId[];
   certificate?: string;

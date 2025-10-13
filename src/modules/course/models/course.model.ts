@@ -98,6 +98,7 @@ const courseSchema = new Schema<ICourse>(
         ref: "Quiz",
       },
     ],
+    couponCodes: [{ type: Schema.Types.ObjectId, ref: "Coupon" }],
     assignment: [{ type: Schema.Types.ObjectId, ref: "Assignment" }],
     certificate: {
       type: String,

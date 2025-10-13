@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isUser } from "../../middlewares/User.js";
+import { isUser } from "../../middlewares/user.middleware.js";
 import { validation } from "../../middlewares/Validator.js";
 import { VReviewSchema } from "./review.validator.js";
 import { addReview, deleteReview, getReviews } from "./review.controller.js";

@@ -1,0 +1,1 @@
+{"version":3,"file":"student.interface.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/student/student.interface.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AACtC,OAAO,KAAK,EAAE,KAAK,EAAE,MAAM,2BAA2B,CAAC;AAEvD,MAAM,WAAW,QAAS,SAAQ,KAAK;IACrC,eAAe,CAAC,EAAE,KAAK,CAAC,QAAQ,EAAE,CAAC;CACpC"}

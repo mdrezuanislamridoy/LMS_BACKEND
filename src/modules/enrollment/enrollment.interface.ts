@@ -9,6 +9,19 @@ export interface IEnrollment extends Document {
   status: "paid" | "pending" | "cancelled";
   transactionId: string;
   phone: string;
+
+  // Track Progress
+  progress: {
+    finishedModules: Types.ObjectId[];
+    finishedVideos: Types.ObjectId[];
+    totalModules: number;
+    totalVideos: number;
+    percentage: number;
+    lastAccessedVideo: Types.ObjectId;
+  };
+
+  certificateIssued: boolean;
+
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,13 +1,12 @@
 import cloudinary from "cloudinary";
-import dotenv from "dotenv";
-dotenv.config();
+import { env } from "../config/env.js";
 
 const cloud = cloudinary.v2;
 
 cloud.config({
-  cloud_name: process.env.CNAME || "",
-  api_key: process.env.CAPI_KEY || "",
-  api_secret: process.env.CAPI_SECRET || "",
+  cloud_name: env.cname || "",
+  api_key: env.capi_key || "",
+  api_secret: env.capi_secret || "",
 });
 
 export default cloud;
