@@ -6,7 +6,7 @@ import { Coupon } from "../coupon/coupon.model.js";
 import type { ICoupon } from "../coupon/coupon.interface.js";
 import { UserModel } from "../auth/user/user.model.js";
 const SEnroll = async (req: Request) => {
-  const userId = req.user.id;
+  const userId = req.user._id;
   const courseId = req.params.id;
 
   const user = await UserModel.findById(userId);
@@ -117,8 +117,8 @@ const SUpdateVideoProgress = async (req: Request) => {
           enrollment.progress.totalVideos) *
         100;
 
-  enrollment.save();
-  
+  await enrollment.save();
+
   return {
     success: true,
     message: "Progress updated successfully",
