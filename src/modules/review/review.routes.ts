@@ -6,13 +6,8 @@ import { User } from "../../middlewares/user.middleware.js";
 
 const router = Router();
 
-router.post(
-  "/addReview/:productId",
-  User,
-  validation(VReviewSchema),
-  addReview
-);
-router.get("/getReviews/:productId", getReviews);
+router.post("/addReview/:courseId", User, validation(VReviewSchema), addReview);
+router.get("/getReviews/:courseId", getReviews);
 router.delete("/delete/:id", User, deleteReview);
 
 export const ReviewRouter = router;

@@ -34,7 +34,7 @@ const createCourseService = async (req: Request, payload: ICourse) => {
 
   const course = await CourseModel.create({
     ...payload,
-    addedBy: req.adminId,
+    addedBy: req.user._id,
     thumbnail: { imageUrl, publicId },
   });
   return course;

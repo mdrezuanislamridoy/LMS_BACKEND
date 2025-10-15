@@ -5,10 +5,10 @@ const reviewModel = new Schema({
         required: true,
         ref: "User",
     },
-    product: {
+    course: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: "Product",
+        ref: "Course",
     },
     rating: {
         type: Number,

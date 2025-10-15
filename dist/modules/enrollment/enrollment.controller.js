@@ -33,7 +33,7 @@ export const getMyEnrollments = async (req, res, next) => {
 };
 export const updateEnrollmentStatus = async (req, res, next) => {
     try {
-        const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(req, req.body.status);
+        const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(req);
         if (!updatedOrder) {
             return next(createHttpError(400, "Order Updation failed"));
         }

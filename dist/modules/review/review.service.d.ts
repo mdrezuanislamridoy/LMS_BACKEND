@@ -1,4 +1,4 @@
-import type { NextFunction } from "express";
+import type { NextFunction, Request } from "express";
 import type { IReview } from "./review.interface.js";
 export declare const SGetReviews: (id: string) => Promise<(import("mongoose").Document<unknown, {}, IReview, {}, import("mongoose").DefaultSchemaOptions> & IReview & Required<{
     _id: unknown;
@@ -11,7 +11,7 @@ export declare const SDeleteReview: (userId: string | undefined, id: string, nex
     __v: number;
 }) | null>;
 export declare const RService: {
-    SAddReview: (reviewer: string, product: string, payload: IReview) => Promise<import("mongoose").Document<unknown, {}, IReview, {}, import("mongoose").DefaultSchemaOptions> & IReview & Required<{
+    SAddReview: (req: Request) => Promise<import("mongoose").Document<unknown, {}, IReview, {}, import("mongoose").DefaultSchemaOptions> & IReview & Required<{
         _id: unknown;
     }> & {
         __v: number;

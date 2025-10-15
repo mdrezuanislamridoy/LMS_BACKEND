@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import { courseService } from "./course.service.js";
-import type { ICourse } from "../interfaces/course.interface.js";
+import type { ICourse } from "./course.interface.js";
 
 const createCourse = async (
   req: Request,

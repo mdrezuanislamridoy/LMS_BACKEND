@@ -1,8 +1,8 @@
-import { CourseModel } from "../course/models/course.model.js";
-import { CourseModule } from "../course/models/module.model.js";
 import { Video } from "./video.model.js";
 import cloud from "../../utils/cloudinary.js";
 import createHttpError from "http-errors";
+import { CourseModel } from "../course/course.model.js";
+import { CourseModule } from "../module/module.model.js";
 const SAddVideo = async (req) => {
     const { id: courseId } = req.params;
     const course = await CourseModel.findById({ _id: courseId });

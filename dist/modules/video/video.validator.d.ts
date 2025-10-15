@@ -1,5 +1,5 @@
 import z from "zod";
-export declare const VideoSchema: z.ZodObject<{
+export declare const VVideoSchema: z.ZodObject<{
     body: z.ZodObject<{
         title: z.ZodString;
         description: z.ZodString;

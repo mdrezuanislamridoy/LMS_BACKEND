@@ -1,6 +1,9 @@
 import { Router } from "express";
 
-import { VEnrollmentSchema } from "./enrollment.validator.js";
+import {
+  VEnrollmentSchema,
+  VUpdateEnrollmentSchema,
+} from "./enrollment.validator.js";
 import { User } from "../../middlewares/user.middleware.js";
 import { validation } from "../../middlewares/Validator.js";
 import {
@@ -17,6 +20,7 @@ router.put(
   "/updateEnrollmentStatus/:id",
   User,
   checkRole("admin"),
+  validation(VUpdateEnrollmentSchema),
   updateEnrollmentStatus
 );
 

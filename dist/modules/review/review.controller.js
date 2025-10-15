@@ -2,7 +2,7 @@ import createHttpError from "http-errors";
 import { RService } from "./review.service.js";
 export const addReview = async (req, res, next) => {
     try {
-        const review = await RService.SAddReview(req.userId, req.params.productId, req.body);
+        const review = await RService.SAddReview(req);
         if (!review) {
             next(createHttpError(400, "Review addition failed"));
         }
@@ -14,7 +14,7 @@ export const addReview = async (req, res, next) => {
 };
 export const getReviews = async (req, res, next) => {
     try {
-        const reviews = await RService.SGetReviews(req.params.productId);
+        const reviews = await RService.SGetReviews(req.params.courseId);
         if (!reviews) {
             return next(createHttpError(404, "No Review Found"));
         }

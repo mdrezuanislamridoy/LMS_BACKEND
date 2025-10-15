@@ -16,7 +16,7 @@ router.post(
   "/create-course",
   User,
   checkRole("admin"),
-  upload.single("image"),
+  upload.single("thumbnail"),
   validation(VCourseSchema),
   courseController.createCourse
 );

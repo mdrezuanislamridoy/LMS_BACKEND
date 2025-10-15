@@ -51,8 +51,7 @@ export const updateEnrollmentStatus = async (
 ) => {
   try {
     const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(
-      req as Request,
-      req.body.status
+      req as Request
     );
     if (!updatedOrder) {
       return next(createHttpError(400, "Order Updation failed"));

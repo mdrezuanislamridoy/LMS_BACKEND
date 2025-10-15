@@ -64,7 +64,8 @@ const SGetMyEnrollments = async (req) => {
         .populate("progress.finishedVideos")
         .populate("progress.finishedModules");
 };
-const SUpdateEnrollmentStatus = async (req, status) => {
+const SUpdateEnrollmentStatus = async (req) => {
+    const status = req.body.status;
     if (!["paid", "pending", "cancelled"].includes(status)) {
         throw createHttpError(400, "Invalid status value");
     }

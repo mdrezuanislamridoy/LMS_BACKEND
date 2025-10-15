@@ -10,11 +10,7 @@ export const addReview = async (
   next: NextFunction
 ) => {
   try {
-    const review = await RService.SAddReview(
-      req.userId as string,
-      req.params.productId as string,
-      req.body as IReview
-    );
+    const review = await RService.SAddReview(req as Request);
 
     if (!review) {
       next(createHttpError(400, "Review addition failed"));
@@ -24,13 +20,14 @@ export const addReview = async (
     next(error);
   }
 };
+
 export const getReviews = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const reviews = await RService.SGetReviews(req.params.productId as string);
+    const reviews = await RService.SGetReviews(req.params.courseId as string);
     if (!reviews) {
       return next(createHttpError(404, "No Review Found"));
     }

@@ -14,7 +14,7 @@ export declare const SEnrollment: {
     }> & {
         __v: number;
     })[]>;
-    SUpdateEnrollmentStatus: (req: Request, status: string) => Promise<(import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
+    SUpdateEnrollmentStatus: (req: Request) => Promise<(import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
         _id: unknown;
     }> & {
         __v: number;
