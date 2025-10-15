@@ -1,20 +1,26 @@
 import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { ZodError } from "zod";
-import z, { type ZodSchema } from "zod/v3";
+import z from "zod";
 
-export const validation = (schema: ZodSchema) => {
+export const validation = (schema: z.ZodTypeAny) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse({
+      const parsed = schema.parse({
         body: req.body,
         params: req.params,
         query: req.query,
       });
+
+      (req.body = parsed.body),
+        (req.params = parsed.params),
+        (req.query = parsed.query);
     } catch (err) {
       if (err instanceof ZodError) {
         const message = err.errors.map((e) => e.message).join(", ");
         return next(createHttpError(400, message));
+      } else {
+        next(createHttpError(400, `${err}`));
       }
       next(err);
     }

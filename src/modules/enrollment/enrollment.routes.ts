@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { EnrollmentSchema } from "./enrollment.validator.js";
+import { VEnrollmentSchema } from "./enrollment.validator.js";
 import { User } from "../../middlewares/user.middleware.js";
 import { validation } from "../../middlewares/Validator.js";
 import {
@@ -11,7 +11,7 @@ import {
 import { checkRole } from "../../middlewares/role.middleware.js";
 const router = Router();
 
-router.post("/enroll/:id", User, validation(EnrollmentSchema), Enroll);
+router.post("/enroll/:id", User, validation(VEnrollmentSchema), Enroll);
 router.get("/getMyEnrollments", User, getMyEnrollments);
 router.put(
   "/updateEnrollmentStatus/:id",

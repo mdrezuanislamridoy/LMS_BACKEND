@@ -1,7 +1,6 @@
-import { CourseModule } from "../course/models/module.model.js";
-import cloud from "../../utils/cloudinary.js";
 import createHttpError from "http-errors";
-import { CourseModel } from "../course/models/course.model.js";
+import { CourseModel } from "../course/course.model.js";
+import { CourseModule } from "./module.model.js";
 const SCreateModule = async (req) => {
     const courseId = req.params.id;
     let data = req.body;

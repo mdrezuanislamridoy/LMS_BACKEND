@@ -4,10 +4,10 @@ export declare const couponSchema: z.ZodObject<{
         code: z.ZodString;
         courses: z.ZodArray<z.ZodString>;
         discount: z.ZodNumber;
-        discountType: z.ZodEnum<{
-            amount: "amount";
+        discountType: z.ZodDefault<z.ZodEnum<{
             percentage: "percentage";
-        }>;
+            amount: "amount";
+        }>>;
         minSpend: z.ZodNumber;
         maxDiscount: z.ZodNumber;
         expiresIn: z.ZodDate;

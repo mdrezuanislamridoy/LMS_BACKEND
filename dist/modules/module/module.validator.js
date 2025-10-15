@@ -1,8 +1,11 @@
-import Joi from "joi";
-const VConst = Joi.object({
-    title: Joi.string().required().trim(),
-    description: Joi.string(),
-    videoUrl: Joi.string(),
+import z from "zod";
+export const VModuleSchema = z.object({
+    body: z.object({
+        title: z.string().trim().min(1, "Title is required"),
+        isLive: z.boolean().default(false),
+    }),
+    params: z.object({
+        id: z.string(),
+    }),
 });
-export const VModule = Joi.object({});
 //# sourceMappingURL=module.validator.js.map

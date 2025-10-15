@@ -1,11 +1,11 @@
-import Joi from "joi";
+import z from "zod";
 
-const VConst = Joi.object({
-  title: Joi.string().required().trim(),
-  description: Joi.string(),
-  videoUrl: Joi.string(),
-});
-
-export const VModule = Joi.object({
-    
+export const VModuleSchema = z.object({
+  body: z.object({
+    title: z.string().trim().min(1, "Title is required"),
+    isLive: z.boolean().default(false),
+  }),
+  params: z.object({
+    id: z.string(),
+  }),
 });

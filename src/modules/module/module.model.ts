@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import type { IModules } from "../../module/module.interface.js";
+import type { IModules } from "./module.interface.js";
 
 const moduleSchema = new Schema<IModules>(
   {

@@ -4,7 +4,7 @@ export const couponSchema = z.object({
         code: z.string().min(3).max(20),
         courses: z.array(z.string().length(24)),
         discount: z.number().positive(),
-        discountType: z.enum(["percentage", "amount"]),
+        discountType: z.enum(["percentage", "amount"]).default("percentage"),
         minSpend: z.number(),
         maxDiscount: z.number(),
         expiresIn: z.date(),

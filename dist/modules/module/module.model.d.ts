@@ -1,2 +1,7 @@
-export declare const CourseModule: import("mongoose").Model<any, unknown, unknown, unknown, any, IModules>;
+import type { IModules } from "./module.interface.js";
+export declare const CourseModule: import("mongoose").Model<IModules, {}, {}, {}, import("mongoose").Document<unknown, {}, IModules, {}, {}> & IModules & {
+    _id: import("mongoose").Types.ObjectId;
+} & {
+    __v: number;
+}, any>;
 //# sourceMappingURL=module.model.d.ts.map

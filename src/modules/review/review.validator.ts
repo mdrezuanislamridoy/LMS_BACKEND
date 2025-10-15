@@ -1,5 +1,11 @@
-import Joi from "joi";
-export const VReviewSchema = Joi.object({
-  rating: Joi.number().required().min(1).max(5).default(1),
-  comment: Joi.string().required(),
+import z from "zod";
+
+export const VReviewSchema = z.object({
+  body: z.object({
+    rating: z.number().min(1).max(5),
+    comment: z.string().min(1, "Comment is required"),
+  }),
+  params: z.object({
+    id: z.string(),
+  }),
 });

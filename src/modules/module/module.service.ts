@@ -1,10 +1,7 @@
 import type { Request } from "express";
-import { CourseModule } from "../course/models/module.model.js";
-import type { IModules } from "./module.interface.js";
-import cloud from "../../utils/cloudinary.js";
 import createHttpError from "http-errors";
-import { CourseModel } from "../course/models/course.model.js";
-import type { ICourse } from "../course/interfaces/course.interface.js";
+import { CourseModel } from "../course/course.model.js";
+import { CourseModule } from "./module.model.js";
 
 const SCreateModule = async (req: Request) => {
   const courseId = req.params.id;

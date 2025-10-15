@@ -1,8 +1,8 @@
 import createHttpError from "http-errors";
-import { CourseModel } from "../course/models/course.model.js";
 import { Enrollment } from "./enrollment.model.js";
 import { Coupon } from "../coupon/coupon.model.js";
 import { UserModel } from "../auth/user/user.model.js";
+import { CourseModel } from "../course/course.model.js";
 const SEnroll = async (req) => {
     const userId = req.user._id;
     const courseId = req.params.id;
