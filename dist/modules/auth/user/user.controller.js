@@ -72,7 +72,7 @@ export const profile = async (req, res, next) => {
         next(error);
     }
 };
-export const update = async (req, res, next) => {
+export const updateUser = async (req, res, next) => {
     try {
         const updatedUser = await SUser.UUpdateUser(req.user._id, req.body);
         if (!updatedUser) {

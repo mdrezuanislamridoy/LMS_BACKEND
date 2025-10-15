@@ -101,7 +101,7 @@ export const profile = async (
   }
 };
 
-export const update = async (
+export const updateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
