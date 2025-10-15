@@ -5,7 +5,7 @@ const ProfileImage = new Schema({});
 const userSchema = new Schema({
     name: { type: String, required: true },
     gender: { type: String, enum: ["male", "female", "other"], required: true },
-    dateOfBirth: String,
+    dateOfBirth: Date,
     email: { type: String, required: true, unique: true },
     contactInfo: ContactInfo,
     socialAccounts: SocialInfo,

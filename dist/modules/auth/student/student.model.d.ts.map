@@ -1,1 +1,1 @@
-{"version":3,"file":"student.model.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/student/student.model.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,wBAAwB,CAAC;AAQvD,eAAO,MAAM,OAAO;;;;OAAoD,CAAC"}
+{"version":3,"file":"student.model.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/student/student.model.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,wBAAwB,CAAC;AAOvD,eAAO,MAAM,OAAO;;;;OAAoD,CAAC"}
