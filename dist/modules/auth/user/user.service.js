@@ -20,10 +20,16 @@ const USendCode = async (email) => {
     return result;
 };
 const UVerifyCode = async (req) => {
-    return await VerifyCode.findOne({
+    const result = await VerifyCode.findOne({
         email: req.body.email,
         verificationCode: req.body.verificationCode,
     });
+    if (!result) {
+        throw createHttpError(400, "Verification failed");
+    }
+    result.verified = true;
+    await result.save();
+    return result;
 };
 const ULogin = async (email, password, next) => {
     const user = await UserModel.findOne({ email });

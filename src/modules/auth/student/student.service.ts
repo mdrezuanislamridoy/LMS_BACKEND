@@ -7,8 +7,16 @@ import createHttpError from "http-errors";
 
 const SCreateStudent = async (req: Request) => {
   const data: IStudent = req.body;
+  const isVerified = await VerifyCode.findOne({
+    email: req.body.email,
+    verificationCode: req.body.verificationCode,
+  });
 
-  await VerifyCode.deleteOne({ email: req.body.email });
+  if (!isVerified?.verified) {
+    throw createHttpError(400, "You're not verified");
+  }
+  await VerifyCode.deleteMany({ email: req.body.email });
+
   const role = "student";
 
   const password = await bcrypt.hash(req.body.password, 10);

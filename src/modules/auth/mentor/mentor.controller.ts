@@ -8,7 +8,7 @@ export const createMentor = async (
   next: NextFunction
 ) => {
   try {
-    const newMentor = await mentorService.SCreateMentor(req.body, next);
+    const newMentor = await mentorService.SCreateMentor(req as Request);
     if (!newMentor) {
       return next(createHttpError(400, "Failed To Create Mentor"));
     }

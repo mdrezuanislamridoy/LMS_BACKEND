@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   changePassword,
+  deleteUser,
   forgetPassword,
   login,
   logout,
@@ -22,13 +23,14 @@ router.post("/verifySignUpCode", verifyCode);
 router.post("/login", login);
 router.get("/profile", User, profile);
 router.put("/updateProfile", User, updateUser);
+router.put("/deleteUser", User, deleteUser);
 router.put("/changePassword", User, changePassword);
 router.post("/sendForgetPasswordCode", sendForgetPassCode),
   router.post("/forgetPassCode", forgetPassword);
 router.post("/logout", User, logout);
 
-router.use("/", studentRoutes);
-router.use("/", adminRouter);
-router.use("/", mentorRouter);
+router.use("/student", studentRoutes);
+router.use("/admin", adminRouter);
+router.use("/mentor", mentorRouter);
 
 export const userRouter = router;

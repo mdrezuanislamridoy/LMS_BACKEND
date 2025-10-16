@@ -11,5 +11,6 @@ export const mentorSchema = z.object({
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         "Password must contain uppercase, lowercase, number, and special character"
       ),
+    verificationCode: z.number().min(1, "verification code is required"),
   }),
 });

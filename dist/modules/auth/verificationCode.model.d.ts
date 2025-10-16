@@ -2,6 +2,7 @@ import { Document, Schema } from "mongoose";
 export interface IVerifyCode extends Document {
     email: string;
     verificationCode: number;
+    verified: boolean;
     createdAt?: Date;
 }
 export declare const VerifyCode: import("mongoose").Model<IVerifyCode, {}, {}, {}, Document<unknown, {}, IVerifyCode, {}, import("mongoose").DefaultSchemaOptions> & IVerifyCode & Required<{

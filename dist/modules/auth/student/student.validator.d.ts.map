@@ -1,1 +1,1 @@
-{"version":3,"file":"student.validator.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/student/student.validator.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,MAAM,KAAK,CAAC;AAEpB,eAAO,MAAM,aAAa;;;;;;mBAYxB,CAAC"}
+{"version":3,"file":"student.validator.d.ts","sourceRoot":"","sources":["../../../../src/modules/auth/student/student.validator.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,MAAM,KAAK,CAAC;AAEpB,eAAO,MAAM,aAAa;;;;;;;mBAaxB,CAAC"}

@@ -28,10 +28,19 @@ const USendCode = async (email: string) => {
 };
 
 const UVerifyCode = async (req: Request) => {
-  return await VerifyCode.findOne({
+  const result = await VerifyCode.findOne({
     email: req.body.email,
     verificationCode: req.body.verificationCode,
   });
+  if (!result) {
+    throw createHttpError(400, "Verification failed");
+  }
+
+  result.verified = true;
+
+  await result.save();
+
+  return result;
 };
 
 const ULogin = async (email: string, password: string, next: NextFunction) => {

@@ -30,11 +30,11 @@ export declare const SUser: {
     }> & {
         __v: number;
     }) | null>;
-    UVerifyCode: (req: Request) => Promise<(import("mongoose").Document<unknown, {}, import("../verificationCode.model.js").IVerifyCode, {}, import("mongoose").DefaultSchemaOptions> & import("../verificationCode.model.js").IVerifyCode & Required<{
+    UVerifyCode: (req: Request) => Promise<import("mongoose").Document<unknown, {}, import("../verificationCode.model.js").IVerifyCode, {}, import("mongoose").DefaultSchemaOptions> & import("../verificationCode.model.js").IVerifyCode & Required<{
         _id: unknown;
     }> & {
         __v: number;
-    }) | null>;
+    }>;
     UChangePassword: (req: Request) => Promise<(import("mongoose").Document<unknown, {}, IUser, {}, import("mongoose").DefaultSchemaOptions> & IUser & Required<{
         _id: unknown;
     }> & {

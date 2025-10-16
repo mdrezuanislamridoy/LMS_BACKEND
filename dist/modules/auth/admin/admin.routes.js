@@ -9,6 +9,6 @@ router.put("/rejectMentor/:id", User, checkRole("admin"), rejectMentor);
 router.put("/block/:id", User, checkRole("admin"), blockUser);
 router.put("/unblock/:id", User, checkRole("admin"), unBlockUser);
 router.put("/delete/:id", User, checkRole("admin"), deleteUser);
-router.put("/undelete/:id", User, checkRole("admin"), undoDeleteUser);
+router.put("/undodelete/:id", User, checkRole("admin"), undoDeleteUser);
 export const adminRouter = router;
 //# sourceMappingURL=admin.routes.js.map
