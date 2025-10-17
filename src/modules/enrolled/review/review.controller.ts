@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 
 import createHttpError from "http-errors";
 import { RService } from "./review.service.js";
-import type { IReview } from "./review.interface.js";
 
 export const addReview = async (
   req: Request,

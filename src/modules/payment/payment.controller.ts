@@ -3,6 +3,7 @@ import { SPayment } from "./payment.service.js";
 import createHttpError from "http-errors";
 import { Enrollment } from "../enrollment/enrollment.model.js";
 
+
 export const payBill = async (
   req: Request,
   res: Response,
