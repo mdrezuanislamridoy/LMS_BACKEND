@@ -94,6 +94,7 @@ const courseSchema = new Schema({
     certificate: {
         type: String,
     },
+    meetings: [{ type: Schema.Types.ObjectId }],
 }, {
     timestamps: true,
 });

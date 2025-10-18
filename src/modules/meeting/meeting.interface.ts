@@ -1,6 +1,7 @@
-import { Document, model } from "mongoose";
+import { Document, model, Types } from "mongoose";
 
 export interface IMeeting extends Document {
+  courseId: Types.ObjectId;
   title: string;
   description: string;
   meetingLink: string;

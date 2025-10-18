@@ -1,7 +1,8 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import type { IMeeting } from "./meeting.interface.js";
 
 const MeetingSchema = new Schema<IMeeting>({
+  courseId: { type: Schema.Types.ObjectId, required: true },
   title: {
     type: String,
     required: true,
@@ -19,8 +20,8 @@ const MeetingSchema = new Schema<IMeeting>({
     required: true,
   },
   isPaid: {
-    type:Boolean,
-    default:false
+    type: Boolean,
+    default: false,
   },
   description: {
     type: String,
