@@ -23,6 +23,12 @@ const reviewModel = new Schema<IReview>(
       type: String,
       required: true,
     },
+    images: [
+      {
+        imageurl: String,
+        publicId: String,
+      },
+    ],
   },
   {
     timestamps: true,

@@ -1,11 +1,11 @@
 import type { Request } from "express";
 import type { IThumbnail } from "./video.interface.js";
 import { Video } from "./video.model.js";
-import cloud from "../../utils/cloudinary.js";
 import createHttpError from "http-errors";
-import { CourseModel } from "../course/course.model.js";
-import type { ICourse } from "../course/course.interface.js";
-import { CourseModule } from "../module/module.model.js";
+import type { ICourse } from "../../course/course.interface.js";
+import { CourseModel } from "../../course/course.model.js";
+import { CourseModule } from "../../module/module.model.js";
+import cloud from "../../../utils/cloudinary.js";
 
 const SAddVideo = async (req: Request) => {
   const { id: courseId } = req.params;

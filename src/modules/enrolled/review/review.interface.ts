@@ -5,6 +5,12 @@ export interface IReview extends Document {
   course: Types.ObjectId;
   rating: number;
   comment: string;
+  images: [
+    {
+      imageurl: String;
+      publicId: String;
+    }
+  ];
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -76,6 +76,7 @@ const getCoursesService = async () => {
   const courses = await CourseModel.find();
   return courses;
 };
+
 const updateCourseService = async (courseId: string, data: ICourse) => {
   if (!Types.ObjectId.isValid(courseId)) {
     throw createHttpError(403, "Invalid Course ID Format");
@@ -86,6 +87,7 @@ const updateCourseService = async (courseId: string, data: ICourse) => {
   });
   return courses;
 };
+
 const deleteCourseService = async (courseId: string) => {
   if (!Types.ObjectId.isValid(courseId)) {
     throw createHttpError(403, "Invalid Course ID Format");

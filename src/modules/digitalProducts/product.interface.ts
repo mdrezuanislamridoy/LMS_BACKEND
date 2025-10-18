@@ -1,9 +1,11 @@
+import type { Document, Types } from "mongoose";
+
 type Thumbnail = {
   imageUrl: string;
   publicId: string;
 };
 
-export interface IProduct {
+export interface IProduct extends Document {
   title: string;
   description: string;
   type: "chrome extension" | "software plugin" | "e-book" | "others";
@@ -11,7 +13,14 @@ export interface IProduct {
   isFree: boolean;
   stock?: number;
   discount?: number;
-  category: string;
+
+  views: number;
+  purchases: number;
+  carts: number;
+  wished: number;
+  avgRating: number;
+  reviews: Types.ObjectId[];
+  popularity: number;
   thumbnail: Thumbnail;
   createdAt?: Date;
   updatedAt?: Date;

@@ -8,7 +8,7 @@ const AddCategory = async (req, payload, next) => {
     }
     const iconUploadStream = (buffer) => {
         return new Promise((resolve, reject) => {
-            const stream = cloud.uploader.upload_stream({ folder: "bac_commerce/categoryIcon" }, (err, data) => {
+            const stream = cloud.uploader.upload_stream({ folder: "LMS/categoryIcon" }, (err, data) => {
                 if (data)
                     resolve(data);
                 else
