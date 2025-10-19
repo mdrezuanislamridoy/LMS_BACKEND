@@ -42,11 +42,9 @@ const getSingleCourse = async (
 
 const getCourses = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const courses = await courseService.getCoursesService();
-    if (!courses) {
-      return next(createHttpError(404, "courses not found"));
-    }
-    res.status(201).json({ message: "course fetched successfully", courses });
+    const result = await courseService.getCoursesService(req as Request);
+
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }

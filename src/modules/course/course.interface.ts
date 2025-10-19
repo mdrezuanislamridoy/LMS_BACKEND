@@ -1,5 +1,4 @@
 import { Document, Types } from "mongoose";
-import type { IModules } from "../../module/module.interface.js";
 
 export interface IProject {
   title: string;

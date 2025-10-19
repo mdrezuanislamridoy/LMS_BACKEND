@@ -3,10 +3,10 @@ const ContactInfo = new Schema({});
 const SocialInfo = new Schema({});
 const ProfileImage = new Schema({});
 const userSchema = new Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, index: true },
     gender: { type: String, enum: ["male", "female", "other"], required: true },
     dateOfBirth: Date,
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true, index: true },
     contactInfo: ContactInfo,
     socialAccounts: SocialInfo,
     profileImg: ProfileImage,
@@ -17,6 +17,7 @@ const userSchema = new Schema({
         type: String,
         enum: ["student", "mentor", "admin"],
         required: true,
+        index: true,
     },
     mentorStatus: {
         type: String,

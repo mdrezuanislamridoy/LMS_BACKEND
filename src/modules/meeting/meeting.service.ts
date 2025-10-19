@@ -32,7 +32,26 @@ const SGetMeetings = async (req: Request) => {
   };
 };
 
+const SGetMeeting = async (req: Request) => {
+  const meetingId = req.params.id;
+  const meeting = await Meeting.findById(meetingId);
+
+  if (!meeting) {
+    throw createHttpError(400, "Meeting not found");
+  }
+
+  return {
+    success: true,
+    message: "Meeting fetched successfully",
+    meeting,
+  };
+};
+const SUpdateMeeting = async (req:Request)=>{
+    
+}
+
 export const SMeeting = {
   SCreateMeeting,
   SGetMeetings,
+  SGetMeeting,
 };

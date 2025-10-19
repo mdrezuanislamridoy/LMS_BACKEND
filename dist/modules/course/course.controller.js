@@ -26,11 +26,8 @@ const getSingleCourse = async (req, res, next) => {
 };
 const getCourses = async (req, res, next) => {
     try {
-        const courses = await courseService.getCoursesService();
-        if (!courses) {
-            return next(createHttpError(404, "courses not found"));
-        }
-        res.status(201).json({ message: "course fetched successfully", courses });
+        const result = await courseService.getCoursesService(req);
+        res.status(201).json(result);
     }
     catch (error) {
         next(error);

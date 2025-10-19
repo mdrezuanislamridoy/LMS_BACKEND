@@ -58,9 +58,43 @@ const getSingleCourseService = async (courseId) => {
     }
     return course;
 };
-const getCoursesService = async () => {
-    const courses = await CourseModel.find();
-    return courses;
+const getCoursesService = async (req) => {
+    const { search = "", category = "", level = "", sort = "", pageNumber = 1, limit = 16, } = req.query;
+    let query = {};
+    if (search) {
+        query.$or = [
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+        ];
+    }
+    if (category) {
+        query.category = category;
+    }
+    if (level) {
+        query.level = level;
+    }
+    const page = Number(pageNumber);
+    const limitation = Number(limit);
+    const skip = (page - 1) * limitation;
+    const sortOptions = {};
+    if (sort) {
+        const [key, value] = sort.split(":");
+        sortOptions[key] = value === "desc" ? -1 : 1;
+    }
+    else {
+        sortOptions.createdAt = -1;
+    }
+    const courses = await CourseModel.find(query)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limitation);
+    const total = await courses.countDocuments();
+    return {
+        success: true,
+        message: "Courses fetched successfully",
+        total,
+        courses,
+    };
 };
 const updateCourseService = async (courseId, data) => {
     if (!Types.ObjectId.isValid(courseId)) {
@@ -77,6 +111,11 @@ const deleteCourseService = async (courseId) => {
     }
     const deletedCourse = await CourseModel.findOneAndDelete({ _id: courseId });
     return deletedCourse;
+};
+const topCourses = async (req) => {
+    const { limit = 10 } = req.query;
+    const topCourses = await CourseModel.aggregate([]);
+    return topCourses;
 };
 export const courseService = {
     createCourseService,

@@ -1,9 +1,5 @@
 import mongoose, { model, mongo, Schema, Types } from "mongoose";
-import type {
-  IProject,
-  ICourse,
-  IThumbnail,
-} from "../interfaces/course.interface.js";
+import type { IProject, ICourse, IThumbnail } from "./course.interface.js";
 
 const ProjectSchema = new Schema<IProject>({
   title: { type: String, required: true },
