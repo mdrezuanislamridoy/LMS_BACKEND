@@ -59,6 +59,7 @@ productSchema.pre("save", function (next) {
     this.carts * 0.5 +
     this.wished * 0.3 +
     this.avgRating * 2;
+  next();
 });
 
 export const Product = model<IProduct>("Product", productSchema);
