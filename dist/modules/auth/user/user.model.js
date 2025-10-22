@@ -30,5 +30,10 @@ const userSchema = new Schema({
     isDeleted: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
 }, { discriminatorKey: "roleKey", timestamps: true });
+userSchema.index({ email: 1 });
+userSchema.index({ role: 1 });
+userSchema.index({ mentorStatus: 1 });
+userSchema.index({ isDeleted: 1 });
+userSchema.index({ isBlocked: 1 });
 export const UserModel = mongoose.model("User", userSchema);
 //# sourceMappingURL=user.model.js.map

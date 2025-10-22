@@ -29,4 +29,6 @@ const CartSchema = new Schema({
   },
 });
 
+CartSchema.index({ user: 1 });
+
 export const Cart = model("Cart", CartSchema);

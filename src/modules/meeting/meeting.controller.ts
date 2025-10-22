@@ -51,3 +51,15 @@ export const updateMeeting = async (
     next(error);
   }
 };
+export const deleteMeeting = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await SMeeting.SDeleteMeeting(req as Request);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -98,5 +98,15 @@ const courseSchema = new Schema({
 }, {
     timestamps: true,
 });
+courseSchema.index({ title: "text", about: "text" });
+courseSchema.index({ category: 1 });
+courseSchema.index({ instructors: 1 });
+courseSchema.index({ live: 1 });
+courseSchema.index({ isFree: 1 });
+courseSchema.index({ discount: 1 });
+courseSchema.index({ ratings: -1 });
+courseSchema.index({ enrolledStudents: -1 });
+courseSchema.index({ ratings: -1, enrolledStudents: -1 });
+courseSchema.index({ createdAt: -1 });
 export const CourseModel = mongoose.models.Course || model("Course", courseSchema);
 //# sourceMappingURL=course.model.js.map

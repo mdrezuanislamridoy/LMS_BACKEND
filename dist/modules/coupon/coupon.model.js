@@ -18,5 +18,8 @@ const couponSchema = new Schema({
 }, {
     timestamps: true,
 });
+couponSchema.index({ code: 1 });
+couponSchema.index({ isActive: 1 });
+couponSchema.index({ expiresIn: 1 });
 export const Coupon = model("Coupon", couponSchema);
 //# sourceMappingURL=coupon.model.js.map

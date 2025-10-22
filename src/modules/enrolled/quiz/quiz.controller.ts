@@ -1,52 +1,52 @@
 import type { NextFunction, Request, Response } from "express";
-import { SProduct } from "./product.service.js";
+import quizService from "./quiz.service.js";
 
-export const getProducts = async (
+export const addQuiz = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const result = await SProduct.getProducts(req as Request);
+    const result = await quizService.addQuiz(req as Request);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getQuiz = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await quizService.getQuiz(req as Request);
     res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
 
-export const getProduct = async (
+export const updateQuiz = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const result = await SProduct.getProduct(req as Request);
+    const result = await quizService.updateQuiz(req as Request);
     res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
 
-export const addProduct = async (
+export const deleteQuiz = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const result = await SProduct.addProduct(req as Request);
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const deleteProduct = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const result = await SProduct.deleteProduct(req as Request);
+    const result = await quizService.deleteQuiz(req as Request);
     res.status(200).json(result);
   } catch (error) {
     next(error);

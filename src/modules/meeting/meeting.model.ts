@@ -28,4 +28,7 @@ const MeetingSchema = new Schema<IMeeting>({
   },
 });
 
+MeetingSchema.index({ courseId: 1, date: 1 });
+MeetingSchema.index({ isPaid: 1 });
+
 export const Meeting = model("Meeting", MeetingSchema);

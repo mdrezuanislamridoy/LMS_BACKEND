@@ -12,6 +12,13 @@ import { mentorRouter } from "./modules/auth/mentor/mentor.routes.js";
 import { adminRouter } from "./modules/auth/admin/admin.routes.js";
 import { CourseRoutes } from "./modules/course/course.routes.js";
 import { PaymentRouter } from "./modules/payment/payment.routes.js";
+import { VideoRouter } from "./modules/enrolled/video/video.routes.js";
+import { MeetingRouter } from "./modules/meeting/meeting.routes.js";
+import { AssignmentRouter } from "./modules/enrolled/assignment/assignment.routes.js";
+import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
+import { ProductRouter } from "./modules/digitalProducts/product.routes.js";
+import { CouponRouter } from "./modules/coupon/coupon.routes.js";
+import { CartRouter } from "./modules/cart/cart.routes.js";
 configDotenv();
 
 const app: Application = express();
@@ -32,10 +39,17 @@ app.use("/api/auth", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/enrollment", EnrollmentRouter);
 app.use("/api/category", CategoryRouter);
+app.use("/api/coupon", CouponRouter);
+app.use("/api/cart", CartRouter);
 app.use("/api/mentor", mentorRouter);
 app.use("/api/review", ReviewRouter);
 app.use("/api/course", CourseRoutes);
 app.use("/api/payment", PaymentRouter);
+app.use("/api/video", VideoRouter);
+app.use("/api/meeting", MeetingRouter);
+app.use("/api/assignment", AssignmentRouter);
+app.use("/api/quiz", quizRouter);
+app.use("/api/product", ProductRouter);
 
 // global error
 app.use(HandleError);

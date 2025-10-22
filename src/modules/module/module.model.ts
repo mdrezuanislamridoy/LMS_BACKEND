@@ -20,4 +20,6 @@ const moduleSchema = new Schema<IModules>(
   }
 );
 
+moduleSchema.index({ title: "text" });
+
 export const CourseModule = model<IModules>("Module", moduleSchema);

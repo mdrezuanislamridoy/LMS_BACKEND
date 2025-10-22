@@ -5,7 +5,7 @@ import { Meeting } from "./meeting.model.js";
 import { success } from "zod";
 
 const SCreateMeeting = async (req: Request) => {
-  const courseId = req.params.id;
+  const courseId = req.params.courseId;
   const course = await CourseModel.findById(courseId);
   if (!course) {
     throw createHttpError(400, "Course not found to add meeting link");
@@ -18,7 +18,7 @@ const SCreateMeeting = async (req: Request) => {
 };
 
 const SGetMeetings = async (req: Request) => {
-  const courseId = req.params.id;
+  const courseId = req.params.courseId;
   const course = await CourseModel.findById(courseId);
 
   if (!course) {
@@ -33,7 +33,7 @@ const SGetMeetings = async (req: Request) => {
 };
 
 const SGetMeeting = async (req: Request) => {
-  const meetingId = req.params.id;
+  const meetingId = req.params.meetingId;
   const meeting = await Meeting.findById(meetingId);
 
   if (!meeting) {
@@ -46,12 +46,39 @@ const SGetMeeting = async (req: Request) => {
     meeting,
   };
 };
-const SUpdateMeeting = async (req:Request)=>{
-    
-}
+
+const SUpdateMeeting = async (req: Request) => {
+  const meetingId = req.params.meetingId;
+  const meeting = await Meeting.findByIdAndUpdate(meetingId, req.body, {
+    new: true,
+  });
+  if (!meeting) {
+    throw createHttpError(400, "Meeting not found");
+  }
+  return {
+    success: true,
+    message: "Meeting updated successfully",
+    meeting,
+  };
+};
+
+const SDeleteMeeting = async (req: Request) => {
+  const meetingId = req.params.meetingId;
+  const meeting = await Meeting.findByIdAndDelete(meetingId);
+  if (!meeting) {
+    throw createHttpError(400, "Meeting not found");
+  }
+  return {
+    success: true,
+    message: "Meeting deleted successfully",
+    meeting,
+  };
+};
 
 export const SMeeting = {
   SCreateMeeting,
   SGetMeetings,
   SGetMeeting,
+  SUpdateMeeting,
+  SDeleteMeeting,
 };

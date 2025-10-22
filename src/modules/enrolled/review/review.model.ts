@@ -35,4 +35,9 @@ const reviewModel = new Schema<IReview>(
   }
 );
 
+reviewModel.index({ course: 1 });
+reviewModel.index({ reviewer: 1 });
+reviewModel.index({ createdAt: -1 });
+reviewModel.index({ reviewer: 1, course: 1 }, { unique: true });
+
 export const Review = model("Review", reviewModel);

@@ -31,5 +31,8 @@ const VideoSchema = new Schema<IVideo>({
     default: Date.now,
   },
 });
+VideoSchema.index({ createdAt: -1 });
+VideoSchema.index({ isFree: 1 });
+VideoSchema.index({ title: "text" });
 
 export const Video = model("Video", VideoSchema);

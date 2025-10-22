@@ -23,4 +23,9 @@ const couponSchema = new Schema<ICoupon>(
     timestamps: true,
   }
 );
+
+couponSchema.index({ code: 1 }); 
+couponSchema.index({ isActive: 1 });
+couponSchema.index({ expiresIn: 1 });
+
 export const Coupon = model("Coupon", couponSchema);

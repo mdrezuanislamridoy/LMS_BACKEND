@@ -12,5 +12,6 @@ const categoryModel = new Schema({
         iconPublicId: { type: String, required: true },
     },
 });
+categoryModel.index({ name: "text" });
 export const Category = model("Category", categoryModel);
 //# sourceMappingURL=category.model.js.map

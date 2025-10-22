@@ -52,6 +52,13 @@ const productSchema = new Schema<IProduct>(
   { timestamps: true }
 );
 
+productSchema.index({ title: "text", description: "text" });
+productSchema.index({ type: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ avgRating: -1 });
+productSchema.index({ popularity: -1 });
+productSchema.index({ createdAt: -1 });
+
 productSchema.pre("save", function (next) {
   this.popularity =
     this.views * 0.2 +

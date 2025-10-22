@@ -113,8 +113,21 @@ const getProduct = async (req: Request) => {
   };
 };
 
+const deleteProduct = async (req: Request) => {
+  const id = req.params.id;
+  const product = await Product.findByIdAndDelete(id);
+  if (!product) {
+    throw createHttpError(404, "Product not found");
+  }
+  return {
+    success: true,
+    message: "Product deleted successfully",
+  };
+};
+
 export const SProduct = {
   addProduct,
   getProducts,
   getProduct,
+  deleteProduct
 };

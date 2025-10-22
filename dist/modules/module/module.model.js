@@ -14,5 +14,6 @@ const moduleSchema = new Schema({
 }, {
     timestamps: true,
 });
+moduleSchema.index({ title: "text" });
 export const CourseModule = model("Module", moduleSchema);
 //# sourceMappingURL=module.model.js.map

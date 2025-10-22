@@ -6,7 +6,10 @@ export const VMeetingSchema = z.object({
     description: z.string().min(1, "Description is required"),
     meetingLink: z.string().min(1, "Meeting link is required"),
     isPaid: z.boolean().default(false),
-    startTime: z.string().min(1,"Starting time is required"),
+    startTime: z.string().min(1, "Starting time is required"),
     date: z.date(),
+  }),
+  params: z.object({
+    courseId: z.string(),
   }),
 });

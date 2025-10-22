@@ -59,4 +59,10 @@ const enrollmentSchema = new Schema<IEnrollment>(
   { timestamps: true }
 );
 
+enrollmentSchema.index({ user: 1, courseId: 1 }, { unique: true });
+enrollmentSchema.index({ status: 1, createdAt: -1 });
+enrollmentSchema.index({ courseId: 1 });
+enrollmentSchema.index({ createdAt: 1 });
+
+
 export const Enrollment = model("Enrollment", enrollmentSchema);

@@ -6,4 +6,6 @@ const StudentSchema = new Schema<IStudent>({
   enrolledCourses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
 });
 
+StudentSchema.index({ enrolledCourses: 1 });
+
 export const Student = UserModel.discriminator("student", StudentSchema);

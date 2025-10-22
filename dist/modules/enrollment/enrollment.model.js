@@ -52,5 +52,9 @@ const enrollmentSchema = new Schema({
     },
     certificateIssued: { type: Boolean, default: false },
 }, { timestamps: true });
+enrollmentSchema.index({ user: 1, courseId: 1 }, { unique: true });
+enrollmentSchema.index({ status: 1, createdAt: -1 });
+enrollmentSchema.index({ courseId: 1 });
+enrollmentSchema.index({ createdAt: 1 });
 export const Enrollment = model("Enrollment", enrollmentSchema);
 //# sourceMappingURL=enrollment.model.js.map
