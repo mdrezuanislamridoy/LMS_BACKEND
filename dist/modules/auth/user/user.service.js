@@ -16,6 +16,7 @@ const USendCode = async (email) => {
     if (!result) {
         throw createHttpError(400, "Failed to create verification code");
     }
+    console.log(result);
     await sendMail(email, "Your RR-LMS verification code", `${verificationCode}`);
     return result;
 };

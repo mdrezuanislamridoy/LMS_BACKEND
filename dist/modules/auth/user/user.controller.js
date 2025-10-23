@@ -5,10 +5,8 @@ import { env } from "../../../config/env.js";
 dotenv.config();
 export const sendVerificationCode = async (req, res, next) => {
     try {
-        await SUser.USendCode(req.body.email);
-        res
-            .status(200)
-            .json({ success: true, message: "A 6 digit code sent to your account" });
+        const result = await SUser.USendCode(req.body.email);
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);
@@ -30,6 +28,7 @@ export const verifyCode = async (req, res, next) => {
 };
 export const login = async (req, res, next) => {
     try {
+        console.log(req.body);
         const { email, password } = req.body;
         const result = await SUser.ULogin(email, password, next);
         if (!result) {

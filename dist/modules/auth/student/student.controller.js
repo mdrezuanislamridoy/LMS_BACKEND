@@ -5,6 +5,7 @@ import { env } from "../../../config/env.js";
 export const createStudent = async (req, res, next) => {
     try {
         const result = await SStudent.SCreateStudent(req);
+        console.log(req.body);
         if (!result) {
             throw createHttpError(400, "something went wrong");
         }

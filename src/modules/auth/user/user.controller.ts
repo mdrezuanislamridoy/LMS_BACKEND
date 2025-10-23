@@ -14,11 +14,9 @@ export const sendVerificationCode = async (
   next: NextFunction
 ) => {
   try {
-    await SUser.USendCode(req.body.email as string);
+    const result = await SUser.USendCode(req.body.email as string);
 
-    res
-      .status(200)
-      .json({ success: true, message: "A 6 digit code sent to your account" });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -48,6 +46,7 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
     const result = await SUser.ULogin(
       email as string,

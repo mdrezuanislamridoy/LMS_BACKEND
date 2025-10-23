@@ -13,6 +13,9 @@ export const createStudent = async (
   try {
     const result = await SStudent.SCreateStudent(req as Request);
 
+    console.log(req.body);
+    
+
     if (!result) {
       throw createHttpError(400, "something went wrong");
     }

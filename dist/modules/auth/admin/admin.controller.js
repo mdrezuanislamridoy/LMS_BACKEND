@@ -44,6 +44,17 @@ export const rejectMentor = async (req, res, next) => {
         next(error);
     }
 };
+export const getRejectedMentors = async (req, res, next) => {
+    const result = await UserModel.find({ mentorStatus: "no" });
+    if (result.length === 0) {
+        return next(createHttpError(404, "No mentor requested rejected yet"));
+    }
+    res.status(200).json({
+        success: true,
+        message: "Rejected mentors fetched successfully",
+        mentors: result,
+    });
+};
 export const blockUser = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -63,6 +74,17 @@ export const unBlockUser = async (req, res, next) => {
     catch (error) {
         next(error);
     }
+};
+export const getBlockedAccounts = async (req, res, next) => {
+    const blockedAccounts = await UserModel.find({ isBlocked: true });
+    if (blockedAccounts.length === 0) {
+        return next(createHttpError(404, "No user is blocked yet"));
+    }
+    res.status(200).json({
+        success: true,
+        message: "Blocked accounts fetched successfully",
+        mentors: blockedAccounts,
+    });
 };
 export const deleteUser = async (req, res, next) => {
     try {
@@ -85,5 +107,16 @@ export const undoDeleteUser = async (req, res, next) => {
     catch (error) {
         next(error);
     }
+};
+export const getDeletedAccount = async (req, res, next) => {
+    const deletedAccount = await UserModel.find({ isBlocked: true });
+    if (deletedAccount.length === 0) {
+        return next(createHttpError(404, "No user is deleted yet"));
+    }
+    res.status(200).json({
+        success: true,
+        message: "Deleted accounts fetched successfully",
+        mentors: deletedAccount,
+    });
 };
 //# sourceMappingURL=admin.controller.js.map
