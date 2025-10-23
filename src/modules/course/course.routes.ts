@@ -4,13 +4,11 @@ import { checkRole } from "../../middlewares/role.middleware.js";
 import { upload } from "../../utils/multer.js";
 import { validation } from "../../middlewares/Validator.js";
 import { VCourseSchema } from "./course.validator.js";
-import { courseController } from "./course.controller.js";
+import { createCourse, deleteCourse, getCourses, getSingleCourse, updateCourse } from "./course.controller.js";
 
 const router = Router();
 
-router.get("/all-courses", (req: Request, res: Response) => {
-  res.send("Hello TypeScript + Node + Express + Mongo!");
-});
+
 
 router.post(
   "/create-course",
@@ -18,22 +16,22 @@ router.post(
   checkRole("admin"),
   upload.single("thumbnail"),
   validation(VCourseSchema),
-  courseController.createCourse
+  createCourse
 );
 
-router.get("/", courseController.getCourses);
-router.get("/:id", courseController.getSingleCourse);
+router.get("/", getCourses);
+router.get("/:id",getSingleCourse);
 router.put(
   "/update/:id",
   User,
   checkRole("admin"),
-  courseController.updateCourse
+ updateCourse
 );
 router.put(
   "/delete/:id",
   User,
   checkRole("admin"),
-  courseController.deleteCourse
+deleteCourse
 );
 
 export const CourseRoutes = router;

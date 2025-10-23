@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { configDotenv } from "dotenv";
 import { HandleError } from "./middlewares/handleError.js";
-import { ReviewRouter } from "./modules/review/review.routes.js";
+
 import { userRouter } from "./modules/auth/user/user.routes.js";
 import { EnrollmentRouter } from "./modules/enrollment/enrollment.routes.js";
 import { mentorRouter } from "./modules/auth/mentor/mentor.routes.js";
@@ -19,6 +19,7 @@ import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
 import { ProductRouter } from "./modules/digitalProducts/product.routes.js";
 import { CouponRouter } from "./modules/coupon/coupon.routes.js";
 import { CartRouter } from "./modules/cart/cart.routes.js";
+import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
 configDotenv();
 
 const app: Application = express();

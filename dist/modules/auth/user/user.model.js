@@ -21,7 +21,7 @@ const userSchema = new Schema({
     },
     mentorStatus: {
         type: String,
-        enum: ["yes", "no", "pending"],
+        enum: ["yes", "no", "pending", "rejected"],
         default: "pending",
     },
     refreshToken: {

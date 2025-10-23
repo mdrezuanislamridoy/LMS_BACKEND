@@ -1,6 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 export declare const VCourseSchema: z.ZodObject<{
-    body: {
+    body: z.ZodObject<{
         title: z.ZodString;
         batchNo: z.ZodDefault<z.ZodNumber>;
         live: z.ZodDefault<z.ZodBoolean>;
@@ -13,10 +13,10 @@ export declare const VCourseSchema: z.ZodObject<{
         discount: z.ZodDefault<z.ZodNumber>;
         category: z.ZodString;
         whatYouWillLearn: z.ZodDefault<z.ZodArray<z.ZodString>>;
-        quiz: z.ZodDefault<z.ZodOptional<z.ZodArray<z.ZodString>>>;
-    };
-    params: {
-        id: z.ZodString;
-    };
-}, z.z.core.$strip>;
+    }, z.core.$strip>;
+    params: z.ZodObject<{
+        id: z.ZodOptional<z.ZodString>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
+export type TCourseSchema = z.infer<typeof VCourseSchema>["body"];
 //# sourceMappingURL=course.validator.d.ts.map

@@ -7,11 +7,9 @@ export const validation = (schema) => {
             const parsed = schema.parse({
                 body: req.body,
                 params: req.params,
-                query: req.query,
             });
             (req.body = parsed.body),
-                (req.params = parsed.params),
-                (req.query = parsed.query);
+                (req.params = parsed.params);
         }
         catch (err) {
             if (err instanceof ZodError) {

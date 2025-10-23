@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
 import { courseService } from "./course.service.js";
-const createCourse = async (req, res, next) => {
+export const createCourse = async (req, res, next) => {
     try {
         const course = await courseService.createCourseService(req, req.body);
         if (!course) {
@@ -12,7 +12,7 @@ const createCourse = async (req, res, next) => {
         next(error);
     }
 };
-const getSingleCourse = async (req, res, next) => {
+export const getSingleCourse = async (req, res, next) => {
     try {
         const course = await courseService.getSingleCourseService(req.params.id);
         if (!course) {
@@ -24,7 +24,7 @@ const getSingleCourse = async (req, res, next) => {
         next(error);
     }
 };
-const getCourses = async (req, res, next) => {
+export const getCourses = async (req, res, next) => {
     try {
         const result = await courseService.getCoursesService(req);
         res.status(201).json(result);
@@ -33,7 +33,7 @@ const getCourses = async (req, res, next) => {
         next(error);
     }
 };
-const updateCourse = async (req, res, next) => {
+export const updateCourse = async (req, res, next) => {
     try {
         const updatedCourse = await courseService.updateCourseService(req.params.id, req.body);
         if (!updatedCourse) {
@@ -47,7 +47,7 @@ const updateCourse = async (req, res, next) => {
         next(error);
     }
 };
-const deleteCourse = async (req, res, next) => {
+export const deleteCourse = async (req, res, next) => {
     try {
         const deletedCourse = await courseService.deleteCourseService(req.params.id);
         if (!deletedCourse) {
@@ -60,12 +60,5 @@ const deleteCourse = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
-export const courseController = {
-    createCourse,
-    getSingleCourse,
-    getCourses,
-    updateCourse,
-    deleteCourse,
 };
 //# sourceMappingURL=course.controller.js.map

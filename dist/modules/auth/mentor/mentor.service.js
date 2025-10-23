@@ -2,6 +2,7 @@ import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import { UserModel } from "../user/user.model.js";
 import { VerifyCode } from "../verificationCode.model.js";
+import { Mentor } from "./mentor.model.js";
 const SCreateMentor = async (req) => {
     const isVerified = await VerifyCode.findOne({
         email: req.body.email,
@@ -16,7 +17,7 @@ const SCreateMentor = async (req) => {
         throw createHttpError(400, "Account Already Exists");
     }
     const hashedPass = await bcrypt.hash(req.body.password, 10);
-    return await UserModel.create({
+    return await Mentor.create({
         ...req.body,
         password: hashedPass,
         role: "mentor",

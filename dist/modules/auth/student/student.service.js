@@ -2,6 +2,7 @@ import { Student } from "./student.model.js";
 import { VerifyCode } from "../verificationCode.model.js";
 import bcrypt from "bcrypt";
 import createHttpError from "http-errors";
+import { UserModel } from "../user/user.model.js";
 const SCreateStudent = async (req) => {
     const data = req.body;
     const isVerified = await VerifyCode.findOne({
@@ -11,17 +12,26 @@ const SCreateStudent = async (req) => {
     if (!isVerified?.verified) {
         throw createHttpError(400, "You're not verified");
     }
-    await VerifyCode.deleteMany({ email: req.body.email });
+    const student = await UserModel.findOne({ email: isVerified.email });
+    if (student) {
+        throw createHttpError(400, "User Already exists");
+    }
+    await VerifyCode.deleteMany({ email: isVerified.email });
     const role = "student";
     const password = await bcrypt.hash(req.body.password, 10);
-    const student = await Student.create({ ...data, role, password });
-    if (!student) {
+    const newStudent = await Student.create({
+        ...data,
+        role,
+        password,
+        mentorStatus: "no",
+    });
+    if (!newStudent) {
         throw createHttpError(400, "Student creation failed");
     }
     return {
         success: true,
         message: "Student account created successfully",
-        student,
+        student: newStudent,
     };
 };
 const SUpdateStudent = async (req) => {

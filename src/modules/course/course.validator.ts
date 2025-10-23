@@ -1,8 +1,8 @@
-import z from "zod";
+import { z } from "zod";
 
 export const VCourseSchema = z.object({
-  body: {
-    title: z.string().trim().min(4, "Title must be at least 4 character"),
+  body: z.object({
+    title: z.string().trim().min(4, "Title must be at least 4 characters"),
     batchNo: z.number().default(1),
     live: z.boolean().default(false),
     introVideo: z.string().optional(),
@@ -23,9 +23,10 @@ export const VCourseSchema = z.object({
       .array(z.string())
       .min(1, "At least one item is required")
       .default([]),
-    quiz: z.array(z.string()).optional().default([]),
-  },
-  params: {
-    id: z.string(),
-  },
+  }),
+  params: z.object({
+    id: z.string().optional(),
+  }),
 });
+
+export type TCourseSchema = z.infer<typeof VCourseSchema>["body"];

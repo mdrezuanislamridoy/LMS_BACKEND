@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import type { NextFunction, Request } from "express";
 import { UserModel } from "../user/user.model.js";
 import { VerifyCode } from "../verificationCode.model.js";
+import { Mentor } from "./mentor.model.js";
 
 const SCreateMentor = async (req: Request) => {
   const isVerified = await VerifyCode.findOne({
@@ -23,7 +24,7 @@ const SCreateMentor = async (req: Request) => {
 
   const hashedPass = await bcrypt.hash(req.body.password, 10);
 
-  return await UserModel.create({
+  return await Mentor.create({
     ...req.body,
     password: hashedPass,
     role: "mentor",

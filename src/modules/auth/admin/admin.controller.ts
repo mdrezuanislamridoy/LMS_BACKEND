@@ -3,6 +3,7 @@ import { AService } from "./admin.service.js";
 import createHttpError from "http-errors";
 import { sendMail } from "../../../utils/sendMail.js";
 import { UserModel } from "../user/user.model.js";
+import { Mentor } from "../mentor/mentor.model.js";
 
 export const createAdmin = async (
   req: Request,
@@ -24,13 +25,96 @@ export const createAdmin = async (
   }
 };
 
+export const getMentors = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = (req.query.search as string) || "";
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      mentorStatus: "yes",
+      name: { $regex: search, $options: "i" },
+    };
+
+    const mentors = await UserModel.find(filter).skip(skip).limit(limit).lean();
+
+    const total = await UserModel.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      message: "Mentors fetched successfully",
+      mentors,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getStudents = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const search = (req.query.search as string) || "";
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      role: "student",
+      name: { $regex: search, $options: "i" },
+    };
+
+    const mentors = await UserModel.find(filter).skip(skip).limit(limit).lean();
+
+    const total = await UserModel.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      message: "Mentors fetched successfully",
+      mentors,
+      total,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const requestedMentors = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await Mentor.find({ mentorStatus: "pending", role: "mentor" });
+  if (result.length === 0) {
+    return next(createHttpError(404, "No requests yet"));
+  }
+  res.status(200).json({
+    success: true,
+    message: "Requested admin fetched successfully",
+    requests: result,
+  });
+};
+
 export const approveMentor = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const approveMentor = await UserModel.findByIdAndUpdate(
+    const approveMentor = await Mentor.findByIdAndUpdate(
       req.params.id,
       { mentorStatus: "yes" },
       { new: true }
@@ -46,15 +130,16 @@ export const approveMentor = async (
     next(error);
   }
 };
+
 export const rejectMentor = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const rejectedMentor = await UserModel.findByIdAndUpdate(
+    const rejectedMentor = await Mentor.findByIdAndUpdate(
       req.params.id,
-      { mentorStatus: "no" },
+      { mentorStatus: "rejected" },
       { new: true }
     );
     if (!rejectedMentor) {
@@ -74,7 +159,10 @@ export const getRejectedMentors = async (
   res: Response,
   next: NextFunction
 ) => {
-  const result = await UserModel.find({ mentorStatus: "no" });
+  const result = await UserModel.find({
+    mentorStatus: "rejected",
+    role: "mentor",
+  });
   if (result.length === 0) {
     return next(createHttpError(404, "No mentor requested rejected yet"));
   }

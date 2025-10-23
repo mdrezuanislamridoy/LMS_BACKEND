@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { validation } from "../../middlewares/Validator.js";
+
 import { VReviewSchema } from "./review.validator.js";
 import { addReview, deleteReview, getReviews } from "./review.controller.js";
-import { User } from "../../middlewares/user.middleware.js";
+import { User } from "../../../middlewares/user.middleware.js";
+import { validation } from "../../../middlewares/Validator.js";
 
 const router = Router();
 

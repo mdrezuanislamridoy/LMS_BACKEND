@@ -3,7 +3,7 @@ import createHttpError from "http-errors";
 import { courseService } from "./course.service.js";
 import type { ICourse } from "./course.interface.js";
 
-const createCourse = async (
+export const createCourse = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -22,7 +22,7 @@ const createCourse = async (
   }
 };
 
-const getSingleCourse = async (
+export const getSingleCourse = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -40,7 +40,7 @@ const getSingleCourse = async (
   }
 };
 
-const getCourses = async (req: Request, res: Response, next: NextFunction) => {
+export const getCourses = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await courseService.getCoursesService(req as Request);
 
@@ -50,7 +50,7 @@ const getCourses = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateCourse = async (
+export const updateCourse = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -72,7 +72,7 @@ const updateCourse = async (
     next(error);
   }
 };
-const deleteCourse = async (
+export const deleteCourse = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -95,10 +95,3 @@ const deleteCourse = async (
   }
 };
 
-export const courseController = {
-  createCourse,
-  getSingleCourse,
-  getCourses,
-  updateCourse,
-  deleteCourse,
-};
