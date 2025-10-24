@@ -81,7 +81,7 @@ const courseSchema = new Schema<ICourse>(
       default: false,
     },
     discount: Number,
-    category: [{ type: Schema.Types.ObjectId, ref: "Category" }],
+    category: { type: Schema.Types.ObjectId, ref: "Category" },
     whatYouWillLearn: [
       {
         type: String,

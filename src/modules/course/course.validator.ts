@@ -6,23 +6,14 @@ export const VCourseSchema = z.object({
     batchNo: z.number().default(1),
     live: z.boolean().default(false),
     introVideo: z.string().optional(),
-    includedInThisCourse: z
-      .array(z.string())
-      .min(1, "At least one item is required")
-      .default([]),
+    includedInThisCourse: z.string().min(1, "At least one item is required"),
     about: z.string().min(1, "About is required"),
-    forWhom: z
-      .array(z.string())
-      .min(1, "At least one item is required")
-      .default([]),
+    forWhom: z.string().min(1, "At least one item is required"),
     price: z.number().positive("Price must be positive"),
     isFree: z.boolean().default(false),
     discount: z.number().default(0),
     category: z.string().min(1, "Category is required"),
-    whatYouWillLearn: z
-      .array(z.string())
-      .min(1, "At least one item is required")
-      .default([]),
+    whatYouWillLearn: z.string().min(1, "At least one item is required"),
   }),
   params: z.object({
     id: z.string().optional(),

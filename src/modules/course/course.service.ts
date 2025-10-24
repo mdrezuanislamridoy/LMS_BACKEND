@@ -8,17 +8,12 @@ import { CourseModel } from "./course.model.js";
 
 const createCourseService = async (req: Request, payload: ICourse) => {
   const thumbnail = req.file;
+  if (!thumbnail) throw createHttpError(404, "Thumbnail not found");
 
-  if (!thumbnail) {
-    throw createHttpError(404, "Thumbnail not found");
-  }
-
-  const uploadStream = (buffer) => {
+  const uploadStream = (buffer: Buffer) => {
     return new Promise((resolve, reject) => {
       const stream = cloud.uploader.upload_stream(
-        {
-          folder: "LMS/courseThumbnail",
-        },
+        { folder: "LMS/courseThumbnail" },
         (err, data) => {
           if (data) resolve(data);
           else reject(err);
@@ -27,16 +22,24 @@ const createCourseService = async (req: Request, payload: ICourse) => {
       stream.end(buffer);
     });
   };
-  const result = await uploadStream(thumbnail.buffer);
 
+  const result = await uploadStream(thumbnail.buffer);
   const imageUrl = result?.secure_url;
   const publicId = result?.public_id;
 
+  const parsedBody = {
+    ...req.body,
+    includedInThisCourse: JSON.parse(req.body.includedInThisCourse) || "[]",
+    forWhom: JSON.parse(req.body.forWhom) || "[]",
+    whatYouWillLearn: JSON.parse(req.body.whatYouWillLearn) || "[]",
+  };
+
   const course = await CourseModel.create({
-    ...payload,
+    ...parsedBody,
     addedBy: req.user._id,
     thumbnail: { imageUrl, publicId },
   });
+
   return course;
 };
 

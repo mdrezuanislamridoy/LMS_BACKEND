@@ -4,7 +4,7 @@ import { checkRole } from "../../middlewares/role.middleware.js";
 import { upload } from "../../utils/multer.js";
 import { validation } from "../../middlewares/Validator.js";
 import { VCourseSchema } from "./course.validator.js";
-import { createCourse, deleteCourse, getCourses, getSingleCourse, updateCourse } from "./course.controller.js";
+import { createCourse, deleteCourse, getCourses, getSingleCourse, updateCourse, } from "./course.controller.js";
 const router = Router();
 router.post("/create-course", User, checkRole("admin"), upload.single("thumbnail"), validation(VCourseSchema), createCourse);
 router.get("/", getCourses);

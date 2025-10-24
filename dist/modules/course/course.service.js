@@ -5,14 +5,11 @@ import { populate } from "dotenv";
 import { CourseModel } from "./course.model.js";
 const createCourseService = async (req, payload) => {
     const thumbnail = req.file;
-    if (!thumbnail) {
+    if (!thumbnail)
         throw createHttpError(404, "Thumbnail not found");
-    }
     const uploadStream = (buffer) => {
         return new Promise((resolve, reject) => {
-            const stream = cloud.uploader.upload_stream({
-                folder: "LMS/courseThumbnail",
-            }, (err, data) => {
+            const stream = cloud.uploader.upload_stream({ folder: "LMS/courseThumbnail" }, (err, data) => {
                 if (data)
                     resolve(data);
                 else
@@ -24,8 +21,14 @@ const createCourseService = async (req, payload) => {
     const result = await uploadStream(thumbnail.buffer);
     const imageUrl = result?.secure_url;
     const publicId = result?.public_id;
+    const parsedBody = {
+        ...req.body,
+        includedInThisCourse: JSON.parse(req.body.includedInThisCourse) || "[]",
+        forWhom: JSON.parse(req.body.forWhom) || "[]",
+        whatYouWillLearn: JSON.parse(req.body.whatYouWillLearn) || "[]",
+    };
     const course = await CourseModel.create({
-        ...payload,
+        ...parsedBody,
         addedBy: req.user._id,
         thumbnail: { imageUrl, publicId },
     });
