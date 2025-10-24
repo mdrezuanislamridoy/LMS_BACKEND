@@ -21,11 +21,16 @@ const createCourseService = async (req, payload) => {
     const result = await uploadStream(thumbnail.buffer);
     const imageUrl = result?.secure_url;
     const publicId = result?.public_id;
+    if (!imageUrl || !publicId)
+        throw createHttpError(400, "Failed to upload image");
+    let incic = req.body.includedInThisCourse.split(",");
+    let forwhom = req.body.forWhom.split(",");
+    let wywl = req.body.whatYouWillLearn.split(",");
     const parsedBody = {
         ...req.body,
-        includedInThisCourse: JSON.parse(req.body.includedInThisCourse) || "[]",
-        forWhom: JSON.parse(req.body.forWhom) || "[]",
-        whatYouWillLearn: JSON.parse(req.body.whatYouWillLearn) || "[]",
+        includedInThisCourse: incic,
+        forWhom: forwhom,
+        whatYouWillLearn: wywl,
     };
     const course = await CourseModel.create({
         ...parsedBody,
@@ -67,7 +72,7 @@ const getCoursesService = async (req) => {
     if (search) {
         query.$or = [
             { title: { $regex: search, $options: "i" } },
-            { description: { $regex: search, $options: "i" } },
+            { about: { $regex: search, $options: "i" } },
         ];
     }
     if (category) {
@@ -91,12 +96,14 @@ const getCoursesService = async (req) => {
         .sort(sortOptions)
         .skip(skip)
         .limit(limitation);
-    const total = await courses.countDocuments();
+    const total = await CourseModel.countDocuments(query);
+    const totalPage = Math.ceil(total / limitation);
     return {
         success: true,
         message: "Courses fetched successfully",
         total,
         courses,
+        totalPage,
     };
 };
 const updateCourseService = async (courseId, data) => {

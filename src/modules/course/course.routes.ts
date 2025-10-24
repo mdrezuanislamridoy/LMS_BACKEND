@@ -19,11 +19,11 @@ router.post(
   User,
   checkRole("admin"),
   upload.single("thumbnail"),
-  validation(VCourseSchema),
   createCourse
 );
 
-router.get("/", getCourses);
+// validation(VCourseSchema),
+router.get("/get-courses", getCourses);
 router.get("/:id", getSingleCourse);
 router.put("/update/:id", User, checkRole("admin"), updateCourse);
 router.put("/delete/:id", User, checkRole("admin"), deleteCourse);

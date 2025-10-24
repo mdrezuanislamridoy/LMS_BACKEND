@@ -6,8 +6,9 @@ export declare const courseService: {
     getCoursesService: (req: Request) => Promise<{
         success: boolean;
         message: string;
-        total: any;
+        total: number;
         courses: any;
+        totalPage: number;
     }>;
     updateCourseService: (courseId: string, data: ICourse) => Promise<any>;
     deleteCourseService: (courseId: string) => Promise<any>;
