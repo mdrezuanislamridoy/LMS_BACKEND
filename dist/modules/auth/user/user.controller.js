@@ -16,11 +16,12 @@ export const verifyCode = async (req, res, next) => {
     try {
         const resp = await SUser.UVerifyCode(req);
         if (!resp) {
-            return next(createHttpError(400, "Code didn't matched, Try again"));
+            return next(createHttpError(400, "Code didn't match, try again"));
         }
-        res
-            .status(200)
-            .json({ success: true, message: "Code verified successfully" });
+        res.status(200).json({
+            success: true,
+            message: "Code verified successfully",
+        });
     }
     catch (error) {
         next(error);
@@ -28,7 +29,6 @@ export const verifyCode = async (req, res, next) => {
 };
 export const login = async (req, res, next) => {
     try {
-        console.log(req.body);
         const { email, password } = req.body;
         const result = await SUser.ULogin(email, password, next);
         if (!result) {
@@ -50,7 +50,7 @@ export const login = async (req, res, next) => {
         })
             .json({
             success: true,
-            message: "User Fetched Successfully",
+            message: "Login successful",
             user: result.user,
         });
     }
@@ -61,6 +61,8 @@ export const login = async (req, res, next) => {
 export const profile = async (req, res, next) => {
     try {
         const user = req.user;
+        if (!user)
+            return next(createHttpError(401, "Unauthorized"));
         res.status(200).json({
             success: true,
             message: "User fetched successfully",
@@ -73,13 +75,16 @@ export const profile = async (req, res, next) => {
 };
 export const updateUser = async (req, res, next) => {
     try {
+        if (!req.user?._id) {
+            return next(createHttpError(401, "Unauthorized"));
+        }
         const updatedUser = await SUser.UUpdateUser(req.user._id, req.body);
         if (!updatedUser) {
-            return next(createHttpError(400, "User Updation failed"));
+            return next(createHttpError(400, "User update failed"));
         }
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            message: "User Updation Successful",
+            message: "User updated successfully",
             updatedUser,
         });
     }
@@ -89,17 +94,17 @@ export const updateUser = async (req, res, next) => {
 };
 export const deleteUser = async (req, res, next) => {
     try {
-        const id = req.user._id;
-        const deletedUser = await SUser.UDelete(id);
-        if (!deletedUser) {
-            return next(createHttpError(400).json({
-                message: "User Deletion Failed",
-                deleteUser,
-            }));
+        if (!req.user?._id) {
+            return next(createHttpError(401, "Unauthorized"));
         }
-        res
-            .status(200)
-            .json({ success: true, message: "User Deleted Successfully" });
+        const deletedUser = await SUser.UDelete(req.user._id);
+        if (!deletedUser) {
+            return next(createHttpError(400, "User deletion failed"));
+        }
+        res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+        });
     }
     catch (error) {
         next(error);
@@ -108,7 +113,11 @@ export const deleteUser = async (req, res, next) => {
 export const changePassword = async (req, res, next) => {
     try {
         const user = await SUser.UChangePassword(req);
-        res.status(200).json({ success: true, user, message: "Password changed" });
+        res.status(200).json({
+            success: true,
+            message: "Password changed successfully",
+            user,
+        });
     }
     catch (error) {
         next(error);
@@ -146,7 +155,10 @@ export const logout = async (req, res, next) => {
             secure: env.node_env === "production",
             sameSite: env.node_env === "production" ? "none" : "lax",
         });
-        res.status(200).json({ message: "Logout successful" });
+        res.status(200).json({
+            success: true,
+            message: "Logout successful",
+        });
     }
     catch (error) {
         next(error);

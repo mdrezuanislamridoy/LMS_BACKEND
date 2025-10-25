@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
-
 import dotenv from "dotenv";
 import { SUser } from "./user.service.js";
 import type { IUser } from "./user.interface.js";
 import { env } from "../../../config/env.js";
 
 dotenv.config();
+
 
 export const sendVerificationCode = async (
   req: Request,
@@ -15,12 +15,12 @@ export const sendVerificationCode = async (
 ) => {
   try {
     const result = await SUser.USendCode(req.body.email as string);
-
     res.status(200).json(result);
   } catch (error) {
     next(error);
   }
 };
+
 
 export const verifyCode = async (
   req: Request,
@@ -28,13 +28,15 @@ export const verifyCode = async (
   next: NextFunction
 ) => {
   try {
-    const resp = await SUser.UVerifyCode(req as Request);
+    const resp = await SUser.UVerifyCode(req);
     if (!resp) {
-      return next(createHttpError(400, "Code didn't matched, Try again"));
+      return next(createHttpError(400, "Code didn't match, try again"));
     }
-    res
-      .status(200)
-      .json({ success: true, message: "Code verified successfully" });
+
+    res.status(200).json({
+      success: true,
+      message: "Code verified successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -46,14 +48,9 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    console.log(req.body);
-    const { email, password } = req.body;
-    const result = await SUser.ULogin(
-      email as string,
-      password as string,
-      next as NextFunction
-    );
+    const { email, password } = req.body as { email: string; password: string };
 
+    const result = await SUser.ULogin(email, password, next);
     if (!result) {
       return next(createHttpError(400, "Login failed"));
     }
@@ -64,7 +61,7 @@ export const login = async (
         httpOnly: true,
         secure: env.node_env === "production",
         sameSite: env.node_env === "production" ? "none" : "lax",
-        maxAge: 60 * 60 * 1000,
+        maxAge: 60 * 60 * 1000, 
       })
       .cookie("refreshToken", result.refreshToken, {
         httpOnly: true,
@@ -74,13 +71,14 @@ export const login = async (
       })
       .json({
         success: true,
-        message: "User Fetched Successfully",
+        message: "Login successful",
         user: result.user,
       });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const profile = async (
   req: Request,
@@ -89,6 +87,7 @@ export const profile = async (
 ) => {
   try {
     const user = req.user;
+    if (!user) return next(createHttpError(401, "Unauthorized"));
 
     res.status(200).json({
       success: true,
@@ -100,23 +99,28 @@ export const profile = async (
   }
 };
 
+
 export const updateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
+    if (!req.user?._id) {
+      return next(createHttpError(401, "Unauthorized"));
+    }
+
     const updatedUser = await SUser.UUpdateUser(
       req.user._id,
       req.body as IUser
     );
     if (!updatedUser) {
-      return next(createHttpError(400, "User Updation failed"));
+      return next(createHttpError(400, "User update failed"));
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      message: "User Updation Successful",
+      message: "User updated successfully",
       updatedUser,
     });
   } catch (error) {
@@ -124,27 +128,26 @@ export const updateUser = async (
   }
 };
 
+
 export const deleteUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const id = req.user._id;
-
-    const deletedUser = await SUser.UDelete(id);
-    if (!deletedUser) {
-      return next(
-        createHttpError(400).json({
-          message: "User Deletion Failed",
-          deleteUser,
-        })
-      );
+    if (!req.user?._id) {
+      return next(createHttpError(401, "Unauthorized"));
     }
 
-    res
-      .status(200)
-      .json({ success: true, message: "User Deleted Successfully" });
+    const deletedUser = await SUser.UDelete(req.user._id);
+    if (!deletedUser) {
+      return next(createHttpError(400, "User deletion failed"));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -156,12 +159,17 @@ export const changePassword = async (
   next: NextFunction
 ) => {
   try {
-    const user = await SUser.UChangePassword(req as Request);
-    res.status(200).json({ success: true, user, message: "Password changed" });
+    const user = await SUser.UChangePassword(req);
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+      user,
+    });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const sendForgetPassCode = async (
   req: Request,
@@ -169,7 +177,7 @@ export const sendForgetPassCode = async (
   next: NextFunction
 ) => {
   try {
-    const { email } = req.body;
+    const { email } = req.body as { email: string };
     const result = await SUser.USendForgetPassCode(email);
     res.status(200).json(result);
   } catch (error) {
@@ -177,13 +185,18 @@ export const sendForgetPassCode = async (
   }
 };
 
+
 export const forgetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { email, verificationCode, newPass } = req.body;
+    const { email, verificationCode, newPass } = req.body as {
+      email: string;
+      verificationCode: number;
+      newPass: string;
+    };
     const result = await SUser.UForgetPassword(
       email,
       verificationCode,
@@ -213,7 +226,10 @@ export const logout = async (
       sameSite: env.node_env === "production" ? "none" : "lax",
     });
 
-    res.status(200).json({ message: "Logout successful" });
+    res.status(200).json({
+      success: true,
+      message: "Logout successful",
+    });
   } catch (error) {
     next(error);
   }
