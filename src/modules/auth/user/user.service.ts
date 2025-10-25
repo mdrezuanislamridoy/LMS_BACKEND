@@ -30,8 +30,6 @@ const USendCode = async (email: string) => {
 };
 
 const UVerifyCode = async (req: Request) => {
-
-
   const result = await VerifyCode.findOne({
     email: req.body.email,
     verificationCode: req.body.verificationCode,
@@ -124,7 +122,7 @@ const UChangePassword = async (req: Request) => {
 
   const user = await UserModel.findById(userId);
 
-  const isPassMatched = await bcrypt.compare(oldPass, user?.password);
+  const isPassMatched = await bcrypt.compare(oldPass, user?.password as string);
   if (!isPassMatched) {
     throw createHttpError(400, "Password didn't matched");
   }

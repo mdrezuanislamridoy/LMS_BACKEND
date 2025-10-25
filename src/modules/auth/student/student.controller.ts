@@ -32,15 +32,15 @@ export const createStudent = async (
     res
       .status(201)
       .cookie("token", accessToken, {
-        httpOnly: env.production ? true : false,
-        secure: env.production ? true : false,
-        sameSite: env.production ? "none" : "lax",
+        httpOnly: env.node_env   ? true : false,
+        secure: env.node_env ? true : false,
+        sameSite: env.node_env ? "none" : "lax",
         maxAge: 60 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
-        httpOnly: env.production ? true : false,
-        secure: env.production ? true : false,
-        sameSite: env.production ? "none" : "lax",
+        httpOnly: env.node_env ? true : false,
+        secure: env.node_env ? true : false,
+        sameSite: env.node_env ? "none" : "lax",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
       .json(result);

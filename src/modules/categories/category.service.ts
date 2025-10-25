@@ -14,7 +14,7 @@ const AddCategory = async (
     return next(createHttpError(404, "Icon not found"));
   }
 
-  const iconUploadStream = (buffer) => {
+  const iconUploadStream = (buffer: any): Promise<any> => {
     return new Promise((resolve, reject) => {
       const stream = cloud.uploader.upload_stream(
         { folder: "LMS/categoryIcon" },
