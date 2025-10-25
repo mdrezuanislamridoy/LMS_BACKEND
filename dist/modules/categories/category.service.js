@@ -1,85 +1,35 @@
+import { Category } from "./category.model.js";
 import createHttpError from "http-errors";
-import { courseService } from "./course.service.js";
-export const createCourse = async (req, res, next) => {
-    try {
-        const course = await courseService.createCourseService(req, req.body);
-        if (!course) {
-            return next(createHttpError(400, "Course creation failed"));
-        }
-        res
-            .status(201)
-            .json({ success: true, message: "Course created successfully", course });
+import cloud from "../../utils/cloudinary.js";
+const AddCategory = async (req, payload, next) => {
+    const icon = req.file;
+    if (!icon) {
+        return next(createHttpError(404, "Icon not found"));
     }
-    catch (error) {
-        next(error);
-    }
-};
-export const getSingleCourse = async (req, res, next) => {
-    try {
-        const course = await courseService.getSingleCourseService(req.params.id);
-        if (!course) {
-            return next(createHttpError(404, "Course not found"));
-        }
-        res
-            .status(200)
-            .json({ success: true, message: "Course fetched successfully", course });
-    }
-    catch (error) {
-        next(error);
-    }
-};
-export const getCourses = async (req, res, next) => {
-    try {
-        const result = await courseService.getCoursesService(req);
-        res.status(200).json(result);
-    }
-    catch (error) {
-        next(error);
-    }
-};
-export const getFeaturedCourses = async (req, res, next) => {
-    try {
-        const result = await courseService.getFeaturedCoursesService(req);
-        res.status(200).json(result);
-    }
-    catch (error) {
-        next(error);
-    }
-};
-export const updateCourse = async (req, res, next) => {
-    try {
-        const updatedCourse = await courseService.updateCourseService(req.params.id, req.body);
-        if (!updatedCourse) {
-            return next(createHttpError(400, "Course update failed"));
-        }
-        res
-            .status(200)
-            .json({
-            success: true,
-            message: "Course updated successfully",
-            updatedCourse,
+    const iconUploadStream = (buffer) => {
+        return new Promise((resolve, reject) => {
+            const stream = cloud.uploader.upload_stream({ folder: "LMS/categoryIcon" }, (err, data) => {
+                if (data)
+                    resolve(data);
+                else
+                    reject(err);
+            });
+            stream.end(buffer);
         });
-    }
-    catch (error) {
-        next(error);
-    }
+    };
+    const result = await iconUploadStream(icon.buffer);
+    const iconUrl = result?.secure_url;
+    const iconPublicId = result?.public_id;
+    return await Category.create({ ...payload, icon: { iconUrl, iconPublicId } });
 };
-export const deleteCourse = async (req, res, next) => {
-    try {
-        const deletedCourse = await courseService.deleteCourseService(req.params.id);
-        if (!deletedCourse) {
-            return next(createHttpError(400, "Course deletion failed"));
-        }
-        res
-            .status(200)
-            .json({
-            success: true,
-            message: "Course deleted successfully",
-            deletedCourse,
-        });
-    }
-    catch (error) {
-        next(error);
-    }
+const GetCategories = async () => {
+    return await Category.find();
 };
+const DeleteCategory = async (id) => {
+    const category = await Category.findById(id);
+    const iconPublicId = category?.icon.iconPublicId;
+    await cloud.uploader.destroy(`bac_commerce/categoryIcon/${iconPublicId}`);
+    return await Category.findByIdAndDelete(id);
+};
+export const CService = { AddCategory, GetCategories, DeleteCategory };
 //# sourceMappingURL=category.service.js.map

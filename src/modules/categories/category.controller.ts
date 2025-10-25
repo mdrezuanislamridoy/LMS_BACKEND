@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { CService } from "./category.service.js";
+
 import type { ICategory } from "./category.interface.js";
+import { CService } from "./category.service.js";
 
 export const addCategory = async (
   req: Request,
