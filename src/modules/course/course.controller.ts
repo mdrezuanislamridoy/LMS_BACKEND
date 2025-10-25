@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import { courseService } from "./course.service.js";
 import type { ICourse } from "./course.interface.js";
 
 export const createCourse = async (
@@ -40,7 +39,11 @@ export const getSingleCourse = async (
   }
 };
 
-export const getCourses = async (req: Request, res: Response, next: NextFunction) => {
+export const getCourses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await courseService.getCoursesService(req as Request);
 
@@ -54,9 +57,11 @@ export const getFeaturedCourses = async (
   req: Request,
   res: Response,
   next: NextFunction
-)=>{
+) => {
   try {
-    const result = await courseService.getFeaturedCoursesService(req as Request);
+    const result = await courseService.getFeaturedCoursesService(
+      req as Request
+    );
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -107,4 +112,3 @@ export const deleteCourse = async (
     next(error);
   }
 };
-

@@ -1,20 +1,8 @@
-import type { NextFunction, Request } from "express";
-import type { ICategory } from "./category.interface.js";
-export declare const CService: {
-    AddCategory: (req: Request, payload: ICategory, next: NextFunction) => Promise<void | (import("mongoose").Document<unknown, {}, ICategory, {}, import("mongoose").DefaultSchemaOptions> & ICategory & Required<{
-        _id: unknown;
-    }> & {
-        __v: number;
-    })>;
-    GetCategories: () => Promise<(import("mongoose").Document<unknown, {}, ICategory, {}, import("mongoose").DefaultSchemaOptions> & ICategory & Required<{
-        _id: unknown;
-    }> & {
-        __v: number;
-    })[]>;
-    DeleteCategory: (id: string) => Promise<(import("mongoose").Document<unknown, {}, ICategory, {}, import("mongoose").DefaultSchemaOptions> & ICategory & Required<{
-        _id: unknown;
-    }> & {
-        __v: number;
-    }) | null>;
-};
+import type { Request, Response, NextFunction } from "express";
+export declare const createCourse: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getSingleCourse: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getCourses: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getFeaturedCourses: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const updateCourse: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const deleteCourse: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=category.service.d.ts.map

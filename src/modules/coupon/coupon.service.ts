@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 const SCreateCoupon = async (req: Request) => {
   const coupon = await Coupon.create(req.body);
   if (!coupon) {
-    throw createHttpError(400, "Coupon code creation failed");
+    throw createHttpError(400, "Coupon creation failed");
   }
 
   return {
@@ -17,28 +17,35 @@ const SCreateCoupon = async (req: Request) => {
 
 const SUpdateCoupon = async (req: Request) => {
   const couponId = req.params.id;
-  const coupon = await Coupon.findById(couponId);
-  if (!coupon) {
-    throw createHttpError(404, "Coupon not found");
+
+  if (!couponId) throw createHttpError(400, "Coupon ID is required");
+
+  const updatedCoupon = await Coupon.findByIdAndUpdate(couponId, req.body, {
+    new: true,
+  });
+
+  if (!updatedCoupon) {
+    throw createHttpError(404, "Coupon not found or update failed");
   }
 
-  const result = await Coupon.findByIdAndUpdate(couponId);
-
-  if (!result) {
-    throw createHttpError(400, "Coupon updation failed");
-  }
   return {
     success: true,
     message: "Coupon updated successfully",
-    coupon: result,
+    coupon: updatedCoupon,
   };
 };
 
 const SDeleteCoupon = async (req: Request) => {
-  const result = await Coupon.findByIdAndDelete(req.params.id as string);
-  if (!result) {
-    throw createHttpError(400, "Coupon deletion failed");
+  const couponId = req.params.id;
+
+  if (!couponId) throw createHttpError(400, "Coupon ID is required");
+
+  const deletedCoupon = await Coupon.findByIdAndDelete(couponId);
+
+  if (!deletedCoupon) {
+    throw createHttpError(404, "Coupon not found or deletion failed");
   }
+
   return {
     success: true,
     message: "Coupon deleted successfully",

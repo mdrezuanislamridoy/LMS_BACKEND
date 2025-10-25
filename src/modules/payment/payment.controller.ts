@@ -1,8 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { SPayment } from "./payment.service.js";
 import createHttpError from "http-errors";
+import { SPayment } from "./payment.service.js";
 import { Enrollment } from "../enrollment/enrollment.model.js";
-
 
 export const payBill = async (
   req: Request,
@@ -10,12 +9,11 @@ export const payBill = async (
   next: NextFunction
 ) => {
   try {
-    const bill = await SPayment.SPayBill(req as Request);
+    const bill = await SPayment.SPayBill(req);
     if (!bill) {
-      return next(createHttpError(400, "Payment failed"));
+      return next(createHttpError(400, "Payment initiation failed"));
     }
-
-    return res.status(200).json(bill);
+    res.status(200).json(bill);
   } catch (error) {
     next(error);
   }
@@ -30,18 +28,15 @@ export const success = async (
     const enrollmentId = req.params.id;
     const enrollment = await Enrollment.findByIdAndUpdate(
       enrollmentId,
-      {
-        status: "paid",
-      },
+      { status: "paid", paymentStatus: "paid" },
       { new: true }
     );
-
     if (!enrollment) {
-      return next(createHttpError(400, "enrollment updation failed"));
+      return next(createHttpError(404, "Enrollment not found"));
     }
     res
       .status(200)
-      .json({ message: "enrollment Completed Successfully", enrollment });
+      .json({ message: "Enrollment completed successfully", enrollment });
   } catch (error) {
     next(error);
   }
@@ -56,17 +51,13 @@ export const failed = async (
     const enrollmentId = req.params.id;
     const enrollment = await Enrollment.findByIdAndUpdate(
       enrollmentId,
-      {
-        paymentStatus: "failed",
-        status: "pending",
-      },
+      { status: "pending", paymentStatus: "failed" },
       { new: true }
     );
-
     if (!enrollment) {
-      return next(createHttpError(400, "enrollment updation failed"));
+      return next(createHttpError(404, "Enrollment not found"));
     }
-    res.status(200).json({ message: "Payment Failed", enrollment });
+    res.status(200).json({ message: "Payment failed", enrollment });
   } catch (error) {
     next(error);
   }
@@ -81,17 +72,13 @@ export const canceled = async (
     const enrollmentId = req.params.id;
     const enrollment = await Enrollment.findByIdAndUpdate(
       enrollmentId,
-      {
-        paymentStatus: "unpaid",
-        status: "pending",
-      },
+      { status: "pending", paymentStatus: "unpaid" },
       { new: true }
     );
-
     if (!enrollment) {
-      return next(createHttpError(400, "enrollment updation failed"));
+      return next(createHttpError(404, "Enrollment not found"));
     }
-    res.status(200).json({ message: "Payment Canceled", enrollment });
+    res.status(200).json({ message: "Payment canceled", enrollment });
   } catch (error) {
     next(error);
   }

@@ -7,7 +7,7 @@ export const addCoupon = async (
   next: NextFunction
 ) => {
   try {
-    const result = await SCoupon.SCreateCoupon(req as Request);
+    const result = await SCoupon.SCreateCoupon(req);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -20,9 +20,8 @@ export const updateCoupon = async (
   next: NextFunction
 ) => {
   try {
-    const result = await SCoupon.SUpdateCoupon(req as Request);
-
-    res.status(201).json(result);
+    const result = await SCoupon.SUpdateCoupon(req);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -34,8 +33,8 @@ export const deleteCoupon = async (
   next: NextFunction
 ) => {
   try {
-    const result = await SCoupon.SDeleteCoupon(req as Request);
-    res.status(201).json(result);
+    const result = await SCoupon.SDeleteCoupon(req);
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

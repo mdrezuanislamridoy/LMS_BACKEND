@@ -11,7 +11,7 @@ export const addCoupon = async (req, res, next) => {
 export const updateCoupon = async (req, res, next) => {
     try {
         const result = await SCoupon.SUpdateCoupon(req);
-        res.status(201).json(result);
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);
@@ -20,7 +20,7 @@ export const updateCoupon = async (req, res, next) => {
 export const deleteCoupon = async (req, res, next) => {
     try {
         const result = await SCoupon.SDeleteCoupon(req);
-        res.status(201).json(result);
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);

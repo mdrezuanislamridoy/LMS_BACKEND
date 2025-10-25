@@ -1,17 +1,18 @@
 import type { Request } from "express";
-import { Cart } from "./cart.model.js";
 import createHttpError from "http-errors";
+import { Cart } from "./cart.model.js";
 import { Product } from "../digitalProducts/product.model.js";
-import { create } from "domain";
 
 const addToCart = async (req: Request) => {
-  const userId = req.user._id;
+  const userId = req.user?._id;
+  if (!userId) throw createHttpError(401, "Unauthorized");
+
   const { productId, qty } = req.body;
+  if (!productId || !qty)
+    throw createHttpError(400, "Product ID and quantity required");
 
   const product = await Product.findById(productId);
-  if (!product) {
-    throw createHttpError(404, "Product not found");
-  }
+  if (!product) throw createHttpError(404, "Product not found");
 
   let cart = await Cart.findOne({ user: userId });
 
@@ -22,8 +23,20 @@ const addToCart = async (req: Request) => {
       totalAmount: product.price * qty,
     });
   } else {
-    cart.items.push({ product: productId, qty, price: product.price });
-    cart.totalAmount += product.price * qty;
+    const existingItemIndex = cart.items.findIndex(
+      (item) => item.product.toString() === productId
+    );
+
+    if (existingItemIndex !== -1) {
+      cart.items[existingItemIndex].qty += qty;
+    } else {
+      cart.items.push({ product: productId, qty, price: product.price });
+    }
+
+    cart.totalAmount = cart.items.reduce(
+      (sum, item) => sum + item.price * item.qty,
+      0
+    );
   }
 
   await cart.save();
@@ -35,37 +48,47 @@ const addToCart = async (req: Request) => {
 };
 
 const getCartItem = async (req: Request) => {
-  const userId = req.user._id;
-  const items = await Cart.find({ user: userId });
+  const userId = req.user?._id;
+  if (!userId) throw createHttpError(401, "Unauthorized");
 
-  if (!items || items.length === 0) {
-    throw createHttpError(400, "Cart items not found");
-  }
+  const cart = await Cart.findOne({ user: userId }).populate("items.product");
+  if (!cart || cart.items.length === 0)
+    throw createHttpError(404, "Cart items not found");
 
   return {
     success: true,
     message: "Cart items fetched successfully",
-    items,
+    cart,
   };
 };
 
 const removeItem = async (req: Request) => {
-  const userId = req.user._id;
-  const productId = req.body.productId;
-  // cart items in items[] then product and user in cart
+  const userId = req.user?._id;
+  if (!userId) throw createHttpError(401, "Unauthorized");
 
-  const deletedItem = await Cart.findOneAndDelete({
-    user: userId,
-    "items.product": productId,
-  });
+  const { productId } = req.body;
+  if (!productId) throw createHttpError(400, "Product ID required");
 
-  if (!deletedItem) {
-    throw createHttpError(400, "Cart item not found");
-  }
+  const cart = await Cart.findOne({ user: userId });
+  if (!cart) throw createHttpError(404, "Cart not found");
+
+  const itemIndex = cart.items.findIndex(
+    (item) => item.product.toString() === productId
+  );
+  if (itemIndex === -1) throw createHttpError(404, "Cart item not found");
+
+  cart.items.splice(itemIndex, 1);
+  cart.totalAmount = cart.items.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
+
+  await cart.save();
 
   return {
     success: true,
     message: "Cart item removed successfully",
+    cart,
   };
 };
 

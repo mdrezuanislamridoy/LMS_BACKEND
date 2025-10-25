@@ -1,11 +1,8 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request } from "express";
 import createHttpError from "http-errors";
-import { configDotenv } from "dotenv";
 import axios from "axios";
 import { Enrollment } from "../enrollment/enrollment.model.js";
 import { env } from "../../config/env.js";
-
-configDotenv();
 
 export const SPayBill = async (req: Request) => {
   const userId = req.user._id;
@@ -14,10 +11,10 @@ export const SPayBill = async (req: Request) => {
   const enrollment = await Enrollment.findOne({
     _id: enrollmentId,
     user: userId,
-  }).populate("user");
+  }).populate<{ user: { name: string; email: string } }>("user");
+
   if (!enrollment) throw createHttpError(404, "Enrollment not found");
 
-  // Unique transaction id
   const transactionId = "tnx_" + Date.now();
 
   const data = {
@@ -32,11 +29,14 @@ export const SPayBill = async (req: Request) => {
     cus_name: enrollment.user.name,
     cus_email: enrollment.user.email,
     cus_phone: enrollment.phone || "01700000000",
-    product_name: enrollment.courseId.title || "Course Enrollment",
+    product_name: enrollment.courseId?.title || "Course Enrollment",
   };
 
   const SSLCommerz_API = "https://sandbox.sslcommerz.com/gwprocess/v4/api.php";
-  const response = await axios.post(SSLCommerz_API, data);
+  const response = await axios.post<{ GatewayPageURL: string }>(
+    SSLCommerz_API,
+    data
+  );
 
   enrollment.transactionId = transactionId;
   await enrollment.save();

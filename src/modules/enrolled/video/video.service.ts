@@ -10,10 +10,11 @@ import cloud from "../../../utils/cloudinary.js";
 const SAddVideo = async (req: Request) => {
   const { id: courseId } = req.params;
 
-  const course: ICourse | null = await CourseModel.findById({ _id: courseId });
+  const course: ICourse | null = await CourseModel.findById(courseId);
   if (!course) throw createHttpError(404, "Course not found");
 
   const moduleId = req.body.moduleId;
+  if (!moduleId) throw createHttpError(400, "Module ID is required");
 
   if (
     req.user.role === "mentor" &&
@@ -29,23 +30,16 @@ const SAddVideo = async (req: Request) => {
     throw createHttpError(400, "Module does not belong to this course");
 
   const module = await CourseModule.findById(moduleId);
-  if (!module) {
-    throw createHttpError(404, "Module not found");
-  }
+  if (!module) throw createHttpError(404, "Module not found");
 
   const image = req.file;
   if (!image) throw createHttpError(400, "Thumbnail image is required");
 
-  const uploadStream = (buffer) => {
-    return new Promise((resolve, reject) => {
+  const uploadStream = (buffer: Buffer) => {
+    return new Promise<any>((resolve, reject) => {
       const stream = cloud.uploader.upload_stream(
-        {
-          folder: "LMS/VideoThumbnail",
-        },
-        (err, data) => {
-          if (err) reject(err);
-          else resolve(data);
-        }
+        { folder: "LMS/VideoThumbnail" },
+        (err, data) => (err ? reject(err) : resolve(data))
       );
       stream.end(buffer);
     });
@@ -58,20 +52,16 @@ const SAddVideo = async (req: Request) => {
     publicId: result?.public_id,
   };
 
-  const video = await Video.create({
-    ...req.body,
-    thumbnail,
-  });
-  if (!video) {
-    throw createHttpError(400, "Video creation failed");
-  }
+  const video = await Video.create({ ...req.body, thumbnail });
+  if (!video) throw createHttpError(400, "Video creation failed");
 
-  module.content?.push(video._id);
-  module.save();
+  module.content = module.content || [];
+  module.content.push(video._id);
+  await module.save();
 
   return {
     success: true,
-    message: "Video addition success",
+    message: "Video added successfully",
     video,
   };
 };

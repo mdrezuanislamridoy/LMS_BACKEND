@@ -10,7 +10,6 @@ export declare const SEnrollment: {
         };
     }>;
     SGetMyEnrollments: (req: Request) => Promise<{
-        total: number;
         success: boolean;
         message: string;
         enrollments: (import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
@@ -18,13 +17,14 @@ export declare const SEnrollment: {
         }> & {
             __v: number;
         })[];
+        total: number;
         completed: number;
     }>;
-    SUpdateEnrollmentStatus: (req: Request) => Promise<(import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
+    SUpdateEnrollmentStatus: (req: Request) => Promise<import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
         _id: unknown;
     }> & {
         __v: number;
-    }) | null>;
+    }>;
     SUpdateVideoProgress: (req: Request) => Promise<{
         success: boolean;
         message: string;

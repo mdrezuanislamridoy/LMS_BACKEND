@@ -2,32 +2,37 @@ import type { Request } from "express";
 import { CourseModel } from "../course/course.model.js";
 import createHttpError from "http-errors";
 import { Meeting } from "./meeting.model.js";
-import { success } from "zod";
 
 const SCreateMeeting = async (req: Request) => {
   const courseId = req.params.courseId;
   const course = await CourseModel.findById(courseId);
   if (!course) {
-    throw createHttpError(400, "Course not found to add meeting link");
+    throw createHttpError(404, "Course not found to add meeting link");
   }
 
   const meeting = await Meeting.create({ ...req.body, courseId });
 
-  course.meetings.push = meeting._id;
+  course.meetings.push(meeting._id);
   await course.save();
+
+  return {
+    success: true,
+    message: "Meeting created successfully",
+    meeting,
+  };
 };
 
 const SGetMeetings = async (req: Request) => {
   const courseId = req.params.courseId;
-  const course = await CourseModel.findById(courseId);
+  const course = await CourseModel.findById(courseId).populate("meetings");
 
   if (!course) {
-    throw createHttpError(400, "Course not found");
+    throw createHttpError(404, "Course not found");
   }
 
   return {
     success: true,
-    message: "Meeting fetched successfully",
+    message: "Meetings fetched successfully",
     meetings: course.meetings,
   };
 };
@@ -37,7 +42,7 @@ const SGetMeeting = async (req: Request) => {
   const meeting = await Meeting.findById(meetingId);
 
   if (!meeting) {
-    throw createHttpError(400, "Meeting not found");
+    throw createHttpError(404, "Meeting not found");
   }
 
   return {
@@ -52,9 +57,11 @@ const SUpdateMeeting = async (req: Request) => {
   const meeting = await Meeting.findByIdAndUpdate(meetingId, req.body, {
     new: true,
   });
+
   if (!meeting) {
-    throw createHttpError(400, "Meeting not found");
+    throw createHttpError(404, "Meeting not found");
   }
+
   return {
     success: true,
     message: "Meeting updated successfully",
@@ -65,9 +72,17 @@ const SUpdateMeeting = async (req: Request) => {
 const SDeleteMeeting = async (req: Request) => {
   const meetingId = req.params.meetingId;
   const meeting = await Meeting.findByIdAndDelete(meetingId);
+
   if (!meeting) {
-    throw createHttpError(400, "Meeting not found");
+    throw createHttpError(404, "Meeting not found");
   }
+
+  // Remove meeting reference from course
+  await CourseModel.updateMany(
+    { meetings: meetingId },
+    { $pull: { meetings: meetingId } }
+  );
+
   return {
     success: true,
     message: "Meeting deleted successfully",
