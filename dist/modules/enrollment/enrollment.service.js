@@ -12,13 +12,15 @@ const SEnroll = async (req) => {
     if (!user || user.role !== "student") {
         throw createHttpError(403, "You cannot enroll in this course");
     }
-    const course = await CourseModel.findById(courseId).populate("couponCodes");
+    const course = await CourseModel.findById(courseId)
+        .populate("couponCodes")
+        .exec();
     if (!course)
         throw createHttpError(404, "Course not found");
-    const { couponCode = "" } = req.body;
     let discount = 0;
     let discountType = "percentage";
     let totalAmount = course.price;
+    const { couponCode = "" } = req.body;
     if (couponCode) {
         const coupon = await Coupon.findOne({ code: couponCode.code });
         if (!coupon)

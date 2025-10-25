@@ -16,13 +16,17 @@ const SEnroll = async (req: Request) => {
     throw createHttpError(403, "You cannot enroll in this course");
   }
 
-  const course = await CourseModel.findById(courseId).populate("couponCodes");
+  const course = await CourseModel.findById(courseId)
+    .populate<{ couponCodes: any[] }>("couponCodes")
+    .exec();
+
   if (!course) throw createHttpError(404, "Course not found");
 
-  const { couponCode = "" } = req.body;
   let discount = 0;
   let discountType: "percentage" | "amount" = "percentage";
   let totalAmount = course.price;
+
+  const { couponCode = "" } = req.body;
 
   if (couponCode) {
     const coupon = await Coupon.findOne({ code: couponCode.code });
@@ -65,7 +69,6 @@ const SEnroll = async (req: Request) => {
     enrollment,
   };
 };
-
 
 const SGetMyEnrollments = async (req: Request) => {
   const userId = req.user?._id;
