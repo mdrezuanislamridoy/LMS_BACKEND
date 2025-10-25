@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, {} from "jsonwebtoken";
 import dotenv from "dotenv";
 import createHttpError from "http-errors";
 import { UserModel } from "../modules/auth/user/user.model.js";

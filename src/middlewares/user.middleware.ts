@@ -37,7 +37,7 @@ export const User = async (req: Request, res: Response, next: NextFunction) => {
       token = newAccessToken;
     }
 
-    const decoded = jwt.verify(token, env.jwt_secret as string);
+    const decoded = jwt.verify(token, env.jwt_secret as string) as JwtPayload;
 
     if (!decoded) {
       return next(createHttpError(400, "Not able to fetch data"));
