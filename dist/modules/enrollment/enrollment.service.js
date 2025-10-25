@@ -4,7 +4,9 @@ import { Coupon } from "../coupon/coupon.model.js";
 import { UserModel } from "../auth/user/user.model.js";
 import { CourseModel } from "../course/course.model.js";
 const SEnroll = async (req) => {
-    const userId = req.user._id;
+    const userId = req.user?._id;
+    if (!userId)
+        throw createHttpError(401, "Unauthorized");
     const courseId = req.params.id;
     const user = await UserModel.findById(userId);
     if (!user || user.role !== "student") {
@@ -52,7 +54,9 @@ const SEnroll = async (req) => {
     };
 };
 const SGetMyEnrollments = async (req) => {
-    const userId = req.user._id;
+    const userId = req.user?._id;
+    if (!userId)
+        throw createHttpError(401, "Unauthorized");
     const enrollments = await Enrollment.find({ user: userId })
         .populate("courseId")
         .populate("progress.finishedVideos")
@@ -83,7 +87,9 @@ const SUpdateEnrollmentStatus = async (req) => {
 const SUpdateVideoProgress = async (req) => {
     const { videoId } = req.body;
     const courseId = req.params.id;
-    const userId = req.user._id;
+    const userId = req.user?._id;
+    if (!userId)
+        throw createHttpError(401, "Unauthorized");
     const enrollment = await Enrollment.findOne({ user: userId, courseId });
     if (!enrollment)
         throw createHttpError(404, "Enrollment not found");
