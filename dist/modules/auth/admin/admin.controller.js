@@ -59,11 +59,8 @@ export const getStudents = async (req, res, next) => {
             isBlocked: false,
             isDeleted: false,
         };
-        const students = await UserModel.find(filter)
-            .skip(skip)
-            .limit(limit)
-            .lean();
-        const total = await UserModel.countDocuments(filter);
+        const students = await Student.find(filter).skip(skip).limit(limit).lean();
+        const total = await Student.countDocuments(filter);
         res.status(200).json({
             success: true,
             message: "Students fetched successfully",

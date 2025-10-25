@@ -80,12 +80,9 @@ export const getStudents = async (
       isDeleted: false,
     };
 
-    const students = await UserModel.find(filter)
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    const students = await Student.find(filter).skip(skip).limit(limit).lean();
 
-    const total = await UserModel.countDocuments(filter);
+    const total = await Student.countDocuments(filter);
 
     res.status(200).json({
       success: true,
