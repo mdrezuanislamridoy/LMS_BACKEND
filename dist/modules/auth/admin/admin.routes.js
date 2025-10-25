@@ -15,6 +15,6 @@ router.put("/unblock/:id", User, checkRole("admin"), unBlockUser);
 router.get("/blockedAccount", User, checkRole("admin"), getBlockedAccounts);
 router.put("/delete/:id", User, checkRole("admin"), deleteUser);
 router.put("/undodelete/:id", User, checkRole("admin"), undoDeleteUser);
-router.get("/getDeletedAccount", User, checkRole("admin"), getDeletedAccount);
+router.get("/getDeletedAccounts", User, checkRole("admin"), getDeletedAccount);
 export const adminRouter = router;
 //# sourceMappingURL=admin.routes.js.map

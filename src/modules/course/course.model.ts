@@ -100,6 +100,13 @@ const courseSchema = new Schema<ICourse>(
       type: String,
     },
     meetings: [{ type: Schema.Types.ObjectId }],
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
+    popular: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
@@ -116,7 +123,13 @@ courseSchema.index({ ratings: -1 });
 courseSchema.index({ enrolledStudents: -1 });
 courseSchema.index({ ratings: -1, enrolledStudents: -1 });
 courseSchema.index({ createdAt: -1 });
+courseSchema.index({ popular: -1 });
+courseSchema.index({ isFeatured: -1 });
 
+courseSchema.pre("save", function (next) {
+  this.popular = Math.floor(Math.random() * 100);
+  next();
+});
 
 export const CourseModel =
   mongoose.models.Course || model<ICourse>("Course", courseSchema);

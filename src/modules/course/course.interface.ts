@@ -39,6 +39,8 @@ export interface ICourse extends Document {
   assignment?: Types.ObjectId[];
   certificate?: string;
   meetings: Types.ObjectId[];
+  isFeatured: boolean;
+  popular: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

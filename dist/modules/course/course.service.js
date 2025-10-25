@@ -3,6 +3,7 @@ import cloud from "../../utils/cloudinary.js";
 import { Types } from "mongoose";
 import { populate } from "dotenv";
 import { CourseModel } from "./course.model.js";
+import { Category } from "../categories/category.model.js";
 const createCourseService = async (req, payload) => {
     const thumbnail = req.file;
     if (!thumbnail)
@@ -95,7 +96,8 @@ const getCoursesService = async (req) => {
     const courses = await CourseModel.find(query)
         .sort(sortOptions)
         .skip(skip)
-        .limit(limitation);
+        .limit(limitation)
+        .lean();
     const total = await CourseModel.countDocuments(query);
     const totalPage = Math.ceil(total / limitation);
     return {
@@ -104,6 +106,18 @@ const getCoursesService = async (req) => {
         total,
         courses,
         totalPage,
+    };
+};
+const getFeaturedCoursesService = async (req) => {
+    const { limitation = 10 } = req.query;
+    const limit = Number(limitation);
+    const courses = await CourseModel.find({ isFeatured: true })
+        .limit(limit)
+        .lean();
+    return {
+        success: true,
+        message: "Featured Courses fetched successfully",
+        courses,
     };
 };
 const updateCourseService = async (courseId, data) => {
@@ -133,5 +147,6 @@ export const courseService = {
     getCoursesService,
     updateCourseService,
     deleteCourseService,
+    getFeaturedCoursesService,
 };
 //# sourceMappingURL=course.service.js.map

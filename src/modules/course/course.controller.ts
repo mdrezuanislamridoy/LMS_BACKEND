@@ -50,6 +50,19 @@ export const getCourses = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+export const getFeaturedCourses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+)=>{
+  try {
+    const result = await courseService.getFeaturedCoursesService(req as Request);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const updateCourse = async (
   req: Request,
   res: Response,

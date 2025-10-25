@@ -8,6 +8,7 @@ import {
   createCourse,
   deleteCourse,
   getCourses,
+  getFeaturedCourses,
   getSingleCourse,
   updateCourse,
 } from "./course.controller.js";
@@ -24,6 +25,8 @@ router.post(
 
 // validation(VCourseSchema),
 router.get("/get-courses", getCourses);
+router.get("/get-popular-courses", getCourses);
+router.get("/get-featured-courses", getFeaturedCourses);
 router.get("/:id", getSingleCourse);
 router.put("/update/:id", User, checkRole("admin"), updateCourse);
 router.put("/delete/:id", User, checkRole("admin"), deleteCourse);

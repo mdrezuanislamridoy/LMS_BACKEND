@@ -12,5 +12,10 @@ export declare const courseService: {
     }>;
     updateCourseService: (courseId: string, data: ICourse) => Promise<any>;
     deleteCourseService: (courseId: string) => Promise<any>;
+    getFeaturedCoursesService: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        courses: any;
+    }>;
 };
 //# sourceMappingURL=course.service.d.ts.map

@@ -3,6 +3,7 @@ import createHttpError from "http-errors";
 import { sendMail } from "../../../utils/sendMail.js";
 import { UserModel } from "../user/user.model.js";
 import { Mentor } from "../mentor/mentor.model.js";
+import { Student } from "../student/student.model.js";
 export const createAdmin = async (req, res, next) => {
     try {
         const user = await AService.ACreate(req.body);
@@ -28,6 +29,8 @@ export const getMentors = async (req, res, next) => {
         const filter = {
             mentorStatus: "yes",
             name: { $regex: search, $options: "i" },
+            isBlocked: false,
+            isDeleted: false,
         };
         const mentors = await UserModel.find(filter).skip(skip).limit(limit).lean();
         const total = await UserModel.countDocuments(filter);
@@ -53,13 +56,18 @@ export const getStudents = async (req, res, next) => {
         const filter = {
             role: "student",
             name: { $regex: search, $options: "i" },
+            isBlocked: false,
+            isDeleted: false,
         };
-        const mentors = await UserModel.find(filter).skip(skip).limit(limit).lean();
+        const students = await UserModel.find(filter)
+            .skip(skip)
+            .limit(limit)
+            .lean();
         const total = await UserModel.countDocuments(filter);
         res.status(200).json({
             success: true,
-            message: "Mentors fetched successfully",
-            mentors,
+            message: "Students fetched successfully",
+            students,
             total,
             totalPages: Math.ceil(total / limit),
             currentPage: page,
@@ -74,10 +82,12 @@ export const requestedMentors = async (req, res, next) => {
     if (result.length === 0) {
         return next(createHttpError(404, "No requests yet"));
     }
+    const count = await Mentor.countDocuments({ mentorStatus: "pending" });
     res.status(200).json({
         success: true,
         message: "Requested admin fetched successfully",
         requests: result,
+        count,
     });
 };
 export const approveMentor = async (req, res, next) => {
@@ -148,7 +158,7 @@ export const getBlockedAccounts = async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "Blocked accounts fetched successfully",
-        mentors: blockedAccounts,
+        blockedAccounts,
     });
 };
 export const deleteUser = async (req, res, next) => {
@@ -174,14 +184,14 @@ export const undoDeleteUser = async (req, res, next) => {
     }
 };
 export const getDeletedAccount = async (req, res, next) => {
-    const deletedAccount = await UserModel.find({ isBlocked: true });
-    if (deletedAccount.length === 0) {
+    const deletedAccounts = await UserModel.find({ isDeleted: true });
+    if (deletedAccounts.length === 0) {
         return next(createHttpError(404, "No user is deleted yet"));
     }
     res.status(200).json({
         success: true,
         message: "Deleted accounts fetched successfully",
-        mentors: deletedAccount,
+        deletedAccounts,
     });
 };
 //# sourceMappingURL=admin.controller.js.map

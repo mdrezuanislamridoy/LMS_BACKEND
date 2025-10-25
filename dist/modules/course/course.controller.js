@@ -33,6 +33,15 @@ export const getCourses = async (req, res, next) => {
         next(error);
     }
 };
+export const getFeaturedCourses = async (req, res, next) => {
+    try {
+        const result = await courseService.getFeaturedCoursesService(req);
+        res.status(201).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 export const updateCourse = async (req, res, next) => {
     try {
         const updatedCourse = await courseService.updateCourseService(req.params.id, req.body);

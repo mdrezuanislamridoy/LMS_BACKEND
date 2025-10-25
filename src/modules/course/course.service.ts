@@ -5,6 +5,7 @@ import { Types } from "mongoose";
 import { populate } from "dotenv";
 import type { ICourse } from "./course.interface.js";
 import { CourseModel } from "./course.model.js";
+import { Category } from "../categories/category.model.js";
 
 const createCourseService = async (req: Request, payload: ICourse) => {
   const thumbnail = req.file;
@@ -121,7 +122,7 @@ const getCoursesService = async (req: Request) => {
   const sortOptions: any = {};
 
   if (sort) {
-    const [key, value] = sort.split(":");
+    const [key, value] = (sort as string).split(":");
     sortOptions[key] = value === "desc" ? -1 : 1;
   } else {
     sortOptions.createdAt = -1;
@@ -130,7 +131,8 @@ const getCoursesService = async (req: Request) => {
   const courses = await CourseModel.find(query)
     .sort(sortOptions)
     .skip(skip)
-    .limit(limitation);
+    .limit(limitation)
+    .lean();
 
   const total = await CourseModel.countDocuments(query);
   const totalPage = Math.ceil(total / limitation);
@@ -140,6 +142,21 @@ const getCoursesService = async (req: Request) => {
     total,
     courses,
     totalPage,
+  };
+};
+
+const getFeaturedCoursesService = async (req: Request) => {
+  const { limitation = 10 } = req.query;
+
+  const limit = Number(limitation);
+
+  const courses = await CourseModel.find({ isFeatured: true })
+    .limit(limit)
+    .lean();
+  return {
+    success: true,
+    message: "Featured Courses fetched successfully",
+    courses,
   };
 };
 
@@ -176,4 +193,5 @@ export const courseService = {
   getCoursesService,
   updateCourseService,
   deleteCourseService,
+  getFeaturedCoursesService,
 };
