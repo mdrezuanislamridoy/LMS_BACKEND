@@ -7,7 +7,6 @@ import { env } from "../../../config/env.js";
 
 dotenv.config();
 
-
 export const sendVerificationCode = async (
   req: Request,
   res: Response,
@@ -20,7 +19,6 @@ export const sendVerificationCode = async (
     next(error);
   }
 };
-
 
 export const verifyCode = async (
   req: Request,
@@ -61,7 +59,7 @@ export const login = async (
         httpOnly: true,
         secure: env.node_env === "production",
         sameSite: env.node_env === "production" ? "none" : "lax",
-        maxAge: 60 * 60 * 1000, 
+        maxAge: 60 * 60 * 1000,
       })
       .cookie("refreshToken", result.refreshToken, {
         httpOnly: true,
@@ -78,7 +76,6 @@ export const login = async (
     next(error);
   }
 };
-
 
 export const profile = async (
   req: Request,
@@ -99,7 +96,6 @@ export const profile = async (
   }
 };
 
-
 export const updateUser = async (
   req: Request,
   res: Response,
@@ -111,7 +107,7 @@ export const updateUser = async (
     }
 
     const updatedUser = await SUser.UUpdateUser(
-      req.user._id,
+      req.user._id as string,
       req.body as IUser
     );
     if (!updatedUser) {
@@ -127,7 +123,6 @@ export const updateUser = async (
     next(error);
   }
 };
-
 
 export const deleteUser = async (
   req: Request,
@@ -170,7 +165,6 @@ export const changePassword = async (
   }
 };
 
-
 export const sendForgetPassCode = async (
   req: Request,
   res: Response,
@@ -184,7 +178,6 @@ export const sendForgetPassCode = async (
     next(error);
   }
 };
-
 
 export const forgetPassword = async (
   req: Request,
