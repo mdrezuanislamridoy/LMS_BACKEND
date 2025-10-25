@@ -28,7 +28,10 @@ const addToCart = async (req: Request) => {
     );
 
     if (existingItemIndex !== -1) {
-      cart.items[existingItemIndex].qty += qty;
+      const existingItem = cart.items[existingItemIndex];
+      if (existingItem) {
+        existingItem.qty += qty;
+      }
     } else {
       cart.items.push({ product: productId, qty, price: product.price });
     }
@@ -46,6 +49,7 @@ const addToCart = async (req: Request) => {
     cart,
   };
 };
+
 
 const getCartItem = async (req: Request) => {
   const userId = req.user?._id;
