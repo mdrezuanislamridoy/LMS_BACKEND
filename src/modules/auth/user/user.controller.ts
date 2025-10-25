@@ -134,7 +134,7 @@ export const deleteUser = async (
       return next(createHttpError(401, "Unauthorized"));
     }
 
-    const deletedUser = await SUser.UDelete(req.user._id);
+    const deletedUser = await SUser.UDelete(req.user._id as string);
     if (!deletedUser) {
       return next(createHttpError(400, "User deletion failed"));
     }

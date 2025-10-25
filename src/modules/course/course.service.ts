@@ -2,17 +2,15 @@ import type { Request } from "express";
 import createHttpError from "http-errors";
 import cloud from "../../utils/cloudinary.js";
 import { Types } from "mongoose";
-import { populate } from "dotenv";
 import type { ICourse } from "./course.interface.js";
 import { CourseModel } from "./course.model.js";
-import { Category } from "../categories/category.model.js";
 
 const createCourseService = async (req: Request, payload: ICourse) => {
-  const thumbnail = req.file;
+  const thumbnail = req.file as Express.Multer.File | undefined;
   if (!thumbnail) throw createHttpError(404, "Thumbnail not found");
 
   const uploadStream = (buffer: Buffer) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       const stream = cloud.uploader.upload_stream(
         { folder: "LMS/courseThumbnail" },
         (err, data) => {
@@ -31,9 +29,9 @@ const createCourseService = async (req: Request, payload: ICourse) => {
   if (!imageUrl || !publicId)
     throw createHttpError(400, "Failed to upload image");
 
-  let incic = req.body.includedInThisCourse.split(",");
-  let forwhom = req.body.forWhom.split(",");
-  let wywl = req.body.whatYouWillLearn.split(",");
+  const incic = (req.body.includedInThisCourse as string)?.split(",") || [];
+  const forwhom = (req.body.forWhom as string)?.split(",") || [];
+  const wywl = (req.body.whatYouWillLearn as string)?.split(",") || [];
 
   const parsedBody = {
     ...req.body,
@@ -44,7 +42,7 @@ const createCourseService = async (req: Request, payload: ICourse) => {
 
   const course = await CourseModel.create({
     ...parsedBody,
-    addedBy: req.user._id,
+    addedBy: req.user?._id,
     thumbnail: { imageUrl, publicId },
   });
 
@@ -88,13 +86,9 @@ const getCoursesService = async (req: Request) => {
     sort = "",
     pageNumber = 1,
     limit = 16,
-  } = req.query;
+  } = req.query as Record<string, any>;
 
-  let query: {
-    $or?: any[];
-    category?: string;
-    level?: string;
-  } = {};
+  const query: Record<string, any> = {};
 
   if (search) {
     query.$or = [
@@ -103,21 +97,14 @@ const getCoursesService = async (req: Request) => {
     ];
   }
 
-  if (category) {
-    query.category = category;
-  }
-
-  if (level) {
-    query.level = level;
-  }
+  if (category) query.category = category;
+  if (level) query.level = level;
 
   const page = Number(pageNumber);
   const limitation = Number(limit);
-
   const skip = (page - 1) * limitation;
 
-  const sortOptions: any = {};
-
+  const sortOptions: Record<string, number> = {};
   if (sort) {
     const [key, value] = (sort as string).split(":");
     sortOptions[key] = value === "desc" ? -1 : 1;
@@ -143,10 +130,8 @@ const getCoursesService = async (req: Request) => {
 };
 
 const getFeaturedCoursesService = async (req: Request) => {
-  const { limitation = 10 } = req.query;
-
+  const { limitation = 10 } = req.query as Record<string, any>;
   const limit = Number(limitation);
-
   const courses = await CourseModel.find({ isFeatured: true })
     .limit(limit)
     .lean();
@@ -162,10 +147,10 @@ const updateCourseService = async (courseId: string, data: ICourse) => {
     throw createHttpError(403, "Invalid Course ID Format");
   }
 
-  const courses = await CourseModel.findByIdAndUpdate(courseId, data, {
+  const course = await CourseModel.findByIdAndUpdate(courseId, data, {
     new: true,
   });
-  return courses;
+  return course;
 };
 
 const deleteCourseService = async (courseId: string) => {
@@ -178,9 +163,8 @@ const deleteCourseService = async (courseId: string) => {
 };
 
 const topCourses = async (req: Request) => {
-  const { limit = 10 } = req.query;
-
-  const topCourses = await CourseModel.aggregate([]);
+  const { limit = 10 } = req.query as Record<string, any>;
+  const topCourses = await CourseModel.aggregate([]).limit(Number(limit));
   return topCourses;
 };
 
@@ -191,4 +175,5 @@ export const courseService = {
   updateCourseService,
   deleteCourseService,
   getFeaturedCoursesService,
+  topCourses,
 };

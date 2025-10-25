@@ -1,9 +1,7 @@
 import createHttpError from "http-errors";
 import cloud from "../../utils/cloudinary.js";
 import { Types } from "mongoose";
-import { populate } from "dotenv";
 import { CourseModel } from "./course.model.js";
-import { Category } from "../categories/category.model.js";
 const createCourseService = async (req, payload) => {
     const thumbnail = req.file;
     if (!thumbnail)
@@ -24,9 +22,9 @@ const createCourseService = async (req, payload) => {
     const publicId = result?.public_id;
     if (!imageUrl || !publicId)
         throw createHttpError(400, "Failed to upload image");
-    let incic = req.body.includedInThisCourse.split(",");
-    let forwhom = req.body.forWhom.split(",");
-    let wywl = req.body.whatYouWillLearn.split(",");
+    const incic = req.body.includedInThisCourse?.split(",") || [];
+    const forwhom = req.body.forWhom?.split(",") || [];
+    const wywl = req.body.whatYouWillLearn?.split(",") || [];
     const parsedBody = {
         ...req.body,
         includedInThisCourse: incic,
@@ -35,7 +33,7 @@ const createCourseService = async (req, payload) => {
     };
     const course = await CourseModel.create({
         ...parsedBody,
-        addedBy: req.user._id,
+        addedBy: req.user?._id,
         thumbnail: { imageUrl, publicId },
     });
     return course;
@@ -66,19 +64,17 @@ const getSingleCourseService = async (courseId) => {
 };
 const getCoursesService = async (req) => {
     const { search = "", category = "", level = "", sort = "", pageNumber = 1, limit = 16, } = req.query;
-    let query = {};
+    const query = {};
     if (search) {
         query.$or = [
             { title: { $regex: search, $options: "i" } },
             { about: { $regex: search, $options: "i" } },
         ];
     }
-    if (category) {
+    if (category)
         query.category = category;
-    }
-    if (level) {
+    if (level)
         query.level = level;
-    }
     const page = Number(pageNumber);
     const limitation = Number(limit);
     const skip = (page - 1) * limitation;
@@ -121,10 +117,10 @@ const updateCourseService = async (courseId, data) => {
     if (!Types.ObjectId.isValid(courseId)) {
         throw createHttpError(403, "Invalid Course ID Format");
     }
-    const courses = await CourseModel.findByIdAndUpdate(courseId, data, {
+    const course = await CourseModel.findByIdAndUpdate(courseId, data, {
         new: true,
     });
-    return courses;
+    return course;
 };
 const deleteCourseService = async (courseId) => {
     if (!Types.ObjectId.isValid(courseId)) {
@@ -135,7 +131,7 @@ const deleteCourseService = async (courseId) => {
 };
 const topCourses = async (req) => {
     const { limit = 10 } = req.query;
-    const topCourses = await CourseModel.aggregate([]);
+    const topCourses = await CourseModel.aggregate([]).limit(Number(limit));
     return topCourses;
 };
 export const courseService = {
@@ -145,5 +141,6 @@ export const courseService = {
     updateCourseService,
     deleteCourseService,
     getFeaturedCoursesService,
+    topCourses,
 };
 //# sourceMappingURL=course.service.js.map

@@ -17,5 +17,6 @@ export declare const courseService: {
         message: string;
         courses: any;
     }>;
+    topCourses: (req: Request) => Promise<any[]>;
 };
 //# sourceMappingURL=course.service.d.ts.map
