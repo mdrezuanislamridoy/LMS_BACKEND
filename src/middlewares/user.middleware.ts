@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
 import createHttpError from "http-errors";
 import type { IUser } from "../modules/auth/user/user.interface.js";
@@ -17,7 +17,10 @@ export const User = async (req: Request, res: Response, next: NextFunction) => {
       if (!refreshToken) {
         return next(createHttpError(401, "Unauthorized"));
       }
-      const refreshDecoded = jwt.verify(refreshToken, env.jwt_secret as string);
+      const refreshDecoded = jwt.verify(
+        refreshToken,
+        env.jwt_secret as string
+      ) as JwtPayload;
 
       const newAccessToken = jwt.sign(
         { id: refreshDecoded.id, email: refreshDecoded.role },
