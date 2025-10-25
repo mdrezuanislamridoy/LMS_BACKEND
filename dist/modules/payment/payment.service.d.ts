@@ -7,10 +7,16 @@ export declare const SPayBill: (req: Request) => Promise<{
             name: string;
             email: string;
         };
-    }>, {}, {}> & Omit<import("../enrollment/enrollment.interface.js").IEnrollment, "user"> & {
+        courseId: {
+            title: string;
+        };
+    }>, {}, {}> & Omit<import("../enrollment/enrollment.interface.js").IEnrollment, "user" | "courseId"> & {
         user: {
             name: string;
             email: string;
+        };
+        courseId: {
+            title: string;
         };
     } & Required<{
         _id: unknown;
@@ -27,10 +33,16 @@ export declare const SPayment: {
                 name: string;
                 email: string;
             };
-        }>, {}, {}> & Omit<import("../enrollment/enrollment.interface.js").IEnrollment, "user"> & {
+            courseId: {
+                title: string;
+            };
+        }>, {}, {}> & Omit<import("../enrollment/enrollment.interface.js").IEnrollment, "user" | "courseId"> & {
             user: {
                 name: string;
                 email: string;
+            };
+            courseId: {
+                title: string;
             };
         } & Required<{
             _id: unknown;

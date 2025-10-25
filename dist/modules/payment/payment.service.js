@@ -3,12 +3,14 @@ import axios from "axios";
 import { Enrollment } from "../enrollment/enrollment.model.js";
 import { env } from "../../config/env.js";
 export const SPayBill = async (req) => {
-    const userId = req.user._id;
+    const userId = req.user?._id;
+    if (!userId)
+        throw createHttpError(401, "Unauthorized");
     const enrollmentId = req.params.id;
     const enrollment = await Enrollment.findOne({
         _id: enrollmentId,
         user: userId,
-    }).populate("user");
+    }).populate("user courseId");
     if (!enrollment)
         throw createHttpError(404, "Enrollment not found");
     const transactionId = "tnx_" + Date.now();
