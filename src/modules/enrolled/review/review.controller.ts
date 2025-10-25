@@ -42,8 +42,11 @@ export const deleteReview = async (
   next: NextFunction
 ) => {
   try {
+    if (!req.user._id) {
+      throw next(createHttpError(400,"Unauthorized"))
+    }
     const reviews = await RService.SDeleteReview(
-      req.userId as string,
+      req.user._id as string,
       req.params.id as string,
       next as NextFunction
     );
