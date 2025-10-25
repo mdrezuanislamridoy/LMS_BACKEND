@@ -14,13 +14,12 @@ import {
 import { checkRole } from "../../middlewares/role.middleware.js";
 const router = Router();
 
-router.post("/enroll/:id", User, validation(VEnrollmentSchema), Enroll);
+router.post("/enroll/:id", User, Enroll);
 router.get("/getMyEnrollments", User, getMyEnrollments);
 router.put(
   "/updateEnrollmentStatus/:id",
   User,
   checkRole("admin"),
-  validation(VUpdateEnrollmentSchema),
   updateEnrollmentStatus
 );
 

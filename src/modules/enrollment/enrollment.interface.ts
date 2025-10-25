@@ -10,7 +10,6 @@ export interface IEnrollment extends Document {
   transactionId: string;
   phone: string;
 
-  // Track Progress
   progress: {
     finishedModules: Types.ObjectId[];
     finishedVideos: Types.ObjectId[];
@@ -19,7 +18,7 @@ export interface IEnrollment extends Document {
     percentage: number;
     lastAccessedVideo: Types.ObjectId;
   };
-
+  isCompleted: boolean;
   certificateIssued: boolean;
 
   createdAt: Date;

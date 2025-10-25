@@ -67,9 +67,6 @@ const getSingleCourseService = async (courseId: string) => {
         select: "title videoUrl duration thumbnail isFree description",
       },
     },
-    { path: "mentor", select: "name expertise profileImage" },
-    { path: "assignment", select: "title dueDate totalMarks" },
-    { path: "quiz", select: "title totalMarks timeLimit" },
   ];
 
   const course = await CourseModel.findById(courseId)

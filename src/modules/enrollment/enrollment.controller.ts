@@ -32,13 +32,11 @@ export const getMyEnrollments = async (
   next: NextFunction
 ) => {
   try {
-    const myEnrollments = await SEnrollment.SGetMyEnrollments(req as Request);
-    if (!myEnrollments) {
+    const result = await SEnrollment.SGetMyEnrollments(req as Request);
+    if (!result) {
       return next(createHttpError(404, "No enrollment found"));
     }
-    res
-      .status(200)
-      .json({ message: "Enrollment fetched successfully", myEnrollments });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

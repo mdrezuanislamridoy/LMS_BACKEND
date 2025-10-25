@@ -16,6 +16,7 @@ export interface IEnrollment extends Document {
         percentage: number;
         lastAccessedVideo: Types.ObjectId;
     };
+    isCompleted: boolean;
     certificateIssued: boolean;
     createdAt: Date;
     updatedAt: Date;

@@ -19,13 +19,11 @@ export const Enroll = async (req, res, next) => {
 };
 export const getMyEnrollments = async (req, res, next) => {
     try {
-        const myEnrollments = await SEnrollment.SGetMyEnrollments(req);
-        if (!myEnrollments) {
+        const result = await SEnrollment.SGetMyEnrollments(req);
+        if (!result) {
             return next(createHttpError(404, "No enrollment found"));
         }
-        res
-            .status(200)
-            .json({ message: "Enrollment fetched successfully", myEnrollments });
+        res.status(200).json(result);
     }
     catch (error) {
         next(error);

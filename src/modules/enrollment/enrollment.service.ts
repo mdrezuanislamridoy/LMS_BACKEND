@@ -20,7 +20,7 @@ const SEnroll = async (req: Request) => {
     throw createHttpError(404, "Course not found");
   }
 
-  const { couponCode } = req.body;
+  const { couponCode = "" } = req.body;
 
   let discount = 0;
   let discountType = "percentage";
@@ -78,10 +78,25 @@ const SEnroll = async (req: Request) => {
 };
 
 const SGetMyEnrollments = async (req: Request) => {
-  return await Enrollment.find({ user: req.userId })
+  const enrollments = await Enrollment.find({ user: req.userId })
     .populate("courseId")
     .populate("progress.finishedVideos")
     .populate("progress.finishedModules");
+
+  const total = await Enrollment.countDocuments({ user: req.user._id });
+
+  const completed = await Enrollment.countDocuments({
+    user: req.user._id,
+    isCompleted: true,
+  });
+
+  return {
+    total,
+    success: true,
+    message: "Enrollments fetched successfully",
+    enrollments,
+    completed,
+  };
 };
 
 const SUpdateEnrollmentStatus = async (req: Request) => {

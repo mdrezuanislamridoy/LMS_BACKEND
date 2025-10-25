@@ -28,7 +28,6 @@ const enrollmentSchema = new Schema({
     transactionId: String,
     phone: {
         type: String,
-        required: true,
     },
     progress: {
         finishedModules: [{ type: Schema.Types.ObjectId, ref: "CourseModule" }],
@@ -50,6 +49,7 @@ const enrollmentSchema = new Schema({
             ref: "Video",
         },
     },
+    isCompleted: { type: Boolean, default: false },
     certificateIssued: { type: Boolean, default: false },
 }, { timestamps: true });
 enrollmentSchema.index({ user: 1, courseId: 1 }, { unique: true });

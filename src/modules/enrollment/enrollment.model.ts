@@ -32,7 +32,6 @@ const enrollmentSchema = new Schema<IEnrollment>(
     transactionId: String,
     phone: {
       type: String,
-      required: true,
     },
     progress: {
       finishedModules: [{ type: Schema.Types.ObjectId, ref: "CourseModule" }],
@@ -54,6 +53,7 @@ const enrollmentSchema = new Schema<IEnrollment>(
         ref: "Video",
       },
     },
+    isCompleted: { type: Boolean, default: false },
     certificateIssued: { type: Boolean, default: false },
   },
   { timestamps: true }
@@ -63,6 +63,5 @@ enrollmentSchema.index({ user: 1, courseId: 1 }, { unique: true });
 enrollmentSchema.index({ status: 1, createdAt: -1 });
 enrollmentSchema.index({ courseId: 1 });
 enrollmentSchema.index({ createdAt: 1 });
-
 
 export const Enrollment = model("Enrollment", enrollmentSchema);
