@@ -1,4 +1,5 @@
 import createHttpError from "http-errors";
+import { courseService } from "./course.service.js";
 export const createCourse = async (req, res, next) => {
     try {
         const course = await courseService.createCourseService(req, req.body);
