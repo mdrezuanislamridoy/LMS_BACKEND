@@ -18,7 +18,7 @@ const SAddVideo = async (req: Request) => {
 
   if (
     req.user.role === "mentor" &&
-    !course.instructors.includes(req.user._id)
+    !course.instructors.includes(req.user?._id)
   ) {
     throw createHttpError(
       401,
