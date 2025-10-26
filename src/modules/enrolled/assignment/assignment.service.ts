@@ -57,7 +57,7 @@ const updateAssignment = async (req: Request) => {
   if (
     user.role === "admin" ||
     (user.role === "mentor" &&
-      assignment?.course?.instructors?.includes(user._id))
+      assignment?.course?.instructors?.includes(user?._id))
   ) {
     assignment = await Assignment.findByIdAndUpdate(
       assignmentId,
