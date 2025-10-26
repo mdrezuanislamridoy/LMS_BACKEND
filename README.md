@@ -9,38 +9,14 @@ Frontend developers can easily use these APIs to connect their React / Next.js f
 
 ## 🚀 Tech Stack
 
-* **Express.js (v5)** — Server framework
-* **TypeScript** — For type safety
-* **MongoDB + Mongoose** — Database
-* **Zod** — Request validation
-* **Cloudinary** — File upload (images, videos)
-* **JWT + Cookies** — Authentication
-* **Multer** — Handle file uploads
-* **Nodemailer** — Send emails for verification
-
----
-
-## 🧩 Project Structure
-
-```
-server/
-│
-├── src/
-│   ├── modules/
-│   │   ├── auth/           → user, student, mentor, admin
-│   │   ├── course/         → courses, modules, videos, quiz
-│   │   ├── enrollment/     → course enrollment & progress
-│   │   ├── review/         → course reviews
-│   │   ├── meeting/        → class meeting links
-│   │   ├── payment/        → payment gateway routes
-│   │   └── category/       → course categories
-│   │
-│   ├── middlewares/        → auth, role, validator, error handler
-│   ├── utils/              → multer, cloudinary, mailer, etc.
-│   └── config/             → env setup
-│
-└── package.json
-```
+- **Express.js (v5)** — Server framework
+- **TypeScript** — For type safety
+- **MongoDB + Mongoose** — Database
+- **Zod** — Request validation
+- **Cloudinary** — File upload (images, videos)
+- **JWT + Cookies** — Authentication
+- **Multer** — Handle file uploads
+- **Nodemailer** — Send emails for verification
 
 ---
 
@@ -49,9 +25,9 @@ server/
 All users (student, mentor, admin) login and register using email/password.
 When you log in:
 
-* Backend sets **two cookies**: `token` and `refreshToken`
-* These cookies are **httpOnly** (safe for frontend)
-* You must send them in every request (axios should include credentials)
+- Backend sets **two cookies**: `token` and `refreshToken`
+- These cookies are **httpOnly** (safe for frontend)
+- You must send them in every request (axios should include credentials)
 
 ### 👉 Frontend setup for axios:
 
@@ -219,8 +195,8 @@ formData.append("title", "MERN Stack Bootcamp");
 
 ## ✉️ Email System
 
-* Nodemailer is used for sending verification and password reset codes.
-* Environment variables required:
+- Nodemailer is used for sending verification and password reset codes.
+- Environment variables required:
 
   ```
   GMAIL_USER=your_email@gmail.com
@@ -302,7 +278,7 @@ CLOUDINARY_API_SECRET=secret
 
 ## ✅ Quick Notes
 
-* All data are soft deleted (not removed from DB).
-* Admin can undo deletes or un-block users.
-* Some routes need file upload (use `multipart/form-data`).
-* Every important API uses **Zod validation**, so you’ll get clear error messages.
+- All data are soft deleted (not removed from DB).
+- Admin can undo deletes or un-block users.
+- Some routes need file upload (use `multipart/form-data`).
+- Every important API uses **Zod validation**, so you’ll get clear error messages.
