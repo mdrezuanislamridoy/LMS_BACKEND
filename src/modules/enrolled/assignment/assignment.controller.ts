@@ -7,7 +7,10 @@ export const addAssignment = async (
   next: NextFunction
 ) => {
   try {
-    const result = await AssignmentService.createAssignment(req as Request);
+    const result = await AssignmentService.createAssignment(
+      req as Request,
+      next as NextFunction
+    );
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -20,7 +23,10 @@ export const getAssignment = async (
   next: NextFunction
 ) => {
   try {
-    const result = await AssignmentService.getAssignment(req as Request);
+    const result = await AssignmentService.getAssignment(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -33,7 +39,10 @@ export const updateAssignment = async (
   next: NextFunction
 ) => {
   try {
-    const result = await AssignmentService.updateAssignment(req as Request);
+    const result = await AssignmentService.updateAssignment(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -46,7 +55,10 @@ export const deleteAssignment = async (
   next: NextFunction
 ) => {
   try {
-    const result = await AssignmentService.deleteAssignment(req as Request);
+    const result = await AssignmentService.deleteAssignment(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -59,7 +71,10 @@ export const submitAssignment = async (
   next: NextFunction
 ) => {
   try {
-    const result = await AssignmentService.submitAssignment(req as Request);
+    const result = await AssignmentService.submitAssignment(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -73,7 +88,8 @@ export const setMarkIntoAssignment = async (
 ) => {
   try {
     const result = await AssignmentService.setMarkIntoAssignment(
-      req as Request
+      req as Request,
+      next as NextFunction
     );
     res.status(200).json(result);
   } catch (error) {
