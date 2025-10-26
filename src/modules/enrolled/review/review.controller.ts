@@ -8,7 +8,7 @@ export const addReview = async (
   next: NextFunction
 ) => {
   try {
-    const review = await RService.SAddReview(req);
+    const review = await RService.SAddReview(req, next);
 
     if (!review) {
       return next(createHttpError(400, "Review addition failed"));
