@@ -42,6 +42,10 @@ const addQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Course not found");
     }
 
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
@@ -102,6 +106,9 @@ const updateQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Course not found");
     }
 
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
@@ -160,6 +167,10 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
       instructors: Types.ObjectId[];
     }>("instructors");
 
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
+    
     if (!course) {
       throw createHttpError(404, "Course not found");
     }
