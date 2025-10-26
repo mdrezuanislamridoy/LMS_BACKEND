@@ -7,11 +7,12 @@ import type { IQuiz } from "./quiz.interface.js";
 import type { IUser } from "../../auth/user/user.interface.js";
 import { sendMail } from "../../../utils/sendMail.js";
 
-// Define Course interface for populated course field
-interface ICourse {
+
+
+interface AuthUser {
   _id: Types.ObjectId;
-  instructors: Types.ObjectId[];
-  // Add other fields as needed
+  role: "student" | "mentor" | "admin";
+  email: string;
 }
 
 const addQuiz = async (req: Request, next: NextFunction) => {
@@ -20,7 +21,7 @@ const addQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const user = req.user; // Store req.user to aid type narrowing
+    const user = req.user as AuthUser; // Use specific type
     const courseId = req.params.courseId;
     const moduleId = req.body.moduleId;
 
@@ -78,7 +79,7 @@ const updateQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const user = req.user; // Store req.user to aid type narrowing
+    const user = req.user as AuthUser; // Use specific type
     const quizId = req.params.quizId;
 
     // Validate quizId
@@ -139,7 +140,7 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const user = req.user; // Store req.user to aid type narrowing
+    const user = req.user as AuthUser; // Use specific type
     const quizId = req.params.quizId;
 
     // Validate quizId
