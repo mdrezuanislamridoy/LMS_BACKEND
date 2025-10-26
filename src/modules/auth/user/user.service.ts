@@ -113,7 +113,7 @@ const UDelete = async (id: string) => {
 };
 
 const UChangePassword = async (req: Request) => {
-  const userId = req.user._id as string;
+  const userId = req.user?._id ;
   if (!userId) {
     throw createHttpError(401, "Unauthorized");
   }
