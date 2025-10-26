@@ -2,6 +2,8 @@ import type { Request } from "express";
 import { CourseModel } from "../course/course.model.js";
 import createHttpError from "http-errors";
 import { Meeting } from "./meeting.model.js";
+import type { Schema } from "mongoose";
+import type mongoose from "mongoose";
 
 const SCreateMeeting = async (req: Request) => {
   const courseId = req.params.courseId;
@@ -12,7 +14,9 @@ const SCreateMeeting = async (req: Request) => {
 
   const meeting = await Meeting.create({ ...req.body, courseId });
 
-  course.meetings.push(meeting._id);
+  const meetingId = (meeting._id as mongoose.Types.ObjectId).toString();
+
+  course.meetings.push(meetingId);
   await course.save();
 
   return {
