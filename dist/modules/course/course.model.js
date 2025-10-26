@@ -121,5 +121,5 @@ courseSchema.pre("save", function (next) {
     this.popular = Math.floor(Math.random() * 100);
     next();
 });
-export const CourseModel = mongoose.models.Course || model("Course", courseSchema);
+export const CourseModel = model("Course", courseSchema);
 //# sourceMappingURL=course.model.js.map

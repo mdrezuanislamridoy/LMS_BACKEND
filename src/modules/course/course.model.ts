@@ -131,5 +131,4 @@ courseSchema.pre("save", function (next) {
   next();
 });
 
-export const CourseModel =
-  mongoose.models.Course || model<ICourse>("Course", courseSchema);
+export const CourseModel = model("Course", courseSchema);

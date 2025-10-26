@@ -16,9 +16,7 @@ const SEnroll = async (req: Request) => {
     throw createHttpError(403, "You cannot enroll in this course");
   }
 
-  const course = await CourseModel.findById(courseId)
-    .populate<{ couponCodes: any[] }>("couponCodes")
-    .exec();
+  const course = await CourseModel.findById(courseId);
 
   if (!course) throw createHttpError(404, "Course not found");
 

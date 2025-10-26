@@ -104,9 +104,9 @@ const getCoursesService = async (req: Request) => {
   const limitation = Number(limit);
   const skip = (page - 1) * limitation;
 
-  const sortOptions: Record<string, number> = {};
+  const sortOptions: any = {};
   if (sort) {
-    const [key, value] = (sort as string).split(":");
+    const [key, value]  = (sort as string).split(":");
     sortOptions[key] = value === "desc" ? -1 : 1;
   } else {
     sortOptions.createdAt = -1;
