@@ -5,9 +5,18 @@ import { Assignment } from "./assignment.model.js";
 import type { IAssignment } from "./assignment.interface.js";
 import { sendMail } from "../../../utils/sendMail.js";
 
+// Define Course interface for populated course field
 interface ICourse {
   _id: Types.ObjectId;
   instructors: Types.ObjectId[];
+  // Add other fields as needed
+}
+
+// Define User type for type safety
+interface AuthUser {
+  _id: Types.ObjectId;
+  role: "student" | "mentor" | "admin";
+  email: string;
 }
 
 type PopulatedAssignment = Omit<IAssignment, "course"> & {
@@ -55,7 +64,7 @@ const getAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const userId = req.user._id;
+    const user = req.user as AuthUser; // Use specific type
     const assignmentId = req.params.id;
     if (!assignmentId) {
       throw createHttpError(400, "Assignment ID is required");
@@ -66,7 +75,7 @@ const getAssignment = async (req: Request, next: NextFunction) => {
     }
 
     const assignment = await Assignment.findOne({
-      student: userId,
+      student: user._id,
       _id: new Types.ObjectId(assignmentId),
     });
 
@@ -95,6 +104,7 @@ const updateAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user as AuthUser; // Use specific type
     const assignmentId = req.params.id;
     if (!assignmentId) {
       throw createHttpError(400, "Assignment ID is required");
@@ -113,10 +123,10 @@ const updateAssignment = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
+      user.role === "admin" ||
+      (user.role === "mentor" &&
         assignment.course?.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(user._id)
         ))
     ) {
       const updatedAssignment = await Assignment.findByIdAndUpdate(
@@ -156,6 +166,7 @@ const submitAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user as AuthUser; // Use specific type
     const assignmentId = req.params.id;
     if (!assignmentId) {
       throw createHttpError(400, "Assignment ID is required");
@@ -173,10 +184,7 @@ const submitAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Assignment not found");
     }
 
-    if (
-      req.user.role !== "student" ||
-      !assignment.student?.equals(req.user._id)
-    ) {
+    if (user.role !== "student" || !assignment.student?.equals(user._id)) {
       throw createHttpError(
         403,
         "You're not allowed to submit this assignment"
@@ -195,7 +203,7 @@ const submitAssignment = async (req: Request, next: NextFunction) => {
 
     // Send email notification
     await sendMail(
-      req.user.email,
+      user.email,
       "Assignment Submitted Successfully",
       `${updatedAssignment.title} has been submitted successfully`
     );
@@ -221,6 +229,7 @@ const setMarkIntoAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user as AuthUser; // Use specific type
     const assignmentId = req.params.id;
     if (!assignmentId) {
       throw createHttpError(400, "Assignment ID is required");
@@ -239,10 +248,10 @@ const setMarkIntoAssignment = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
+      user.role === "admin" ||
+      (user.role === "mentor" &&
         assignment.course?.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(user._id)
         ))
     ) {
       const updatedAssignment = await Assignment.findByIdAndUpdate(
@@ -279,6 +288,7 @@ const deleteAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user as AuthUser; // Use specific type
     const assignmentId = req.params.id;
     if (!assignmentId) {
       throw createHttpError(400, "Assignment ID is required");
@@ -297,10 +307,10 @@ const deleteAssignment = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
+      user.role === "admin" ||
+      (user.role === "mentor" &&
         assignment.course?.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(user._id)
         ))
     ) {
       const deletedAssignment = await Assignment.findByIdAndDelete(
@@ -338,10 +348,9 @@ const getMyCompletedAssignments = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const userId = req.user._id;
-
+    const user = req.user as AuthUser; // Use specific type
     const assignments = await Assignment.find({
-      student: userId,
+      student: user._id,
       isSubmitted: true,
     });
 
