@@ -1,94 +1,232 @@
-import type { Types } from "mongoose";
-import type { IUser } from "../../auth/user/user.interface.js";
+import type { Request, NextFunction } from "express";
+import { Types } from "mongoose";
+import createHttpError from "http-errors";
 import { CourseModel } from "../../course/course.model.js";
 import { Quiz } from "./quiz.model.js";
-import createHttpError from "http-errors";
-import type { Request } from "express";
+import type { IQuiz } from "./quiz.interface.js"; // Assumed interface
+import type { IUser } from "../../auth/user/user.interface.js";
+import { sendMail } from "../../../utils/sendMail.js";
 
-const addQuiz = async (req: Request) => {
-  const courseId = req.params.courseId;
-  const moduleId = req.body.moduleId;
-  const user: IUser | null = req.user;
+// Define Course interface for populated course field
+interface ICourse {
+  _id: Types.ObjectId;
+  instructors: Types.ObjectId[];
+  // Add other fields as needed
+}
 
-  const course = await CourseModel.findById(courseId).populate("instructors");
+const addQuiz = async (req: Request, next: NextFunction) => {
+  try {
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
 
-  if (
-    user?.role === "admin" ||
-    (user?.role === "mentor" && course?.instructors?.includes(user?._id))
-  ) {
-    const quiz = await Quiz.create({ ...req.body, courseId, moduleId });
+    const courseId = req.params.courseId;
+    const moduleId = req.body.moduleId;
+
+    // Validate inputs
+    if (!courseId) {
+      throw createHttpError(400, "Course ID is required");
+    }
+    if (!Types.ObjectId.isValid(courseId)) {
+      throw createHttpError(400, "Invalid course ID");
+    }
+    if (!moduleId || !Types.ObjectId.isValid(moduleId)) {
+      throw createHttpError(400, "Invalid module ID");
+    }
+
+    const course = await CourseModel.findById(courseId).populate<{
+      instructors: Types.ObjectId[];
+    }>("instructors");
+
+    if (!course) {
+      throw createHttpError(404, "Course not found");
+    }
+
+    if (
+      req.user.role === "admin" ||
+      (req.user.role === "mentor" &&
+        course.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
+    ) {
+      const quiz = await Quiz.create({
+        ...req.body,
+        courseId: new Types.ObjectId(courseId),
+        moduleId: new Types.ObjectId(moduleId),
+      });
+
+      return {
+        success: true,
+        message: "Quiz added successfully",
+        quiz,
+      };
+    } else {
+      throw createHttpError(403, "You're not allowed to add quiz");
+    }
+  } catch (error: any) {
+    next(
+      createHttpError(
+        error.status || 500,
+        error.message || "Failed to add quiz"
+      )
+    );
+  }
+};
+
+const updateQuiz = async (req: Request, next: NextFunction) => {
+  try {
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const quizId = req.params.quizId;
+
+    // Validate quizId
+    if (!quizId) {
+      throw createHttpError(400, "Quiz ID is required");
+    }
+    if (!Types.ObjectId.isValid(quizId)) {
+      throw createHttpError(400, "Invalid quiz ID");
+    }
+
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      throw createHttpError(404, "Quiz not found");
+    }
+
+    const course = await CourseModel.findById(quiz.courseId).populate<{
+      instructors: Types.ObjectId[];
+    }>("instructors");
+
+    if (!course) {
+      throw createHttpError(404, "Course not found");
+    }
+
+    if (
+      req.user.role === "admin" ||
+      (req.user.role === "mentor" &&
+        course.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
+    ) {
+      const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, req.body, {
+        new: true,
+      });
+
+      if (!updatedQuiz) {
+        throw createHttpError(404, "Quiz not found after update");
+      }
+
+      return {
+        success: true,
+        message: "Quiz updated successfully",
+        quiz: updatedQuiz,
+      };
+    } else {
+      throw createHttpError(403, "You're not allowed to update quiz");
+    }
+  } catch (error: any) {
+    next(
+      createHttpError(
+        error.status || 500,
+        error.message || "Failed to update quiz"
+      )
+    );
+  }
+};
+
+const deleteQuiz = async (req: Request, next: NextFunction) => {
+  try {
+    if (!req.user) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const quizId = req.params.quizId;
+
+    // Validate quizId
+    if (!quizId) {
+      throw createHttpError(400, "Quiz ID is required");
+    }
+    if (!Types.ObjectId.isValid(quizId)) {
+      throw createHttpError(400, "Invalid quiz ID");
+    }
+
+    const quiz = await Quiz.findById(quizId);
+    if (!quiz) {
+      throw createHttpError(404, "Quiz not found");
+    }
+
+    const course = await CourseModel.findById(quiz.courseId).populate<{
+      instructors: Types.ObjectId[];
+    }>("instructors");
+
+    if (!course) {
+      throw createHttpError(404, "Course not found");
+    }
+
+    if (
+      req.user.role === "admin" ||
+      (req.user.role === "mentor" &&
+        course.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
+    ) {
+      const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
+
+      if (!deletedQuiz) {
+        throw createHttpError(404, "Quiz not found after deletion");
+      }
+
+      return {
+        success: true,
+        message: "Quiz deleted successfully",
+        quiz: deletedQuiz,
+      };
+    } else {
+      throw createHttpError(403, "You're not allowed to delete quiz");
+    }
+  } catch (error: any) {
+    next(
+      createHttpError(
+        error.status || 500,
+        error.message || "Failed to delete quiz"
+      )
+    );
+  }
+};
+
+const getQuiz = async (req: Request, next: NextFunction) => {
+  try {
+    const moduleId = req.params.moduleId;
+
+    // Validate moduleId
+    if (!moduleId) {
+      throw createHttpError(400, "Module ID is required");
+    }
+    if (!Types.ObjectId.isValid(moduleId)) {
+      throw createHttpError(400, "Invalid module ID");
+    }
+
+    const quizzes = await Quiz.find({ moduleId: new Types.ObjectId(moduleId) });
 
     return {
       success: true,
-      message: "Quiz added successfully",
-      quiz,
+      message: "Quizzes fetched successfully",
+      quizzes,
     };
-  } else {
-    throw createHttpError(401, "You're not allowed to add quiz");
-  }
-};
-const updateQuiz = async (req: Request) => {
-  const id = req.params.quizId;
-  const user: IUser = req.user;
-
-  const quiz = await Quiz.findById(id);
-
-  const course = await CourseModel.findById(quiz?.courseId).populate(
-    "instructors"
-  );
-
-  if (
-    user.role === "admin" ||
-    (user.role === "mentor" && course?.instructors?.includes(user._id))
-  ) {
-    const quiz = await Quiz.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    return {
-      success: true,
-      message: "Quiz updated successfully",
-      quiz,
-    };
-  } else {
-    throw createHttpError(401, "You're not allowed to update quiz");
+  } catch (error: any) {
+    next(
+      createHttpError(
+        error.status || 500,
+        error.message || "Failed to fetch quizzes"
+      )
+    );
   }
 };
 
-const deleteQuiz = async (req: Request) => {
-  const quizId = req.params.quizId;
-  const user = req.user;
-  const quiz = await Quiz.findById(quizId);
-
-  const course = await CourseModel.findById(quiz?.courseId).populate(
-    "instructors"
-  );
-
-  if (
-    user.role === "admin" ||
-    (user.role === "mentor" && course?.instructors?.includes(user._id))
-  ) {
-    const deletedData = await Quiz.findByIdAndDelete(quizId);
-
-    return {
-      success: true,
-      message: "Quiz deleted successfully",
-      deletedData,
-    };
-  }
+export default {
+  addQuiz,
+  updateQuiz,
+  deleteQuiz,
+  getQuiz,
 };
-const getQuiz = async (req: Request) => {
-  const moduleId = req.params.moduleId;
-
-  const quiz = await Quiz.find({ moduleId });
-  if (!quiz) {
-    throw createHttpError(404, "Quiz not found");
-  }
-
-  return {
-    success: true,
-    message: "Quiz fetched successfully",
-    quiz,
-  };
-};
-
-export default { addQuiz, updateQuiz, deleteQuiz, getQuiz };

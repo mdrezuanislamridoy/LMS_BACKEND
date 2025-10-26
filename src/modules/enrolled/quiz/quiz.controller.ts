@@ -7,7 +7,10 @@ export const addQuiz = async (
   next: NextFunction
 ) => {
   try {
-    const result = await quizService.addQuiz(req as Request);
+    const result = await quizService.addQuiz(
+      req as Request,
+      next as NextFunction
+    );
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -20,7 +23,10 @@ export const getQuiz = async (
   next: NextFunction
 ) => {
   try {
-    const result = await quizService.getQuiz(req as Request);
+    const result = await quizService.getQuiz(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -33,7 +39,10 @@ export const updateQuiz = async (
   next: NextFunction
 ) => {
   try {
-    const result = await quizService.updateQuiz(req as Request);
+    const result = await quizService.updateQuiz(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -46,7 +55,10 @@ export const deleteQuiz = async (
   next: NextFunction
 ) => {
   try {
-    const result = await quizService.deleteQuiz(req as Request);
+    const result = await quizService.deleteQuiz(
+      req as Request,
+      next as NextFunction
+    );
     res.status(200).json(result);
   } catch (error) {
     next(error);
