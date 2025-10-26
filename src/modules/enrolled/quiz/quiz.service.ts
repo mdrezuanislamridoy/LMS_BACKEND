@@ -20,6 +20,7 @@ const addQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user; // Store req.user to aid type narrowing
     const courseId = req.params.courseId;
     const moduleId = req.body.moduleId;
 
@@ -43,11 +44,9 @@ const addQuiz = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
-        course.instructors?.some((instructor) =>
-          instructor.equals(req.user._id)
-        ))
+      user.role === "admin" ||
+      (user.role === "mentor" &&
+        course.instructors?.some((instructor) => instructor.equals(user._id)))
     ) {
       const quiz = await Quiz.create({
         ...req.body,
@@ -79,6 +78,7 @@ const updateQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user; // Store req.user to aid type narrowing
     const quizId = req.params.quizId;
 
     // Validate quizId
@@ -103,11 +103,9 @@ const updateQuiz = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
-        course.instructors?.some((instructor) =>
-          instructor.equals(req.user._id)
-        ))
+      user.role === "admin" ||
+      (user.role === "mentor" &&
+        course.instructors?.some((instructor) => instructor.equals(user._id)))
     ) {
       const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, req.body, {
         new: true,
@@ -141,6 +139,7 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
+    const user = req.user; // Store req.user to aid type narrowing
     const quizId = req.params.quizId;
 
     // Validate quizId
@@ -165,11 +164,9 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
     }
 
     if (
-      req.user.role === "admin" ||
-      (req.user.role === "mentor" &&
-        course.instructors?.some((instructor) =>
-          instructor.equals(req.user._id)
-        ))
+      user.role === "admin" ||
+      (user.role === "mentor" &&
+        course.instructors?.some((instructor) => instructor.equals(user._id)))
     ) {
       const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
 
