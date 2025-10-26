@@ -6,6 +6,7 @@ import type { ICourse } from "../../course/course.interface.js";
 import { CourseModel } from "../../course/course.model.js";
 import { CourseModule } from "../../module/module.model.js";
 import cloud from "../../../utils/cloudinary.js";
+import type mongoose from "mongoose";
 
 const SAddVideo = async (req: Request) => {
   const { id: courseId } = req.params;
@@ -22,7 +23,7 @@ const SAddVideo = async (req: Request) => {
 
   if (
     req.user.role === "mentor" &&
-    !course.instructors.includes(req.user._id)
+    !course.instructors.includes(req.user?._id as mongoose.Types.ObjectId)
   ) {
     throw createHttpError(403, "You are not an instructor for this course");
   }
