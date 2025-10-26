@@ -35,6 +35,9 @@ const SCreateStudent = async (req) => {
     };
 };
 const SUpdateStudent = async (req) => {
+    if (!req.user) {
+        throw createHttpError(401, "User not authenticated");
+    }
     const userId = req.user.id;
     const student = await Student.findByIdAndUpdate(userId, req.body, {
         new: true,

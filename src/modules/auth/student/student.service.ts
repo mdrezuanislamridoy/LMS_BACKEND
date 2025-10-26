@@ -17,9 +17,9 @@ const SCreateStudent = async (req: Request) => {
     throw createHttpError(400, "You're not verified");
   }
 
-  const student = await UserModel.findOne({email:isVerified.email})
+  const student = await UserModel.findOne({ email: isVerified.email });
   if (student) {
-    throw createHttpError(400,"User Already exists")
+    throw createHttpError(400, "User Already exists");
   }
 
   await VerifyCode.deleteMany({ email: isVerified.email });
@@ -46,6 +46,10 @@ const SCreateStudent = async (req: Request) => {
 };
 
 const SUpdateStudent = async (req: Request) => {
+  if (!req.user) {
+    throw createHttpError(401, "User not authenticated");
+  }
+
   const userId = req.user.id as string;
   const student = await Student.findByIdAndUpdate(userId, req.body, {
     new: true,
