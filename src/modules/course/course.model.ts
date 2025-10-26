@@ -99,7 +99,7 @@ const courseSchema = new Schema<ICourse>(
     certificate: {
       type: String,
     },
-    meetings: [{ type: Schema.Types.ObjectId }],
+    meetings: [{ type: Schema.Types.ObjectId, ref: "Meeting" }],
     isFeatured: {
       type: Boolean,
       default: false,

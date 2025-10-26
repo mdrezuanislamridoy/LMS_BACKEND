@@ -1,10 +1,8 @@
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { sendMail } from "../../../utils/sendMail.js";
 import { VerifyCode } from "../verificationCode.model.js";
 import { UserModel } from "./user.model.js";
-import { env } from "../../../config/env.js";
 import { generateToken } from "../../../utils/generateToken.js";
 const USendCode = async (email) => {
     const user = await UserModel.findOne({ email });

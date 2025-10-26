@@ -2,8 +2,7 @@ import type { Request } from "express";
 import { CourseModel } from "../course/course.model.js";
 import createHttpError from "http-errors";
 import { Meeting } from "./meeting.model.js";
-import type { Schema } from "mongoose";
-import type mongoose from "mongoose";
+import mongoose from "mongoose";
 
 const SCreateMeeting = async (req: Request) => {
   const courseId = req.params.courseId;
@@ -16,7 +15,10 @@ const SCreateMeeting = async (req: Request) => {
 
   const meetingId = (meeting._id as mongoose.Types.ObjectId).toString();
 
-  course.meetings.push(meetingId);
+  if (!mongoose.Types.ObjectId.isValid(meetingId)) {
+    throw createHttpError(400, "Invalid meeting ID format");
+  }
+  course.meetings.push(new mongoose.Types.ObjectId(meetingId));
   await course.save();
 
   return {
