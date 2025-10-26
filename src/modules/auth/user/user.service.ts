@@ -113,7 +113,10 @@ const UDelete = async (id: string) => {
 };
 
 const UChangePassword = async (req: Request) => {
-  const userId = req.user._id;
+  const userId = req.user._id as string;
+  if (!userId) {
+    throw createHttpError(401, "Unauthorized");
+  }
   const { oldPass, newPass } = req.body;
 
   const user = await UserModel.findById(userId);

@@ -74,6 +74,9 @@ const UDelete = async (id) => {
 };
 const UChangePassword = async (req) => {
     const userId = req.user._id;
+    if (!userId) {
+        throw createHttpError(401, "Unauthorized");
+    }
     const { oldPass, newPass } = req.body;
     const user = await UserModel.findById(userId);
     const isPassMatched = await bcrypt.compare(oldPass, user?.password);
