@@ -16,14 +16,15 @@ const SAddVideo = async (req: Request) => {
   const moduleId = req.body.moduleId;
   if (!moduleId) throw createHttpError(400, "Module ID is required");
 
+  if (!req.user) {
+    throw createHttpError(401, "User not authenticated");
+  }
+
   if (
     req.user.role === "mentor" &&
-    !course.instructors.includes(req.user?._id)
+    !course.instructors.includes(req.user._id)
   ) {
-    throw createHttpError(
-      401,
-      "You're not allowed to add video to this course"
-    );
+    throw createHttpError(403, "You are not an instructor for this course");
   }
 
   if (!course.modules.includes(moduleId))
