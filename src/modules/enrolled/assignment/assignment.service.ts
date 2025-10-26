@@ -348,7 +348,7 @@ const getMyCompletedAssignments = async (req: Request, next: NextFunction) => {
       throw createHttpError(401, "User not authenticated");
     }
 
-    const user = req.user as AuthUser; // Use specific type
+    const user = req.user as AuthUser; 
     const assignments = await Assignment.find({
       student: user._id,
       isSubmitted: true,
