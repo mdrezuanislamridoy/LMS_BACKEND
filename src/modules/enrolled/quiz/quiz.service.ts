@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import createHttpError from "http-errors";
 import { CourseModel } from "../../course/course.model.js";
 import { Quiz } from "./quiz.model.js";
-import type { IQuiz } from "./quiz.interface.js"; // Assumed interface
+import type { IQuiz } from "./quiz.interface.js";
 import type { IUser } from "../../auth/user/user.interface.js";
 import { sendMail } from "../../../utils/sendMail.js";
 
@@ -42,15 +42,11 @@ const addQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Course not found");
     }
 
-    if (!req.user) {
-      throw createHttpError(401, "User not authenticated");
-    }
-
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
         course.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(req.user._id)
         ))
     ) {
       const quiz = await Quiz.create({
@@ -106,14 +102,11 @@ const updateQuiz = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Course not found");
     }
 
-    if (!req.user) {
-      throw createHttpError(401, "User not authenticated");
-    }
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
         course.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(req.user._id)
         ))
     ) {
       const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, req.body, {
@@ -167,10 +160,6 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
       instructors: Types.ObjectId[];
     }>("instructors");
 
-    if (!req.user) {
-      throw createHttpError(401, "User not authenticated");
-    }
-    
     if (!course) {
       throw createHttpError(404, "Course not found");
     }
@@ -179,7 +168,7 @@ const deleteQuiz = async (req: Request, next: NextFunction) => {
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
         course.instructors?.some((instructor) =>
-          instructor.equals(req.user!._id)
+          instructor.equals(req.user._id)
         ))
     ) {
       const deletedQuiz = await Quiz.findByIdAndDelete(quizId);
