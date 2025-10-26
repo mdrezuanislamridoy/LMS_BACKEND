@@ -29,7 +29,10 @@ const userSchema = new Schema({
     },
     isDeleted: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
-}, { discriminatorKey: "roleKey", timestamps: true });
+}, {
+    discriminatorKey: "roleKey",
+    timestamps: true,
+});
 userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ mentorStatus: 1 });

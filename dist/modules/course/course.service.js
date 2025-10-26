@@ -79,9 +79,17 @@ const getCoursesService = async (req) => {
     const limitation = Number(limit);
     const skip = (page - 1) * limitation;
     const sortOptions = {};
-    if (sort) {
+    const allowedSortKeys = ["createdAt", "title", "category", "level"]; // Adjust based on schema
+    if (sort && sort.includes(":")) {
         const [key, value] = sort.split(":");
-        sortOptions[key] = value === "desc" ? -1 : 1;
+        if (key &&
+            allowedSortKeys.includes(key) &&
+            ["asc", "desc"].includes(value)) {
+            sortOptions[key] = value === "desc" ? -1 : 1;
+        }
+        else {
+            sortOptions.createdAt = -1;
+        }
     }
     else {
         sortOptions.createdAt = -1;

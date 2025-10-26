@@ -90,9 +90,7 @@ const ULogin = async (email: string, password: string, next: NextFunction) => {
 
   await user.save();
 
-  const userData = user.toObject();
-  delete userData.password;
-
+  const { password: _, ...userData } = user.toObject();
   return {
     user: userData,
     accessToken,

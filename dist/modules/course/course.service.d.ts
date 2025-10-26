@@ -1,5 +1,13 @@
 import type { Request } from "express";
 import type { ICourse } from "./course.interface.js";
+interface QueryParams {
+    search?: string;
+    category?: string;
+    level?: string;
+    sort?: string;
+    pageNumber?: string | number;
+    limit?: string | number;
+}
 export declare const courseService: {
     createCourseService: (req: Request, payload: ICourse) => Promise<import("mongoose").Document<unknown, {}, ICourse, {}, import("mongoose").DefaultSchemaOptions> & ICourse & Required<{
         _id: unknown;
@@ -11,7 +19,7 @@ export declare const courseService: {
     }> & {
         __v: number;
     }>;
-    getCoursesService: (req: Request) => Promise<{
+    getCoursesService: (req: Request<{}, {}, {}, QueryParams>) => Promise<{
         success: boolean;
         message: string;
         total: number;
@@ -43,4 +51,5 @@ export declare const courseService: {
     }>;
     topCourses: (req: Request) => Promise<any[]>;
 };
+export {};
 //# sourceMappingURL=course.service.d.ts.map

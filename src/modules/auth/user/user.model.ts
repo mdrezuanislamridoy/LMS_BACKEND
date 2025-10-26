@@ -26,7 +26,7 @@ const userSchema = new Schema<IUser>(
     },
     mentorStatus: {
       type: String,
-      enum: ["yes", "no", "pending","rejected"],
+      enum: ["yes", "no", "pending", "rejected"],
       default: "pending",
     },
 
@@ -37,7 +37,10 @@ const userSchema = new Schema<IUser>(
     isDeleted: { type: Boolean, default: false },
     isBlocked: { type: Boolean, default: false },
   },
-  { discriminatorKey: "roleKey", timestamps: true }
+  {
+    discriminatorKey: "roleKey",
+    timestamps: true,
+  }
 );
 
 userSchema.index({ email: 1 });

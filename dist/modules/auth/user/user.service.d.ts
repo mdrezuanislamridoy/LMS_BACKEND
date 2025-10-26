@@ -7,9 +7,35 @@ export declare const SUser: {
         __v: number;
     }>;
     ULogin: (email: string, password: string, next: NextFunction) => Promise<{
-        user: IUser & Required<{
+        user: {
+            name: string;
+            email: string;
+            phone: string;
+            role: "admin" | "mentor" | "student";
+            mentorStatus: string;
+            dateOfBirth?: Date;
+            contactInfo?: import("./user.interface.js").Contact;
+            socialAccounts?: import("./user.interface.js").Social;
+            profileImg?: import("./user.interface.js").ProfileImg;
+            gender?: "male" | "female" | "others";
+            profession: string;
+            isPasswordChanged?: boolean;
+            isDeleted?: boolean;
+            isBlocked?: boolean;
+            refreshToken?: string;
+            createdAt?: Date;
+            updatedAt?: Date;
             _id: unknown;
-        }> & {
+            $locals: Record<string, unknown>;
+            $op: "save" | "validate" | "remove" | null;
+            $where: Record<string, unknown>;
+            baseModelName?: string;
+            collection: import("mongoose").Collection;
+            db: import("mongoose").Connection;
+            errors?: import("mongoose").Error.ValidationError;
+            id?: any;
+            isNew: boolean;
+            schema: import("mongoose").Schema;
             __v: number;
         };
         accessToken: string;

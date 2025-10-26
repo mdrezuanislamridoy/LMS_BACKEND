@@ -5,6 +5,19 @@ import { Types } from "mongoose";
 import type { ICourse } from "./course.interface.js";
 import { CourseModel } from "./course.model.js";
 
+interface QueryParams {
+  search?: string;
+  category?: string;
+  level?: string;
+  sort?: string;
+  pageNumber?: string | number;
+  limit?: string | number;
+}
+
+interface SortOptions {
+  [key: string]: 1 | -1;
+}
+
 const createCourseService = async (req: Request, payload: ICourse) => {
   const thumbnail = req.file as Express.Multer.File | undefined;
   if (!thumbnail) throw createHttpError(404, "Thumbnail not found");
@@ -78,7 +91,7 @@ const getSingleCourseService = async (courseId: string) => {
   return course;
 };
 
-const getCoursesService = async (req: Request) => {
+const getCoursesService = async (req: Request<{}, {}, {}, QueryParams>) => {
   const {
     search = "",
     category = "",
@@ -86,7 +99,7 @@ const getCoursesService = async (req: Request) => {
     sort = "",
     pageNumber = 1,
     limit = 16,
-  } = req.query as Record<string, any>;
+  } = req.query;
 
   const query: Record<string, any> = {};
 
@@ -104,10 +117,19 @@ const getCoursesService = async (req: Request) => {
   const limitation = Number(limit);
   const skip = (page - 1) * limitation;
 
-  const sortOptions: any = {};
-  if (sort) {
-    const [key, value]  = (sort as string).split(":");
-    sortOptions[key] = value === "desc" ? -1 : 1;
+  const sortOptions: SortOptions = {};
+  const allowedSortKeys = ["createdAt", "title", "category", "level"]; // Adjust based on schema
+  if (sort && sort.includes(":")) {
+    const [key, value] = sort.split(":");
+    if (
+      key &&
+      allowedSortKeys.includes(key) &&
+      ["asc", "desc"].includes(value as string)
+    ) {
+      sortOptions[key] = value === "desc" ? -1 : 1;
+    } else {
+      sortOptions.createdAt = -1;
+    }
   } else {
     sortOptions.createdAt = -1;
   }
@@ -128,7 +150,6 @@ const getCoursesService = async (req: Request) => {
     totalPage,
   };
 };
-
 const getFeaturedCoursesService = async (req: Request) => {
   const { limitation = 10 } = req.query as Record<string, any>;
   const limit = Number(limitation);

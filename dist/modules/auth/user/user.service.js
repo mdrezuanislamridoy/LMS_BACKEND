@@ -56,8 +56,7 @@ const ULogin = async (email, password, next) => {
     const refreshToken = generateToken({ id: user._id, role: user.role }, "7d");
     user.refreshToken = refreshToken;
     await user.save();
-    const userData = user.toObject();
-    delete userData.password;
+    const { password: _, ...userData } = user.toObject();
     return {
         user: userData,
         accessToken,
