@@ -3,17 +3,16 @@ import { Types } from "mongoose";
 import createHttpError from "http-errors";
 import { Assignment } from "./assignment.model.js";
 import type { IAssignment } from "./assignment.interface.js";
-import type { IUser } from "../../auth/user/user.interface.js";
 import { sendMail } from "../../../utils/sendMail.js";
 
-// Define Course interface for populated course field
 interface ICourse {
   _id: Types.ObjectId;
   instructors: Types.ObjectId[];
-  // Add other fields as needed
 }
 
-
+type PopulatedAssignment = Omit<IAssignment, "course"> & {
+  course: ICourse;
+};
 
 const createAssignment = async (req: Request, next: NextFunction) => {
   try {
@@ -59,7 +58,7 @@ const getAssignment = async (req: Request, next: NextFunction) => {
     const userId = req.user._id;
     const assignmentId = req.params.id;
     if (!assignmentId) {
-      throw createHttpError(400, "assignmentId is required");
+      throw createHttpError(400, "Assignment ID is required");
     }
     // Validate assignmentId
     if (!Types.ObjectId.isValid(assignmentId)) {
@@ -97,19 +96,17 @@ const updateAssignment = async (req: Request, next: NextFunction) => {
     }
 
     const assignmentId = req.params.id;
-
     if (!assignmentId) {
-      throw createHttpError(400, "assignmentId is required");
+      throw createHttpError(400, "Assignment ID is required");
     }
-
     // Validate assignmentId
     if (!Types.ObjectId.isValid(assignmentId)) {
       throw createHttpError(400, "Invalid assignment ID");
     }
 
-    const assignment = await Assignment.findById(assignmentId).populate(
-      "course"
-    );
+    const assignment: PopulatedAssignment | null = await Assignment.findById(
+      assignmentId
+    ).populate<{ course: ICourse }>("course");
 
     if (!assignment) {
       throw createHttpError(404, "Assignment not found");
@@ -118,7 +115,9 @@ const updateAssignment = async (req: Request, next: NextFunction) => {
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
-        assignment.course?.instructors?.includes(req.user._id))
+        assignment.course?.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
     ) {
       const updatedAssignment = await Assignment.findByIdAndUpdate(
         assignmentId,
@@ -158,9 +157,8 @@ const submitAssignment = async (req: Request, next: NextFunction) => {
     }
 
     const assignmentId = req.params.id;
-
     if (!assignmentId) {
-      throw createHttpError(400, "assignmentId is required");
+      throw createHttpError(400, "Assignment ID is required");
     }
     // Validate assignmentId
     if (!Types.ObjectId.isValid(assignmentId)) {
@@ -175,13 +173,9 @@ const submitAssignment = async (req: Request, next: NextFunction) => {
       throw createHttpError(404, "Assignment not found");
     }
 
-    if (!req.user) {
-      throw createHttpError(401, "User not authenticated");
-    }
-
     if (
       req.user.role !== "student" ||
-      assignment.student?.toString() !== req.user._id.toString()
+      !assignment.student?.equals(req.user._id)
     ) {
       throw createHttpError(
         403,
@@ -228,19 +222,17 @@ const setMarkIntoAssignment = async (req: Request, next: NextFunction) => {
     }
 
     const assignmentId = req.params.id;
-
     if (!assignmentId) {
-      throw createHttpError(400, "assignmentId is required");
+      throw createHttpError(400, "Assignment ID is required");
     }
-
     // Validate assignmentId
     if (!Types.ObjectId.isValid(assignmentId)) {
       throw createHttpError(400, "Invalid assignment ID");
     }
 
-    const assignment = await Assignment.findById(
+    const assignment: PopulatedAssignment | null = await Assignment.findById(
       assignmentId
-    ).populate("course");
+    ).populate<{ course: ICourse }>("course");
 
     if (!assignment) {
       throw createHttpError(404, "Assignment not found");
@@ -249,7 +241,9 @@ const setMarkIntoAssignment = async (req: Request, next: NextFunction) => {
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
-        assignment.course?.instructors?.includes(req.user._id))
+        assignment.course?.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
     ) {
       const updatedAssignment = await Assignment.findByIdAndUpdate(
         assignmentId,
@@ -286,19 +280,17 @@ const deleteAssignment = async (req: Request, next: NextFunction) => {
     }
 
     const assignmentId = req.params.id;
-
     if (!assignmentId) {
-      throw createHttpError(400, "assignmentId is required");
+      throw createHttpError(400, "Assignment ID is required");
     }
-
     // Validate assignmentId
     if (!Types.ObjectId.isValid(assignmentId)) {
       throw createHttpError(400, "Invalid assignment ID");
     }
 
-    const assignment= await Assignment.findById(
+    const assignment: PopulatedAssignment | null = await Assignment.findById(
       assignmentId
-    ).populate("course");
+    ).populate<{ course: ICourse }>("course");
 
     if (!assignment) {
       throw createHttpError(404, "Assignment not found");
@@ -307,7 +299,9 @@ const deleteAssignment = async (req: Request, next: NextFunction) => {
     if (
       req.user.role === "admin" ||
       (req.user.role === "mentor" &&
-        assignment.course?.instructors?.includes(req.user._id))
+        assignment.course?.instructors?.some((instructor) =>
+          instructor.equals(req.user!._id)
+        ))
     ) {
       const deletedAssignment = await Assignment.findByIdAndDelete(
         assignmentId
@@ -338,10 +332,7 @@ const deleteAssignment = async (req: Request, next: NextFunction) => {
   }
 };
 
-const getMyCompletedAssignments = async (
-  req: Request,
-  next: NextFunction
-) => {
+const getMyCompletedAssignments = async (req: Request, next: NextFunction) => {
   try {
     if (!req.user) {
       throw createHttpError(401, "User not authenticated");
