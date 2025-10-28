@@ -32,6 +32,7 @@ export const getMyEnrollments = async (
   next: NextFunction
 ) => {
   try {
+
     const result = await SEnrollment.SGetMyEnrollments(req as Request);
     if (!result) {
       return next(createHttpError(404, "No enrollment found"));

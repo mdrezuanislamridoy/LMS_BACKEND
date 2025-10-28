@@ -69,13 +69,13 @@ const SEnroll = async (req: Request) => {
 };
 
 const SGetMyEnrollments = async (req: Request) => {
-  const userId = req.user?._id;
+  const userId = req.user._id;
   if (!userId) throw createHttpError(401, "Unauthorized");
+
 
   const enrollments = await Enrollment.find({ user: userId })
     .populate("courseId")
-    .populate("progress.finishedVideos")
-    .populate("progress.finishedModules");
+    .sort({ createdAt: -1 });
 
   const total = await Enrollment.countDocuments({ user: userId });
   const completed = await Enrollment.countDocuments({
