@@ -5,6 +5,6 @@ export declare const studentSchema: z.ZodObject<{
         email: z.ZodString;
         password: z.ZodString;
         verificationCode: z.ZodNumber;
-    }, z.core.$strip>;
-}, z.core.$strip>;
+    }, z.z.core.$strip>;
+}, z.z.core.$strip>;
 //# sourceMappingURL=student.validator.d.ts.map

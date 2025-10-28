@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
     "rootDir": "./src",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "target": "ES2022",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
+    "outDir": "./dist",
+
+    "module": "nodenext",
+    "target": "esnext",
     "types": [],
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "sourceMap": true,
@@ -16,6 +13,8 @@
 
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
     "strict": true,
     "jsx": "react-jsx",
