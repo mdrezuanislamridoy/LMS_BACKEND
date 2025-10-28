@@ -113,7 +113,7 @@ const UDelete = async (id: string) => {
 };
 
 const UChangePassword = async (req: Request) => {
-  const userId = req.user?._id ;
+  const userId = req.user?._id;
   if (!userId) {
     throw createHttpError(401, "Unauthorized");
   }
@@ -125,7 +125,6 @@ const UChangePassword = async (req: Request) => {
   if (!isPassMatched) {
     throw createHttpError(400, "Password didn't matched");
   }
-
   const hashedPass = await bcrypt.hash(newPass, 10);
 
   return await UserModel.findByIdAndUpdate(
