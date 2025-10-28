@@ -51,7 +51,7 @@ const SDeleteModule = async (req) => {
     const module = await CourseModule.findByIdAndDelete(moduleId);
     if (!module)
         throw createHttpError(404, "Module deletion failed");
-    course.modules.pull(module._id);
+    course.modules.pull(moduleId);
     await course.save();
     return {
         success: true,
