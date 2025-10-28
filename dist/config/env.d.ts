@@ -1,16 +1,18 @@
-export declare const env: {
-    port: string | undefined;
-    db_url: string | undefined;
-    jwt_secret: string | undefined;
-    gmail_user: string | undefined;
-    gmail_pass: string | undefined;
-    sslc_store_id: string | undefined;
-    sslc_store_pass: string | undefined;
-    is_live: string | undefined;
-    cname: string | undefined;
-    capi_key: string | undefined;
-    capi_secret: string | undefined;
-    origin: string | undefined;
-    node_env: string | undefined;
-};
+interface AppEnv {
+    port: string;
+    db_url: string;
+    jwt_secret: string;
+    gmail_user: string;
+    gmail_pass: string;
+    sslc_store_id: string;
+    sslc_store_pass: string;
+    is_live: boolean;
+    cname: string;
+    capi_key: string;
+    capi_secret: string;
+    origin: string;
+    node_env: string;
+}
+export declare const env: AppEnv;
+export {};
 //# sourceMappingURL=env.d.ts.map
