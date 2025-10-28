@@ -11,7 +11,7 @@ export declare const SUser: {
             name: string;
             email: string;
             phone: string;
-            role: "admin" | "mentor" | "student";
+            role: "student" | "mentor" | "admin";
             mentorStatus: string;
             dateOfBirth?: Date;
             contactInfo?: import("./user.interface.js").Contact;
