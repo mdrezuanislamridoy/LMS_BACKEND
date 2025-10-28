@@ -12,6 +12,6 @@ export declare const couponSchema: z.ZodObject<{
         maxDiscount: z.ZodNumber;
         expiresIn: z.ZodDate;
         isActive: typeof z.boolean;
-    }, z.z.core.$strip>;
-}, z.z.core.$strip>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 //# sourceMappingURL=coupon.validator.d.ts.map

@@ -5,6 +5,6 @@ export declare const mentorSchema: z.ZodObject<{
         email: z.ZodString;
         password: z.ZodString;
         verificationCode: z.ZodNumber;
-    }, z.z.core.$strip>;
-}, z.z.core.$strip>;
+    }, z.core.$strip>;
+}, z.core.$strip>;
 //# sourceMappingURL=mentor.validator.d.ts.map

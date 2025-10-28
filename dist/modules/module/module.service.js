@@ -45,6 +45,9 @@ const SDeleteModule = async (req) => {
     const course = await CourseModel.findOne({ modules: moduleId });
     if (!course)
         throw createHttpError(404, "Module's course not found");
+    if (!user) {
+        throw createHttpError(401, "User not authenticated");
+    }
     if (user.role === "mentor" && !course.instructors.includes(user._id)) {
         throw createHttpError(403, "You're not allowed to delete this module");
     }
