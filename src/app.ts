@@ -1,24 +1,23 @@
 import express, { type Application } from "express";
 
-import { CategoryRouter } from "./modules/categories/category.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { configDotenv } from "dotenv";
 import { HandleError } from "./middlewares/handleError.js";
-
 import { userRouter } from "./modules/auth/user/user.routes.js";
-import { EnrollmentRouter } from "./modules/enrollment/enrollment.routes.js";
-import { mentorRouter } from "./modules/auth/mentor/mentor.routes.js";
 import { adminRouter } from "./modules/auth/admin/admin.routes.js";
+import { EnrollmentRouter } from "./modules/enrollment/enrollment.routes.js";
+import { CouponRouter } from "./modules/coupon/coupon.routes.js";
+import { CategoryRouter } from "./modules/categories/category.routes.js";
+import { mentorRouter } from "./modules/auth/mentor/mentor.routes.js";
+import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
 import { CourseRoutes } from "./modules/course/course.routes.js";
 import { PaymentRouter } from "./modules/payment/payment.routes.js";
-
-import { AssignmentRouter } from "./modules/enrolled/assignment/assignment.routes.js";
-import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
-import { CouponRouter } from "./modules/coupon/coupon.routes.js";
-import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
 import { VideoRouter } from "./modules/enrolled/video/video.routes.js";
 import { MeetingRouter } from "./modules/meeting/meeting.routes.js";
+import { AssignmentRouter } from "./modules/enrolled/assignment/assignment.routes.js";
+import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
+
 configDotenv();
 
 const app: Application = express();
