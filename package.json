@@ -34,11 +34,10 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.7.1"
   },
- "scripts": {
-  "build": "tsc",
-  "start": "node dist/server.js"
-}
-,
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
