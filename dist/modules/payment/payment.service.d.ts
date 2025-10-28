@@ -1,6 +1,7 @@
 import type { Request } from "express";
 export declare const SPayBill: (req: Request) => Promise<{
-    url: string;
+    url: any;
+    tran_id: string;
     message: string;
     enrollment: import("mongoose").Document<unknown, {}, import("mongoose").MergeType<import("../enrollment/enrollment.interface.js").IEnrollment, {
         user: {
@@ -23,10 +24,20 @@ export declare const SPayBill: (req: Request) => Promise<{
     }> & {
         __v: number;
     };
+    transactionId: string;
+    success?: never;
+} | {
+    success: boolean;
+    message: string;
+    url?: never;
+    tran_id?: never;
+    enrollment?: never;
+    transactionId?: never;
 }>;
 export declare const SPayment: {
     SPayBill: (req: Request) => Promise<{
-        url: string;
+        url: any;
+        tran_id: string;
         message: string;
         enrollment: import("mongoose").Document<unknown, {}, import("mongoose").MergeType<import("../enrollment/enrollment.interface.js").IEnrollment, {
             user: {
@@ -49,6 +60,15 @@ export declare const SPayment: {
         }> & {
             __v: number;
         };
+        transactionId: string;
+        success?: never;
+    } | {
+        success: boolean;
+        message: string;
+        url?: never;
+        tran_id?: never;
+        enrollment?: never;
+        transactionId?: never;
     }>;
 };
 //# sourceMappingURL=payment.service.d.ts.map

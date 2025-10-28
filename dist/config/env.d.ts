@@ -6,6 +6,7 @@ export declare const env: {
     gmail_pass: string | undefined;
     sslc_store_id: string | undefined;
     sslc_store_pass: string | undefined;
+    is_live: string | undefined;
     cname: string | undefined;
     capi_key: string | undefined;
     capi_secret: string | undefined;

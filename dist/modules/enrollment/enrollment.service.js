@@ -15,6 +15,9 @@ const SEnroll = async (req) => {
     const course = await CourseModel.findById(courseId);
     if (!course)
         throw createHttpError(404, "Course not found");
+    const enroll = await Enrollment.findOne({ user: userId, courseId });
+    if (enroll)
+        throw createHttpError(400, "You are already enrolled in this course");
     let discount = 0;
     let discountType = "percentage";
     let totalAmount = course.price;

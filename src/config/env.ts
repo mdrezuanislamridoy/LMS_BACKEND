@@ -9,6 +9,7 @@ export const env = {
   gmail_pass: process.env.GMAIL_PASS,
   sslc_store_id: process.env.SSLC_STORE_ID,
   sslc_store_pass: process.env.SSLC_STORE_PASS,
+  is_live: process.env.IS_LIVE,
   cname: process.env.CNAME,
   capi_key: process.env.CAPI_KEY,
   capi_secret: process.env.CAPI_SECRET,

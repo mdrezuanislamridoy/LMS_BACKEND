@@ -19,6 +19,10 @@ const SEnroll = async (req: Request) => {
   const course = await CourseModel.findById(courseId);
 
   if (!course) throw createHttpError(404, "Course not found");
+  const enroll = await Enrollment.findOne({ user: userId, courseId });
+
+  if (enroll)
+    throw createHttpError(400, "You are already enrolled in this course");
 
   let discount = 0;
   let discountType: "percentage" | "amount" = "percentage";
@@ -71,7 +75,6 @@ const SEnroll = async (req: Request) => {
 const SGetMyEnrollments = async (req: Request) => {
   const userId = req.user._id;
   if (!userId) throw createHttpError(401, "Unauthorized");
-
 
   const enrollments = await Enrollment.find({ user: userId })
     .populate("courseId")
