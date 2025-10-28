@@ -25,18 +25,9 @@ export const success = async (
   next: NextFunction
 ) => {
   try {
-    const enrollmentId = req.params.id;
-    const enrollment = await Enrollment.findByIdAndUpdate(
-      enrollmentId,
-      { status: "paid", paymentStatus: "paid" },
-      { new: true }
-    );
-    if (!enrollment) {
-      return next(createHttpError(404, "Enrollment not found"));
-    }
-    res
-      .status(200)
-      .json({ message: "Enrollment completed successfully", enrollment });
+    const enrollment = await SPayment.SSuccess(req as Request);
+
+    return res.status(200).json(enrollment);
   } catch (error) {
     next(error);
   }
@@ -48,16 +39,9 @@ export const failed = async (
   next: NextFunction
 ) => {
   try {
-    const enrollmentId = req.params.id;
-    const enrollment = await Enrollment.findByIdAndUpdate(
-      enrollmentId,
-      { status: "pending", paymentStatus: "failed" },
-      { new: true }
-    );
-    if (!enrollment) {
-      return next(createHttpError(404, "Enrollment not found"));
-    }
-    res.status(200).json({ message: "Payment failed", enrollment });
+    const enrollment = await SPayment.SFail(req as Request);
+
+    return res.status(200).json(enrollment);
   } catch (error) {
     next(error);
   }
@@ -69,16 +53,9 @@ export const canceled = async (
   next: NextFunction
 ) => {
   try {
-    const enrollmentId = req.params.id;
-    const enrollment = await Enrollment.findByIdAndUpdate(
-      enrollmentId,
-      { status: "pending", paymentStatus: "unpaid" },
-      { new: true }
-    );
-    if (!enrollment) {
-      return next(createHttpError(404, "Enrollment not found"));
-    }
-    res.status(200).json({ message: "Payment canceled", enrollment });
+    const enrollment = await SPayment.SCancel(req as Request);
+
+    return res.status(200).json(enrollment);
   } catch (error) {
     next(error);
   }
