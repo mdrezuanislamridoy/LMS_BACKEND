@@ -10,13 +10,14 @@ import { EnrollmentRouter } from "./modules/enrollment/enrollment.routes.js";
 import { CouponRouter } from "./modules/coupon/coupon.routes.js";
 import { CategoryRouter } from "./modules/categories/category.routes.js";
 import { mentorRouter } from "./modules/auth/mentor/mentor.routes.js";
-import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
+
 import { CourseRoutes } from "./modules/course/course.routes.js";
 import { PaymentRouter } from "./modules/payment/payment.routes.js";
 import { VideoRouter } from "./modules/enrolled/video/video.routes.js";
 import { MeetingRouter } from "./modules/meeting/meeting.routes.js";
 import { AssignmentRouter } from "./modules/enrolled/assignment/assignment.routes.js";
 import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
+import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
 
 configDotenv();
 
