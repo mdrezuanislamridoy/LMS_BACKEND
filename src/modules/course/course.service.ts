@@ -67,6 +67,7 @@ const getSingleCourseService = async (courseId: string) => {
     throw createHttpError(403, "Invalid Course ID Format");
   }
 
+
   const populateOption = [
     { path: "reviews", select: "rating comment user" },
     {

@@ -79,39 +79,19 @@ const SGetMyEnrollments = async (req) => {
     };
 };
 const getSingleEnrollment = async (req) => {
+    if (!req.params.id)
+        throw createHttpError(400, "Enrollment id is required");
     const enrollment = await Enrollment.findOne({
         _id: req.params.id,
         user: req.user._id,
-    })
-        .populate("user", "name email phone")
-        .populate({
+    }).populate({
         path: "courseId",
-        select: "title description thumbnail price ratings duration introVideo enrolledStudents instructors modules projectsFromThis category",
-        populate: [
-            { path: "instructors", select: "name expertise designation" },
-            {
-                path: "modules",
-                select: "title videos",
-                populate: { path: "videos", select: "title duration url" },
-            },
-            { path: "category", select: "name" },
-        ],
-    })
-        .populate({
-        path: "progress.finishedModules",
-        select: "title",
-    })
-        .populate({
-        path: "progress.finishedVideos",
-        select: "title duration",
-    })
-        .populate({
-        path: "progress.lastAccessedVideo",
-        select: "title duration",
+        populate: {
+            path: "modules",
+        },
     });
-    if (!enrollment) {
+    if (!enrollment)
         throw createHttpError(404, "Enrollment not found");
-    }
     return {
         success: true,
         message: "Enrollment fetched successfully",
