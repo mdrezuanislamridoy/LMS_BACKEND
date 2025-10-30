@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { User } from "../../../middlewares/user.middleware.js";
 import { checkRole } from "../../../middlewares/role.middleware.js";
-import { approveMentor, blockUser, createAdmin, deleteUser, getBlockedAccounts, getDeletedAccount, getRejectedMentors, rejectMentor, unBlockUser, undoDeleteUser, requestedMentors, getMentors, getStudents, } from "./admin.controller.js";
+import { approveMentor, blockUser, createAdmin, deleteUser, getBlockedAccounts, getDeletedAccount, getRejectedMentors, rejectMentor, unBlockUser, undoDeleteUser, requestedMentors, getMentors, getStudents, addMentorToCourse, } from "./admin.controller.js";
 const router = Router();
 router.post("/register", createAdmin);
 router.get("/mentors", User, checkRole("admin"), getMentors);
@@ -15,6 +15,7 @@ router.put("/unblock/:id", User, checkRole("admin"), unBlockUser);
 router.get("/blockedAccount", User, checkRole("admin"), getBlockedAccounts);
 router.put("/delete/:id", User, checkRole("admin"), deleteUser);
 router.put("/undodelete/:id", User, checkRole("admin"), undoDeleteUser);
+router.put("/addMentorToCourse/:id", User, checkRole("admin"), addMentorToCourse);
 router.get("/getDeletedAccounts", User, checkRole("admin"), getDeletedAccount);
 export const adminRouter = router;
 //# sourceMappingURL=admin.routes.js.map

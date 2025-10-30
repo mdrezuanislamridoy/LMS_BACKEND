@@ -267,3 +267,16 @@ export const getDeletedAccount = async (
     deletedAccounts,
   });
 };
+
+export const addMentorToCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await AService.addMentorToCourse(req as Request);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -12,4 +12,5 @@ export declare const getBlockedAccounts: (req: Request, res: Response, next: Nex
 export declare const deleteUser: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const undoDeleteUser: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getDeletedAccount: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const addMentorToCourse: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=admin.controller.d.ts.map

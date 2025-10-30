@@ -15,6 +15,7 @@ import {
   requestedMentors,
   getMentors,
   getStudents,
+  addMentorToCourse,
 } from "./admin.controller.js";
 
 const router = Router();
@@ -32,6 +33,12 @@ router.get("/blockedAccount", User, checkRole("admin"), getBlockedAccounts);
 
 router.put("/delete/:id", User, checkRole("admin"), deleteUser);
 router.put("/undodelete/:id", User, checkRole("admin"), undoDeleteUser);
+router.put(
+  "/addMentorToCourse/:id",
+  User,
+  checkRole("admin"),
+  addMentorToCourse
+);
 
 router.get("/getDeletedAccounts", User, checkRole("admin"), getDeletedAccount);
 

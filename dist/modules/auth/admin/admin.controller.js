@@ -191,4 +191,13 @@ export const getDeletedAccount = async (req, res, next) => {
         deletedAccounts,
     });
 };
+export const addMentorToCourse = async (req, res, next) => {
+    try {
+        const result = await AService.addMentorToCourse(req);
+        res.status(200).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 //# sourceMappingURL=admin.controller.js.map

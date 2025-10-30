@@ -3,6 +3,8 @@ import { sendMail } from "../../../utils/sendMail.js";
 import bcrypt from "bcrypt";
 import { UserModel } from "../user/user.model.js";
 import { Admin } from "./admin.model.js";
+import { CourseModel } from "../../course/course.model.js";
+import mongoose from "mongoose";
 const ACreate = async (payload) => {
     const hashedPass = await bcrypt.hash(payload.password, 10);
     const user = await UserModel.findOne({ email: payload.email });
@@ -63,11 +65,32 @@ const AUndoDelete = async (id, next) => {
     `);
     return user;
 };
+const addMentorToCourse = async (req) => {
+    const courseId = req.body.id;
+    const mentorId = req.params.id;
+    if (!courseId || !mentorId) {
+        throw createHttpError(400, "Something went wrong");
+    }
+    const course = await CourseModel.findById(courseId);
+    if (!course)
+        throw createHttpError(404, "Course not found");
+    const mentorObjectId = new mongoose.Types.ObjectId(mentorId);
+    const alreadyExists = course.instructors.some((id) => id.toString() === mentorId);
+    if (!alreadyExists) {
+        course.instructors.push(mentorObjectId);
+        await course.save();
+    }
+    return {
+        success: true,
+        message: `Mentor Added to ${course.title} course successfully`,
+    };
+};
 export const AService = {
     ACreate,
     ABlock,
     AUnBlock,
     ADelete,
     AUndoDelete,
+    addMentorToCourse,
 };
 //# sourceMappingURL=admin.service.js.map

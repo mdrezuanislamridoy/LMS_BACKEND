@@ -43,7 +43,19 @@ const getSingleCourseService = async (courseId) => {
         throw createHttpError(403, "Invalid Course ID Format");
     }
     const populateOption = [
-        { path: "reviews", select: "rating comment user" },
+        {
+            path: "reviews",
+            select: "rating comment user",
+            populate: {
+                path: "user",
+                select: "name email",
+            },
+        },
+        {
+            path: "instructors",
+            model: "Instructor",
+            select: "name designation expertise profileImage",
+        },
         {
             path: "modules",
             select: "title content isLive",
@@ -52,6 +64,10 @@ const getSingleCourseService = async (courseId) => {
                 model: "Video",
                 select: "title videoUrl duration thumbnail isFree description",
             },
+        },
+        {
+            path: "category",
+            select: "name icon",
         },
     ];
     const course = await CourseModel.findById(courseId)
