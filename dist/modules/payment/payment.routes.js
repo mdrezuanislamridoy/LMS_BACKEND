@@ -4,8 +4,8 @@ import { fail } from "assert";
 import { User } from "../../middlewares/user.middleware.js";
 const router = Router();
 router.post("/payBill/:id", User, payBill);
-router.post("/success/:id", success);
-router.post("/fail/:id", fail);
-router.post("/cancel/:id", canceled);
+router.post("/success/:id", User, success);
+router.post("/fail/:id", User, fail);
+router.post("/cancel/:id", User, canceled);
 export const PaymentRouter = router;
 //# sourceMappingURL=payment.routes.js.map

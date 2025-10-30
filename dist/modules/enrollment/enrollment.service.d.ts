@@ -20,6 +20,15 @@ export declare const SEnrollment: {
         total: number;
         completed: number;
     }>;
+    getSingleEnrollment: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        enrollment: import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
+            _id: unknown;
+        }> & {
+            __v: number;
+        };
+    }>;
     SUpdateEnrollmentStatus: (req: Request) => Promise<import("mongoose").Document<unknown, {}, import("./enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("./enrollment.interface.js").IEnrollment & Required<{
         _id: unknown;
     }> & {

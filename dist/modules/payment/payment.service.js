@@ -2,6 +2,7 @@ import createHttpError from "http-errors";
 import { Enrollment } from "../enrollment/enrollment.model.js";
 import { env } from "../../config/env.js";
 import SSLCOMMERZ from "sslcommerz-lts";
+import { success } from "zod";
 export const SPayBill = async (req) => {
     try {
         const userId = req.user?._id;
@@ -44,13 +45,13 @@ export const SPayBill = async (req) => {
             cus_country: "Bangladesh",
             cus_phone: enrollment.phone || "01700000000",
         };
-        console.log("SSLCommerz Init Data:", data); // DEBUG
+        console.log("SSLCommerz Init Data:", data);
         const sslcz = new SSLCOMMERZ(store_id, store_passwd, is_live);
         const initResponse = await sslcz.init(data).catch((sdkError) => {
             console.error("SSLCommerz SDK Error:", sdkError);
             throw createHttpError(502, `SSLCommerz SDK Error: ${sdkError.message}`);
         });
-        console.log("SSLCommerz Response:", initResponse); // DEBUG
+        console.log("SSLCommerz Response:", initResponse);
         if (initResponse?.GatewayPageURL) {
             enrollment.transactionId = transactionId;
             await enrollment.save();
@@ -78,7 +79,61 @@ export const SPayBill = async (req) => {
         };
     }
 };
+const SSuccess = async (req) => {
+    const transactionId = req.params.id;
+    const enrollment = await Enrollment.findOne({
+        user: req.user._id,
+        transactionId,
+    });
+    if (!enrollment) {
+        throw createHttpError(404, "Enrollment not found");
+    }
+    enrollment.status = "paid";
+    await enrollment.save();
+    return {
+        success: true,
+        message: "Payment completed successfully",
+        enrollment,
+    };
+};
+const SFail = async (req) => {
+    const transactionId = req.params.id;
+    const enrollment = await Enrollment.findOne({
+        user: req.user._id,
+        transactionId,
+    });
+    if (!enrollment) {
+        throw createHttpError(404, "Enrollment not found");
+    }
+    enrollment.status = "pending";
+    await enrollment.save();
+    return {
+        success: false,
+        message: "Payment failed",
+        enrollment,
+    };
+};
+const SCancel = async (req) => {
+    const transactionId = req.params.id;
+    const enrollment = await Enrollment.findOne({
+        user: req.user._id,
+        transactionId,
+    });
+    if (!enrollment) {
+        throw createHttpError(404, "Enrollment not found");
+    }
+    enrollment.status = "cancelled";
+    await enrollment.save();
+    return {
+        success: false,
+        message: "Payment cancelled",
+        enrollment,
+    };
+};
 export const SPayment = {
     SPayBill,
+    SSuccess,
+    SFail,
+    SCancel,
 };
 //# sourceMappingURL=payment.service.js.map

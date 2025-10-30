@@ -22,5 +22,32 @@ export declare const SPayment: {
         url?: never;
         tran_id?: never;
     }>;
+    SSuccess: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        enrollment: import("mongoose").Document<unknown, {}, import("../enrollment/enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("../enrollment/enrollment.interface.js").IEnrollment & Required<{
+            _id: unknown;
+        }> & {
+            __v: number;
+        };
+    }>;
+    SFail: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        enrollment: import("mongoose").Document<unknown, {}, import("../enrollment/enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("../enrollment/enrollment.interface.js").IEnrollment & Required<{
+            _id: unknown;
+        }> & {
+            __v: number;
+        };
+    }>;
+    SCancel: (req: Request) => Promise<{
+        success: boolean;
+        message: string;
+        enrollment: import("mongoose").Document<unknown, {}, import("../enrollment/enrollment.interface.js").IEnrollment, {}, import("mongoose").DefaultSchemaOptions> & import("../enrollment/enrollment.interface.js").IEnrollment & Required<{
+            _id: unknown;
+        }> & {
+            __v: number;
+        };
+    }>;
 };
 //# sourceMappingURL=payment.service.d.ts.map

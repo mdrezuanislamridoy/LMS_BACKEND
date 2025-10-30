@@ -29,6 +29,18 @@ export const getMyEnrollments = async (req, res, next) => {
         next(error);
     }
 };
+export const getSingleEnrollment = async (req, res, next) => {
+    try {
+        const result = await SEnrollment.getSingleEnrollment(req);
+        if (!result) {
+            return next(createHttpError(404, "No enrollment found"));
+        }
+        res.status(200).json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+};
 export const updateEnrollmentStatus = async (req, res, next) => {
     try {
         const updatedOrder = await SEnrollment.SUpdateEnrollmentStatus(req);

@@ -78,7 +78,9 @@ const SGetMyEnrollments = async (req: Request) => {
 
   const enrollments = await Enrollment.find({ user: userId })
     .populate("courseId")
-    .sort({ createdAt: -1 });
+    .sort({
+      createdAt: -1,
+    });
 
   const total = await Enrollment.countDocuments({ user: userId });
   const completed = await Enrollment.countDocuments({
@@ -92,6 +94,50 @@ const SGetMyEnrollments = async (req: Request) => {
     enrollments,
     total,
     completed,
+  };
+};
+
+const getSingleEnrollment = async (req: Request) => {
+  const enrollment = await Enrollment.findOne({
+    _id: req.params.id,
+    user: req.user._id,
+  })
+    .populate("user", "name email phone")
+    .populate({
+      path: "courseId",
+      select:
+        "title description thumbnail price ratings duration introVideo enrolledStudents instructors modules projectsFromThis category",
+      populate: [
+        { path: "instructors", select: "name expertise designation" },
+        {
+          path: "modules",
+          select: "title videos",
+          populate: { path: "videos", select: "title duration url" },
+        },
+        { path: "category", select: "name" },
+      ],
+    })
+    .populate({
+      path: "progress.finishedModules",
+      select: "title",
+    })
+    .populate({
+      path: "progress.finishedVideos",
+      select: "title duration",
+    })
+    .populate({
+      path: "progress.lastAccessedVideo",
+      select: "title duration",
+    });
+
+  if (!enrollment) {
+    throw createHttpError(404, "Enrollment not found");
+  }
+
+  return {
+    success: true,
+    message: "Enrollment fetched successfully",
+    enrollment,
   };
 };
 
@@ -145,6 +191,7 @@ const SUpdateVideoProgress = async (req: Request) => {
 export const SEnrollment = {
   SEnroll,
   SGetMyEnrollments,
+  getSingleEnrollment,
   SUpdateEnrollmentStatus,
   SUpdateVideoProgress,
 };
