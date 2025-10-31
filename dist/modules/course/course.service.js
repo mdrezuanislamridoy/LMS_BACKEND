@@ -38,40 +38,28 @@ const createCourseService = async (req, payload) => {
     });
     return course;
 };
-const getSingleCourseService = async (courseId) => {
+export const getSingleCourseService = async (courseId) => {
     if (!Types.ObjectId.isValid(courseId)) {
         throw createHttpError(403, "Invalid Course ID Format");
     }
-    const populateOption = [
-        {
-            path: "reviews",
-            select: "rating comment user",
-            populate: {
-                path: "user",
-                select: "name email",
-            },
-        },
-        {
-            path: "instructors",
-            model: "Instructor",
-            select: "name designation expertise profileImage",
-        },
+    const populateOptions = [
+        { path: "reviews", select: "rating comment user" },
         {
             path: "modules",
-            select: "title content isLive",
+            select: "title videos isLive",
             populate: {
-                path: "content",
+                path: "videos",
                 model: "Video",
                 select: "title videoUrl duration thumbnail isFree description",
             },
         },
         {
-            path: "category",
-            select: "name icon",
+            path: "instructors",
+            model: "User",
         },
     ];
     const course = await CourseModel.findById(courseId)
-        .populate(populateOption)
+        .populate(populateOptions)
         .lean();
     if (!course) {
         throw createHttpError(404, "Course not found");

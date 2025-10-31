@@ -65,7 +65,7 @@ const courseSchema = new Schema({
     includedInThisCourse: [{ type: String, required: true }],
     about: { type: String, required: true },
     forWhom: [{ type: String, required: true }],
-    instructors: [{ type: Schema.Types.ObjectId, ref: "Instructor" }],
+    instructors: [{ type: Schema.Types.ObjectId, ref: "User" }],
     projectsFromThis: [ProjectSchema],
     price: {
         type: Number,

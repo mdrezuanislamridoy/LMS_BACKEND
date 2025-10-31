@@ -8,6 +8,11 @@ interface QueryParams {
     pageNumber?: string | number;
     limit?: string | number;
 }
+export declare const getSingleCourseService: (courseId: string) => Promise<import("mongoose").FlattenMaps<ICourse> & Required<{
+    _id: import("mongoose").FlattenMaps<unknown>;
+}> & {
+    __v: number;
+}>;
 export declare const courseService: {
     createCourseService: (req: Request, payload: ICourse) => Promise<import("mongoose").Document<unknown, {}, ICourse, {}, import("mongoose").DefaultSchemaOptions> & ICourse & Required<{
         _id: unknown;
