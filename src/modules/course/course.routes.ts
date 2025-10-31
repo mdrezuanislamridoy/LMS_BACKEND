@@ -2,8 +2,6 @@ import { Router, type Request, type Response } from "express";
 import { User } from "../../middlewares/user.middleware.js";
 import { checkRole } from "../../middlewares/role.middleware.js";
 import { upload } from "../../utils/multer.js";
-import { validation } from "../../middlewares/Validator.js";
-import { VCourseSchema } from "./course.validator.js";
 import {
   createCourse,
   deleteCourse,
@@ -23,7 +21,6 @@ router.post(
   createCourse
 );
 
-// validation(VCourseSchema),
 router.get("/get-courses", getCourses);
 router.get("/get-popular-courses", getCourses);
 router.get("/get-featured-courses", getFeaturedCourses);
