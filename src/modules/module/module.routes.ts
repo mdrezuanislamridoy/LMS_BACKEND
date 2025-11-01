@@ -11,10 +11,9 @@ router.post(
   "/addModule/:id",
   User,
   checkRole("admin", "mentor"),
-  validation(VModuleSchema),
+  // validation(VModuleSchema),
   createModule
 );
-
 
 router.post(
   "/updateModule/:id",

@@ -2,6 +2,7 @@ import createHttpError from "http-errors";
 import cloud from "../../utils/cloudinary.js";
 import { Types } from "mongoose";
 import { CourseModel } from "./course.model.js";
+import { Enrollment } from "../enrollment/enrollment.model.js";
 const createCourseService = async (req, payload) => {
     const thumbnail = req.file;
     if (!thumbnail)
@@ -46,9 +47,9 @@ export const getSingleCourseService = async (courseId) => {
         { path: "reviews", select: "rating comment user" },
         {
             path: "modules",
-            select: "title videos isLive",
+            select: "title content description isLive",
             populate: {
-                path: "videos",
+                path: "content",
                 model: "Video",
                 select: "title videoUrl duration thumbnail isFree description",
             },
@@ -83,7 +84,7 @@ const getCoursesService = async (req) => {
     const limitation = Number(limit);
     const skip = (page - 1) * limitation;
     const sortOptions = {};
-    const allowedSortKeys = ["createdAt", "title", "category", "level"]; // Adjust based on schema
+    const allowedSortKeys = ["createdAt", "title", "category", "level"];
     if (sort && sort.includes(":")) {
         const [key, value] = sort.split(":");
         if (key &&
@@ -138,6 +139,9 @@ const deleteCourseService = async (courseId) => {
     if (!Types.ObjectId.isValid(courseId)) {
         throw createHttpError(403, "Invalid Course ID Format");
     }
+    await Enrollment.deleteMany({
+        course: courseId,
+    });
     const deletedCourse = await CourseModel.findOneAndDelete({ _id: courseId });
     return deletedCourse;
 };

@@ -10,6 +10,7 @@ const moduleSchema = new Schema<IModules>(
         ref: "Video",
       },
     ],
+    description: { type: String, required: true, trim: true },
     isLive: {
       type: Boolean,
       required: true,

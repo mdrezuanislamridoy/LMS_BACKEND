@@ -2,6 +2,7 @@ import z from "zod";
 export declare const VModuleSchema: z.ZodObject<{
     body: z.ZodObject<{
         title: z.ZodString;
+        description: z.ZodString;
         isLive: z.ZodDefault<z.ZodBoolean>;
     }, z.z.core.$strip>;
     params: z.ZodObject<{
