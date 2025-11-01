@@ -8,13 +8,12 @@ export const createModule = async (
 ) => {
   try {
     const result = await MService.SCreateModule(req as Request);
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 };
-
-
 
 export const updateModule = async (
   req: Request,
@@ -41,4 +40,3 @@ export const deleteModule = async (
     next(error);
   }
 };
-

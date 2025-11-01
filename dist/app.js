@@ -16,6 +16,7 @@ import { MeetingRouter } from "./modules/meeting/meeting.routes.js";
 import { AssignmentRouter } from "./modules/enrolled/assignment/assignment.routes.js";
 import { quizRouter } from "./modules/enrolled/quiz/quiz.routes.js";
 import { ReviewRouter } from "./modules/enrolled/review/review.routes.js";
+import { ModuleRoutes } from "./modules/module/module.routes.js";
 configDotenv();
 const app = express();
 // middlewires
@@ -40,6 +41,7 @@ app.use("/api/video", VideoRouter);
 app.use("/api/meeting", MeetingRouter);
 app.use("/api/assignment", AssignmentRouter);
 app.use("/api/quiz", quizRouter);
+app.use("/api/module", ModuleRoutes);
 // global error
 app.use(HandleError);
 export default app;

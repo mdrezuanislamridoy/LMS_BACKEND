@@ -7,6 +7,7 @@ const moduleSchema = new Schema({
             ref: "Video",
         },
     ],
+    description: { type: String, required: true, trim: true },
     isLive: {
         type: Boolean,
         required: true,
